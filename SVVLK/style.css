@@ -62,6 +62,7 @@ margin-bottom: 30px;
 .product-container {
 display: flex;
 justify-content: center;
+flex-wrap: wrap;
 gap: 25px;
 }
 
@@ -105,6 +106,9 @@ padding: 20px;
 }
 
 #cart-items > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 15px;
     margin: 10px 0;
     border: 1px solid #ddd;
@@ -130,7 +134,8 @@ padding: 20px;
 .product-card {
     background-color: white;
     padding: 20px;
-    width: 260px;
+    width: 100%;
+    max-width: 260px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -170,17 +175,21 @@ padding: 20px;
 .product-card button:hover {
     background-color: #444;
 }
+
 /* Search Box */
 
 .search-box {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 30px;
+    padding: 0 15px;
 }
 
 .search-box input {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     padding: 12px 15px;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -347,4 +356,101 @@ header h1 a {
 #order-message {
     margin-top: 25px;
     padding: 15px;
+}
+
+/* SVG Icons Style */
+.icon {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    margin: 0 4px;
+}
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    nav a {
+        margin-left: 0;
+    }
+    .hero {
+        padding: 60px 15px;
+    }
+    .hero h2 {
+        font-size: 32px;
+    }
+    .cart {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+    .checkout {
+        margin: 30px 15px;
+        padding: 20px;
+    }
+    #cart-items > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast {
+    background-color: #222;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.3s ease-out forwards, fadeOut 0.3s ease-in forwards 2.7s;
+}
+
+.toast svg {
+    margin-right: 10px;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(120%); opacity: 0; }
+}
+
+#proceed-checkout {
+    transition: all 0.2s ease;
+}
+
+#proceed-checkout:hover {
+    background-color: #218838 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
 }
