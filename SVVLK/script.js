@@ -1,8 +1,20 @@
-// ===============================
+const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsY3BkeWFpdGV0Z3lxaWF3c29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5ODU1MjksImV4cCI6MjEwMzU2MTUyOX0.rYePHXoZgy68see7wNZPz0QyGR7tsM1RdTvsA6BwttU";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);// ===============================
 // SVVLK GROCERY CART
 // ===============================
 
-let cart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
+let cart = [];
+try {
+    cart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
+} catch (e) {
+    console.error("Cart parsing error, resetting cart");
+    localStorage.removeItem('svvlk-cart');
+}
 
 function saveCart() {
     localStorage.setItem('svvlk-cart', JSON.stringify(cart));
@@ -13,53 +25,31 @@ function saveCart() {
 // ADD TO CART
 // ===============================
 
-const addButtons = document.querySelectorAll(".add-to-cart");
-
-addButtons.forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-        const productCard = button.closest(".product-card");
-
+document.getElementById('products-list').addEventListener('click', function(event) {
+    if (event.target.classList.contains('add-to-cart')) {
+        const productCard = event.target.closest(".product-card");
         const name = productCard.dataset.name;
         const brand = productCard.dataset.brand;
         const size = productCard.dataset.size;
         const price = Number(productCard.dataset.price);
 
-        // Don't allow products with ₹0
         if (price <= 0) {
             showToast("Price not added for this product yet.", "warning");
             return;
         }
 
         const productId = name + "-" + brand + "-" + size;
-
-        const existingProduct = cart.find(function(item) {
-            return item.id === productId;
-        });
+        const existingProduct = cart.find(item => item.id === productId);
 
         if (existingProduct) {
-
             existingProduct.quantity++;
-
         } else {
-
-            cart.push({
-                id: productId,
-                name: name,
-                brand: brand,
-                size: size,
-                price: price,
-                quantity: 1
-            });
-
+            cart.push({ id: productId, name, brand, size, price, quantity: 1 });
         }
 
         updateCart();
-        showToast("" + brand + " " + name + " added to cart!", "success");
-
-    });
-
+        showToast(brand + " " + name + " added to cart!", "success");
+    }
 });
 
 
@@ -295,40 +285,23 @@ updateCart();
 // CATEGORY FILTER
 // ===============================
 
-const categoryButtons =
-    document.querySelectorAll(".category-filter");
-
-const allProducts =
-    document.querySelectorAll(".product-card");
-
-
-categoryButtons.forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-        const selectedCategory =
-            button.dataset.category;
-
-        allProducts.forEach(function(product) {
-
-            if (
-                selectedCategory === "all" ||
-                product.dataset.category === selectedCategory
-            ) {
-
+const categoryButtons = document.querySelectorAll(".category-filter");
+categoryButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const selectedCategory = button.dataset.category;
+        const allProducts = document.querySelectorAll(".product-card");
+        
+        allProducts.forEach(product => {
+            if (selectedCategory === "all" || product.dataset.category === selectedCategory) {
                 product.style.display = "";
-
             } else {
-
                 product.style.display = "none";
-
             }
-
         });
-
     });
-
 });
+
+
 // ===============================
 // CHECKOUT
 // ===============================
@@ -336,7 +309,7 @@ categoryButtons.forEach(function(button) {
 const checkoutForm =
     document.getElementById("checkout-form");
 
-checkoutForm.addEventListener("submit", function(event) {
+checkoutForm.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
@@ -357,6 +330,28 @@ checkoutForm.addEventListener("submit", function(event) {
     const customerCity =
         document.getElementById("customer-city").value;
 
+
+        const totalAmount = document.getElementById("cart-total").textContent;
+
+    try {
+        const { error } = await supabaseClient
+            .from('orders')
+            .insert([
+                {
+                    order_id: "ORD-" + Date.now(),
+                    customer_name: customerName,
+                    customer_phone: customerPhone,
+                    customer_address: customerAddress + ", " + customerCity,
+                    total_amount: Number(totalAmount.replace(/,/g, '')),
+                    cart_items: cart
+                }
+            ]);
+
+        if (error) throw error;
+    } catch (err) {
+        console.error("Supabase Error:", err);
+        showToast("Error saving order to database. Check console.", "warning");
+    }
 
     const orderMessage =
         document.getElementById("order-message");
@@ -432,3 +427,149 @@ if (proceedCheckoutBtn) {
         }, 600);
     });
 }
+
+// ===============================
+// FETCH PRODUCTS FROM SUPABASE
+// ===============================
+async function loadProducts() {
+    const productsList = document.getElementById('products-list');
+    if (!productsList) return;
+
+    try {
+        const { data: products, error } = await supabaseClient
+            .from('products')
+            .select('*');
+
+        if (error) throw error;
+
+        productsList.innerHTML = ''; 
+
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.dataset.category = product.category;
+            card.dataset.name = product.name;
+            card.dataset.brand = product.brand;
+            card.dataset.size = product.size;
+            card.dataset.price = product.price;
+
+            card.innerHTML = 
+                '<img src="' + product.image_url + '" alt="' + product.name + '">' +
+                '<h3>' + product.brand + '</h3>' +
+                '<p>' + product.name + ' - ' + product.size + '</p>' +
+                '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                '<button class="add-to-cart">Add to Cart</button>';
+
+            productsList.appendChild(card);
+        });
+
+    } catch (err) {
+        console.error("Error loading products:", err);
+        productsList.innerHTML = '<p style="color:red; font-weight:bold;">Error loading products. Make sure your Supabase table is created and RLS is disabled.</p>';
+    }
+}
+
+// Call on load
+loadProducts();
+// ===============================
+// AUTHENTICATION
+// ===============================
+
+let isSignUp = false;
+let currentUser = null;
+
+const authModal = document.getElementById("auth-modal");
+const loginBtn = document.getElementById("login-btn");
+const closeAuth = document.getElementById("close-auth");
+const authForm = document.getElementById("auth-form");
+const authTitle = document.getElementById("auth-title");
+const authSubmit = document.getElementById("auth-submit");
+const authToggleText = document.getElementById("auth-toggle-text");
+
+function handleToggle(e) {
+    e.preventDefault();
+    isSignUp = !isSignUp;
+    authTitle.textContent = isSignUp ? "Sign Up for SVVLK" : "Login to SVVLK";
+    authSubmit.textContent = isSignUp ? "Sign Up" : "Login";
+    authToggleText.innerHTML = isSignUp 
+        ? 'Already have an account? <a href="#" id="auth-toggle-link">Login</a>' 
+        : 'Don\'t have an account? <a href="#" id="auth-toggle-link">Sign up</a>';
+    
+    document.getElementById("auth-toggle-link").addEventListener("click", handleToggle);
+}
+
+document.getElementById("auth-toggle-link").addEventListener("click", handleToggle);
+
+// Google OAuth
+const googleBtn = document.getElementById("auth-google-btn");
+if (googleBtn) {
+    googleBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        googleBtn.innerHTML = "Redirecting to Google...";
+        googleBtn.style.opacity = "0.5";
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                
+            });
+            if (error) throw error;
+        } catch (err) {
+            showToast(err.message, "warning");
+        }
+    });
+}
+
+loginBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentUser) {
+        supabaseClient.auth.signOut().then(() => {
+            showToast("Logged out successfully");
+            updateAuthState();
+        });
+    } else {
+        authModal.style.display = "flex";
+    }
+});
+
+closeAuth.addEventListener("click", () => {
+    authModal.style.display = "none";
+});
+
+authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("auth-email").value;
+    const password = document.getElementById("auth-password").value;
+    
+    try {
+        if (isSignUp) {
+            const { data, error } = await supabaseClient.auth.signUp({ email, password });
+            if (error) throw error;
+            showToast("Signup successful! You can now log in.", "success");
+            
+            // Switch back to login mode automatically
+            document.getElementById("auth-password").value = '';
+            document.getElementById("auth-toggle-link").click(); 
+        } else {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            showToast("Logged in successfully!", "success");
+            authModal.style.display = "none";
+            updateAuthState();
+        }
+    } catch (err) {
+        showToast(err.message, "warning");
+    }
+});
+
+async function updateAuthState() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    currentUser = session?.user || null;
+    
+    if (currentUser) {
+        loginBtn.innerHTML = "Logout";
+    } else {
+        loginBtn.innerHTML = "Login";
+    }
+}
+
+updateAuthState();
