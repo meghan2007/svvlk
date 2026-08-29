@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SVVLK - Grocery Store</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+
+        <h1>
+            <a href="#">SVVLK</a>
+        </h1>
+
+        <nav>
+            <a href="#">Home</a>
+            <a href="#products">Groceries</a>
+            <a href="#cart">Cart 🛒 (<span id="cart-count">0</span>)</a>
+        </nav>
+
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <h2>Welcome to SVVLK 🛍️</h2>
+
+        <p>Quality groceries at the best prices!</p>
+
+        <button id="shop-now">
+            Shop Now
+        </button>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+    <section class="products" id="products">
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Search groceries..."
+            >
+
+            <button id="search-button">
+                Search 🔍
+            </button>
+
+        </div>
+
+
+        <h2>Our Groceries</h2>
+        <div class="category-buttons">
+
+    <button class="category-filter" data-category="all">
+        All
+    </button>
+
+    <button class="category-filter" data-category="flours">
+        🌾 Flours
+    </button>
+
+    <button class="category-filter" data-category="retail">
+        📦 Retail
+    </button>
+
+    <button class="category-filter" data-category="rice">
+        🍚 Rice
+    </button>
+
+    <button class="category-filter" data-category="oils">
+        🫗 Oils
+    </button>
+
+    <button class="category-filter" data-category="dals">
+        🫘 Dals
+    </button>
+
+    <button class="category-filter" data-category="salt">
+        🧂 Salt
+    </button>
+
+    <button class="category-filter" data-category="tamarind">
+        🌿 Tamarind
+    </button>
+
+</div>
+
+
+        <!-- ================= FLOURS ================= -->
+
+        <h3 class="category-title">
+            🌾 Flours - 50 kg
+        </h3>
+
+        <div class="product-container">
+
+
+            <div class="product-card"
+                 data-category="flours"
+                 data-name="Atta"
+                 data-brand="SVVLK"
+                 data-size="50 kg"
+                 data-price="1725">
+
+                <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Atta%20flour.jpg" alt="Atta">
+
+                <h3>Atta</h3>
+                <p>50 kg</p>
+                <p>₹1,725</p>
+
+                <button class="add-to-cart">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="flours"
+                 data-name="Maida"
+                 data-brand="SVVLK"
+                 data-size="50 kg"
+                 data-price="1625">
+
+                <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Maida%20flour.jpg" alt="Maida">
+
+                <h3>Maida</h3>
+                <p>50 kg</p>
+                <p>₹1,625</p>
+
+                <button class="add-to-cart">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="flours"
+                 data-name="Ravva"
+                 data-brand="SVVLK"
+                 data-size="50 kg"
+                 data-price="1650">
+
+                <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rava-close2.jpg" alt="Ravva">
+
+                <h3>Ravva</h3>
+                <p>50 kg</p>
+                <p>₹1,650</p>
+
+                <button class="add-to-cart">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RETAIL ================= -->
+
+        <h3 class="category-title">
+            📦 Retail - 1 kg
+        </h3>
+
+        <div class="product-container">
+
+
+            <div class="product-card"
+                 data-category="retail"
+                 data-name="Atta"
+                 data-brand="SVVLK"
+                 data-size="1 kg"
+                 data-price="65">
+
+                <img src="YOUR_IMAGE_LINK" alt="Atta 1 kg">
+
+                <h3>Atta</h3>
+                <p>1 kg packet</p>
+                <p>₹65</p>
+
+                <button class="add-to-cart">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="retail"
+                 data-name="Sugar"
+                 data-brand="SVVLK"
+                 data-size="1 kg"
+                 data-price="68">
+
+                <img src="YOUR_IMAGE_LINK" alt="Sugar 1 kg">
+
+                <h3>Sugar</h3>
+                <p>1 kg packet</p>
+                <p>₹68</p>
+
+                <button class="add-to-cart">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RICE ================= -->
+
+        <h3 class="category-title">
+            🍚 Rice
+        </h3>
+
+        <div class="product-container">
+
+
+            <!-- LALITHA -->
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Lalitha"
+                 data-size="5 kg"
+                 data-price="426">
+
+                <img src="YOUR_IMAGE_LINK" alt="Lalitha Rice">
+
+                <h3>Lalitha</h3>
+                <p>Rice - 5 kg</p>
+                <p>₹426</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Lalitha"
+                 data-size="10 kg"
+                 data-price="786">
+
+                <img src="YOUR_IMAGE_LINK" alt="Lalitha Rice">
+
+                <h3>Lalitha</h3>
+                <p>Rice - 10 kg</p>
+                <p>₹786</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Lalitha"
+                 data-size="26 kg"
+                 data-price="1650">
+
+                <img src="YOUR_IMAGE_LINK" alt="Lalitha Rice">
+
+                <h3>Lalitha</h3>
+                <p>Rice - 26 kg</p>
+                <p>₹1,650</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- DIAMOND -->
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Diamond"
+                 data-size="5 kg"
+                 data-price="430">
+
+                <img src="YOUR_IMAGE_LINK" alt="Diamond Rice">
+
+                <h3>Diamond</h3>
+                <p>Rice - 5 kg</p>
+                <p>₹430</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Diamond"
+                 data-size="10 kg"
+                 data-price="800">
+
+                <img src="YOUR_IMAGE_LINK" alt="Diamond Rice">
+
+                <h3>Diamond</h3>
+                <p>Rice - 10 kg</p>
+                <p>₹800</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Diamond"
+                 data-size="26 kg"
+                 data-price="1600">
+
+                <img src="YOUR_IMAGE_LINK" alt="Diamond Rice">
+
+                <h3>Diamond</h3>
+                <p>Rice - 26 kg</p>
+                <p>₹1,600</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- BELL -->
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Bell"
+                 data-size="5 kg"
+                 data-price="450">
+
+                <img src="YOUR_IMAGE_LINK" alt="Bell Rice">
+
+                <h3>Bell</h3>
+                <p>Rice - 5 kg</p>
+                <p>₹450</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Bell"
+                 data-size="10 kg"
+                 data-price="815">
+
+                <img src="YOUR_IMAGE_LINK" alt="Bell Rice">
+
+                <h3>Bell</h3>
+                <p>Rice - 10 kg</p>
+                <p>₹815</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="rice"
+                 data-name="Rice"
+                 data-brand="Bell"
+                 data-size="26 kg"
+                 data-price="1690">
+
+                <img src="YOUR_IMAGE_LINK" alt="Bell Rice">
+
+                <h3>Bell</h3>
+                <p>Rice - 26 kg</p>
+                <p>₹1,690</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= OILS ================= -->
+
+        <h3 class="category-title">
+            🫗 Oils
+        </h3>
+
+        <div class="product-container">
+
+
+            <!-- FREEDOM -->
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="Freedom"
+                 data-size="1 box"
+                 data-price="2900">
+
+                <img src="YOUR_IMAGE_LINK" alt="Freedom Oil">
+
+                <h3>Freedom</h3>
+                <p>1 box</p>
+                <p>₹2,900</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="Freedom"
+                 data-size="15 kg"
+                 data-price="2890">
+
+                <img src="YOUR_IMAGE_LINK" alt="Freedom Oil">
+
+                <h3>Freedom</h3>
+                <p>15 kg</p>
+                <p>₹2,890</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="Freedom"
+                 data-size="15 litre"
+                 data-price="2700">
+
+                <img src="YOUR_IMAGE_LINK" alt="Freedom Oil">
+
+                <h3>Freedom</h3>
+                <p>15 litre</p>
+                <p>₹2,700</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- GOLD DROP -->
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="GoldDrop"
+                 data-size="1 box"
+                 data-price="2900">
+
+                <img src="YOUR_IMAGE_LINK" alt="GoldDrop Oil">
+
+                <h3>GoldDrop</h3>
+                <p>1 box</p>
+                <p>₹2,900</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="GoldDrop"
+                 data-size="15 kg"
+                 data-price="2900">
+
+                <img src="YOUR_IMAGE_LINK" alt="GoldDrop Oil">
+
+                <h3>GoldDrop</h3>
+                <p>15 kg</p>
+                <p>₹2,900</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="GoldDrop"
+                 data-size="15 litre"
+                 data-price="2650">
+
+                <img src="YOUR_IMAGE_LINK" alt="GoldDrop Oil">
+
+                <h3>GoldDrop</h3>
+                <p>15 litre</p>
+                <p>₹2,650</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- RUCHI GOLD -->
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="Ruchi Gold"
+                 data-size="1 box"
+                 data-price="1250">
+
+                <img src="YOUR_IMAGE_LINK" alt="Ruchi Gold Oil">
+
+                <h3>Ruchi Gold</h3>
+                <p>1 box</p>
+                <p>₹1,250</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="oils"
+                 data-name="Oil"
+                 data-brand="Ruchi Gold"
+                 data-size="15 litre"
+                 data-price="2630">
+
+                <img src="YOUR_IMAGE_LINK" alt="Ruchi Gold Oil">
+
+                <h3>Ruchi Gold</h3>
+                <p>15 litre</p>
+                <p>₹2,630</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= DALS ================= -->
+
+        <h3 class="category-title">
+            🫘 Dals - 50 kg
+        </h3>
+
+        <div class="product-container">
+
+
+            <!-- URAD DAL -->
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Urad Dal"
+                 data-brand="Gopuram"
+                 data-size="50 kg"
+                 data-price="5500">
+
+                <img src="YOUR_IMAGE_LINK" alt="Gopuram Urad Dal">
+
+                <h3>Gopuram</h3>
+                <p>Urad Dal - 50 kg</p>
+                <p>₹5,500</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Urad Dal"
+                 data-brand="Pineapple"
+                 data-size="50 kg"
+                 data-price="6000">
+
+                <img src="YOUR_IMAGE_LINK" alt="Pineapple Urad Dal">
+
+                <h3>Pineapple</h3>
+                <p>Urad Dal - 50 kg</p>
+                <p>₹6,000</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Urad Dal"
+                 data-brand="Akhil"
+                 data-size="50 kg"
+                 data-price="4500">
+
+                <img src="YOUR_IMAGE_LINK" alt="Akhil Urad Dal">
+
+                <h3>Akhil</h3>
+                <p>Urad Dal - 50 kg</p>
+                <p>₹4,500</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- TOOR DAL -->
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Toor Dal"
+                 data-brand="Shreya Gold"
+                 data-size="50 kg"
+                 data-price="5838">
+
+                <img src="YOUR_IMAGE_LINK" alt="Shreya Gold Toor Dal">
+
+                <h3>Shreya Gold</h3>
+                <p>Toor Dal - 50 kg</p>
+                <p>₹5,838</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Toor Dal"
+                 data-brand="Palnadu King"
+                 data-size="50 kg"
+                 data-price="5400">
+
+                <img src="YOUR_IMAGE_LINK" alt="Palnadu King Toor Dal">
+
+                <h3>Palnadu King</h3>
+                <p>Toor Dal - 50 kg</p>
+                <p>₹5,400</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+
+            <!-- CHANA DAL -->
+
+            <div class="product-card"
+                 data-category="dals"
+                 data-name="Chana Dal"
+                 data-brand="Tiger"
+                 data-size="50 kg"
+                 data-price="5000">
+
+                <img src="YOUR_IMAGE_LINK" alt="Tiger Chana Dal">
+
+                <h3>Tiger</h3>
+                <p>Chana Dal - 50 kg</p>
+                <p>₹5,000</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SALT ================= -->
+
+        <h3 class="category-title">
+            🧂 Salt
+        </h3>
+
+        <div class="product-container">
+
+            <div class="product-card"
+                 data-category="salt"
+                 data-name="Salt"
+                 data-brand="Aashirvaad"
+                 data-size="25 kg"
+                 data-price="400">
+
+                <img src="YOUR_IMAGE_LINK" alt="Aashirvaad Salt">
+
+                <h3>Aashirvaad</h3>
+                <p>Salt - 25 kg</p>
+                <p>₹400</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= TAMARIND ================= -->
+
+        <h3 class="category-title">
+            🌿 Tamarind
+        </h3>
+
+        <div class="product-container">
+
+            <div class="product-card"
+                 data-category="tamarind"
+                 data-name="Tamarind"
+                 data-brand="Quality"
+                 data-size="15 kg"
+                 data-price="1800">
+
+                <img src="YOUR_IMAGE_LINK" alt="Quality Tamarind">
+
+                <h3>Quality</h3>
+                <p>Tamarind - 15 kg</p>
+                <p>₹1,800</p>
+
+                <button class="add-to-cart">Add to Cart</button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CART ================= -->
+
+    <section class="cart" id="cart">
+
+        <h2>Your Cart 🛒</h2>
+
+        <div id="cart-items">
+
+            <p>Your cart is empty.</p>
+
+        </div>
+
+        <h3>
+            Total: ₹<span id="cart-total">0</span>
+        </h3>
+
+    </section>
+    <!-- ===============================
+     CHECKOUT
+     =============================== -->
+
+<section class="checkout" id="checkout">
+
+    <h2>Checkout 📦</h2>
+
+    <form id="checkout-form">
+
+        <input
+            type="text"
+            id="customer-name"
+            placeholder="Enter your name"
+            required
+        >
+
+        <input
+            type="tel"
+            id="customer-phone"
+            placeholder="Enter mobile number"
+            required
+        >
+
+        <textarea
+            id="customer-address"
+            placeholder="Enter delivery address"
+            required
+        ></textarea>
+
+        <input
+            type="text"
+            id="customer-city"
+            placeholder="Enter city"
+            required
+        >
+
+        <button type="submit">
+            Place Order 🛒
+        </button>
+
+    </form>
+
+    <div id="order-message"></div>
+
+</section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 SVVLK. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
