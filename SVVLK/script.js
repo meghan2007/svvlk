@@ -2,7 +2,11 @@
 // SVVLK GROCERY CART
 // ===============================
 
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
+
+function saveCart() {
+    localStorage.setItem('svvlk-cart', JSON.stringify(cart));
+}
 
 
 // ===============================
@@ -24,7 +28,7 @@ addButtons.forEach(function(button) {
 
         // Don't allow products with ₹0
         if (price <= 0) {
-            alert("Price not added for this product yet.");
+            showToast("Price not added for this product yet.", "warning");
             return;
         }
 
@@ -52,6 +56,7 @@ addButtons.forEach(function(button) {
         }
 
         updateCart();
+        showToast("" + brand + " " + name + " added to cart!", "success");
 
     });
 
@@ -83,6 +88,10 @@ function updateCart() {
         cartCount.textContent = "0";
         cartTotal.textContent = "0";
 
+        if (document.getElementById("proceed-checkout")) {
+            document.getElementById("proceed-checkout").style.display = "none";
+        }
+        saveCart();
         return;
     }
 
@@ -132,7 +141,7 @@ function updateCart() {
                 </p>
 
                 <button onclick="removeItem(${index})">
-                    🗑️ Remove
+                    <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><polyline points='3 6 5 6 21 6'></polyline><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path><line x1='10' y1='11' x2='10' y2='17'></line><line x1='14' y1='11' x2='14' y2='17'></line></svg> Remove
                 </button>
 
             </div>
@@ -148,6 +157,11 @@ function updateCart() {
 
     cartTotal.textContent = total.toLocaleString("en-IN");
 
+    if (document.getElementById("proceed-checkout")) {
+        document.getElementById("proceed-checkout").style.display = "inline-block";
+    }
+
+    saveCart();
 }
 
 
@@ -327,7 +341,7 @@ checkoutForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     if (cart.length === 0) {
-        alert("Your cart is empty!");
+        showToast("Your cart is empty!", "warning");
         return;
     }
 
@@ -348,16 +362,16 @@ checkoutForm.addEventListener("submit", function(event) {
         document.getElementById("order-message");
 
     orderMessage.innerHTML = `
-        <h3>✅ Order Placed Successfully!</h3>
+        <h3><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points='22 4 12 14.01 9 11.01'></polyline></svg> Order Placed Successfully!</h3>
 
         <p>Thank you, ${customerName}!</p>
 
-        <p>📱 Mobile: ${customerPhone}</p>
+        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect><line x1='12' y1='18' x2='12.01' y2='18'></line></svg> Mobile: ${customerPhone}</p>
 
-        <p>📍 Delivery: ${customerAddress}, ${customerCity}</p>
+        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg> Delivery: ${customerAddress}, ${customerCity}</p>
 
         <p>
-            💰 Order Total:
+            <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'></circle><path d='M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8'></path><path d='M12 18V6'></path></svg> Order Total:
             ₹${document.getElementById("cart-total").textContent}
         </p>
 
@@ -374,3 +388,47 @@ checkoutForm.addEventListener("submit", function(event) {
     checkoutForm.reset();
 
 });
+
+
+
+// ===============================
+// TOAST NOTIFICATIONS
+// ===============================
+
+const toastCheckIcon = `<svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points='22 4 12 14.01 9 11.01'></polyline></svg>`;
+const toastWarnIcon = `<svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='12'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg>`;
+
+const toastContainer = document.createElement('div');
+toastContainer.id = 'toast-container';
+document.body.appendChild(toastContainer);
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    const icon = type === 'success' ? toastCheckIcon : toastWarnIcon;
+    toast.innerHTML = icon + message;
+    
+    toastContainer.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// ===============================
+// PROCEED TO CHECKOUT BUTTON
+// ===============================
+
+const proceedCheckoutBtn = document.getElementById("proceed-checkout");
+
+if (proceedCheckoutBtn) {
+    proceedCheckoutBtn.addEventListener("click", function() {
+        document.getElementById("checkout").scrollIntoView({
+            behavior: "smooth"
+        });
+        
+        setTimeout(() => {
+            document.getElementById("customer-name").focus();
+        }, 600);
+    });
+}
