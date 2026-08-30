@@ -4,7 +4,24 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
-);// ===============================
+);
+// ===============================
+// SECURITY HELPER
+// ===============================
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, function(tag) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag;
+    });
+}
+
+// ===============================
 // SVVLK GROCERY CART
 // ===============================
 
@@ -310,6 +327,13 @@ const checkoutForm =
     document.getElementById("checkout-form");
 
 checkoutForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    if (!currentUser) {
+        showToast("You must be logged in to place an order. Please log in first.", "warning");
+        document.getElementById("auth-modal").style.display = "flex";
+        return;
+    }
 
     event.preventDefault();
 
@@ -338,7 +362,8 @@ checkoutForm.addEventListener("submit", async function(event) {
             .from('orders')
             .insert([
                 {
-                    order_id: "ORD-" + Date.now(),
+                                        order_id: "ORD-" + Date.now(),
+                    user_id: currentUser.id,
                     customer_name: customerName,
                     customer_phone: customerPhone,
                     customer_address: customerAddress + ", " + customerCity,
@@ -359,11 +384,11 @@ checkoutForm.addEventListener("submit", async function(event) {
     orderMessage.innerHTML = `
         <h3><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points='22 4 12 14.01 9 11.01'></polyline></svg> Order Placed Successfully!</h3>
 
-        <p>Thank you, ${customerName}!</p>
+        <p>Thank you, ${escapeHTML(customerName)}!</p>
 
-        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect><line x1='12' y1='18' x2='12.01' y2='18'></line></svg> Mobile: ${customerPhone}</p>
+        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect><line x1='12' y1='18' x2='12.01' y2='18'></line></svg> Mobile: ${escapeHTML(customerPhone)}</p>
 
-        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg> Delivery: ${customerAddress}, ${customerCity}</p>
+        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg> Delivery: ${escapeHTML(customerAddress)}, ${escapeHTML(customerCity)}</p>
 
         <p>
             <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'></circle><path d='M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8'></path><path d='M12 18V6'></path></svg> Order Total:
