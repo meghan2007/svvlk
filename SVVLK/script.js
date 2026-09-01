@@ -656,13 +656,21 @@ if (myOrdersBtn) {
                     itemsText += "Details unavailable";
                 }
 
+                let statusClass = "status-pending";
+                let statusText = order.status || "Pending";
+                if (statusText.toLowerCase() === "shipped") statusClass = "status-shipped";
+                if (statusText.toLowerCase() === "delivered") statusClass = "status-delivered";
+
                 card.innerHTML = 
-                    '<div class="order-history-header">' +
-                        '<span class="order-history-id">' + escapeHTML(order.order_id) + '</span>' +
-                        '<span class="order-history-amount">₹' + Number(order.total_amount).toLocaleString("en-IN") + '</span>' +
-                    '</div>' +
-                    '<div>Delivered to: ' + escapeHTML(order.customer_address) + '</div>' +
-                    '<div class="order-history-items">' + escapeHTML(itemsText) + '</div>';
+                    `<div class="order-history-header">
+                        <div>
+                            <span class="order-history-id">${escapeHTML(order.order_id)}</span>
+                            <span class="order-status-badge ${statusClass}">${escapeHTML(statusText)}</span>
+                        </div>
+                        <span class="order-history-amount">₹${Number(order.total_amount).toLocaleString("en-IN")}</span>
+                    </div>
+                    <div>Delivered to: ${escapeHTML(order.customer_address)}</div>
+                    <div class="order-history-items">${escapeHTML(itemsText)}</div>`;
 
                 ordersList.appendChild(card);
             });
