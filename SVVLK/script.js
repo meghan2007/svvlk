@@ -369,7 +369,7 @@ checkoutForm.addEventListener("submit", async function(event) {
                     customer_address: customerAddress,
                     customer_city: customerCity,
                     total_amount: Number(totalAmount.replace(/,/g, '')),
-                    cart_items: cart
+                    items: cart
                 }
             ]);
 
