@@ -5,6 +5,31 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+// ===============================
+// DARK MODE
+// ===============================
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+if (darkModeToggle) {
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.textContent = '☀️';
+    }
+
+    darkModeToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('dark-mode', 'enabled');
+            darkModeToggle.textContent = '☀️';
+        } else {
+            localStorage.setItem('dark-mode', 'disabled');
+            darkModeToggle.textContent = '🌙';
+        }
+    });
+}
+
 // ===============================
 // SECURITY HELPER
 // ===============================
