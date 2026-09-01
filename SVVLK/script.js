@@ -93,6 +93,8 @@ function updateCart() {
         cartItems.innerHTML = "<p>Your cart is empty.</p>";
 
         cartCount.textContent = "0";
+        const floatingCount = document.getElementById("floating-cart-count");
+        if (floatingCount) floatingCount.textContent = "0";
         cartTotal.textContent = "0";
 
         if (document.getElementById("proceed-checkout")) {
@@ -161,6 +163,8 @@ function updateCart() {
 
 
     cartCount.textContent = totalItems;
+    const floatingCount = document.getElementById("floating-cart-count");
+    if (floatingCount) floatingCount.textContent = totalItems;
 
     cartTotal.textContent = total.toLocaleString("en-IN");
 
