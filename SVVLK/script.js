@@ -593,7 +593,8 @@ async function updateAuthState() {
     currentUser = session?.user || null;
     
     if (currentUser) {
-        loginBtn.innerHTML = "Logout";`n        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "inline-block";
+        loginBtn.innerHTML = "Logout";
+        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "inline-block";
         
         const nameInput = document.getElementById("customer-name");
         if (nameInput && !nameInput.value) {
@@ -605,7 +606,8 @@ async function updateAuthState() {
             }
         }
     } else {
-        loginBtn.innerHTML = "Login";`n        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "none";
+        loginBtn.innerHTML = "Login";
+        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "none";
         
         // Clear auto-filled name on logout if we want, but usually it's fine to leave it.
     }
