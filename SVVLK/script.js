@@ -366,7 +366,8 @@ checkoutForm.addEventListener("submit", async function(event) {
                     user_id: currentUser.id,
                     customer_name: customerName,
                     customer_phone: customerPhone,
-                    customer_address: customerAddress + ", " + customerCity,
+                    customer_address: customerAddress,
+                    customer_city: customerCity,
                     total_amount: Number(totalAmount.replace(/,/g, '')),
                     cart_items: cart
                 }
@@ -375,7 +376,8 @@ checkoutForm.addEventListener("submit", async function(event) {
         if (error) throw error;
     } catch (err) {
         console.error("Supabase Error:", err);
-        showToast("Error saving order to database. Check console.", "warning");
+        showToast("Error saving order: " + err.message, "warning");
+        return; // STOP execution so it doesn't say success!
     }
 
     const orderMessage =
