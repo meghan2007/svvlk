@@ -384,7 +384,29 @@ checkoutForm.addEventListener("submit", async function(event) {
         document.getElementById("customer-city").value;
 
 
-        const totalAmount = document.getElementById("cart-total").textContent;
+                const totalAmount = document.getElementById("cart-total").textContent;
+
+    const paymentMethod = document.getElementById("payment-method").value;
+    if (!paymentMethod) {
+        showToast("Please select a payment method", "warning");
+        return;
+    }
+
+    // Show Payment Animation
+    const paymentOverlay = document.getElementById("payment-overlay");
+    if (paymentOverlay) {
+        paymentOverlay.style.display = "flex";
+        if (paymentMethod === "COD") {
+            paymentOverlay.querySelector("h3").textContent = "Confirming Order...";
+            paymentOverlay.querySelector("p").textContent = "Preparing for Cash on Delivery";
+        } else {
+            paymentOverlay.querySelector("h3").textContent = "Processing UPI Payment...";
+            paymentOverlay.querySelector("p").textContent = "Awaiting confirmation from your bank app";
+        }
+    }
+    
+    // Simulate 2.5 second bank processing delay
+    await new Promise(resolve => setTimeout(resolve, 2500));
 
     try {
         const { error } = await supabaseClient
@@ -397,14 +419,17 @@ checkoutForm.addEventListener("submit", async function(event) {
                     customer_phone: customerPhone,
                     customer_address: customerAddress,
                     customer_city: customerCity,
+                    payment_method: paymentMethod,
                     total_amount: Number(totalAmount.replace(/,/g, '')),
                     items: cart
                 }
             ]);
 
         if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
     } catch (err) {
         console.error("Supabase Error:", err);
+        if (paymentOverlay) paymentOverlay.style.display = "none";
         showToast("Error saving order: " + err.message, "warning");
         return; // STOP execution so it doesn't say success!
     }
@@ -497,6 +522,7 @@ async function loadProducts() {
             .select('*');
 
         if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
 
         productsList.innerHTML = ''; 
 
@@ -569,6 +595,7 @@ if (googleBtn) {
                 
             });
             if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
         } catch (err) {
             showToast(err.message, "warning");
         }
@@ -600,6 +627,7 @@ authForm.addEventListener("submit", async (e) => {
         if (isSignUp) {
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
             showToast("Signup successful! You can now log in.", "success");
             
             // Switch back to login mode automatically
@@ -608,6 +636,7 @@ authForm.addEventListener("submit", async (e) => {
         } else {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
             showToast("Logged in successfully!", "success");
             authModal.style.display = "none";
             updateAuthState();
@@ -666,6 +695,7 @@ if (myOrdersBtn) {
                 .order('order_id', { ascending: false });
 
             if (error) throw error;
+        if (paymentOverlay) paymentOverlay.style.display = "none";
 
             if (!data || data.length === 0) {
                 ordersList.innerHTML = "<p>You haven't placed any orders yet!</p>";
