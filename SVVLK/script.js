@@ -594,8 +594,20 @@ async function updateAuthState() {
     
     if (currentUser) {
         loginBtn.innerHTML = "Logout";
+        
+        const nameInput = document.getElementById("customer-name");
+        if (nameInput && !nameInput.value) {
+            const googleName = currentUser.user_metadata?.full_name || currentUser.user_metadata?.name;
+            if (googleName) {
+                nameInput.value = googleName;
+            } else if (currentUser.email) {
+                nameInput.value = currentUser.email.split('@')[0];
+            }
+        }
     } else {
         loginBtn.innerHTML = "Login";
+        
+        // Clear auto-filled name on logout if we want, but usually it's fine to leave it.
     }
 }
 
