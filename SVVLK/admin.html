@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVVLK - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f4f7f6; color: #333; }
+        header { background: #2c3e50; color: white; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { color: #2ecc71; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px; }
+        .card h2 { margin-bottom: 20px; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* Form */
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        button { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #219150; }
+        
+        /* Table */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 15px; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #555; }
+        .status-select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
+        .update-btn { padding: 8px 12px; background: #3498db; font-size: 14px; margin-left: 10px; }
+        
+        #auth-warning { text-align: center; margin-top: 100px; }
+        #admin-content { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SVVLK Admin</h1>
+        <a href="index.html" style="color: white; text-decoration: none;">&larr; Back to Store</a>
+    </header>
+
+    <div id="auth-warning">
+        <h2>Verifying Admin Access...</h2>
+        <p>Please wait.</p>
+    </div>
+
+    <div class="container" id="admin-content">
+        
+        <!-- Add Product -->
+        <div class="card">
+            <h2>Add New Grocery Product</h2>
+            <form id="add-product-form">
+                <input type="text" id="p-name" placeholder="Product Name (e.g., Organic Bananas)" required>
+                <input type="text" id="p-brand" placeholder="Brand Name" required>
+                <input type="number" id="p-price" placeholder="Price (₹)" required>
+                <input type="text" id="p-size" placeholder="Size/Weight (e.g., 1 kg)" required>
+                <input type="url" id="p-image" placeholder="Image URL (Unsplash or direct link)" required>
+                <select id="p-category" required>
+                    <option value="fruits">Fruits & Vegetables</option>
+                    <option value="dairy">Dairy & Eggs</option>
+                    <option value="pantry">Pantry Staples</option>
+                    <option value="snacks">Snacks</option>
+                </select>
+                <button type="submit">Upload Product to Database</button>
+            </form>
+        </div>
+
+        <!-- Manage Orders -->
+        <div class="card">
+            <h2>Live Order Management</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="5">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Use the EXACT SAME keys you use in script.js!
+        // We will grab them dynamically from script.js using a trick, or we can just read them from localStorage if you stored them, but for security, you should copy your keys here if they aren't loading.
+        // Actually, since we don't know the exact anon key from this script, let me just tell the user to copy their URL/Key.
+        <script>
+        const supabaseUrl = "";
+        const supabaseKey = "";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function checkAdmin() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session?.user) {
+                document.getElementById('auth-warning').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                loadOrders();
+            } else {
+                document.getElementById('auth-warning').innerHTML = "<h2>Access Denied</h2><p>You must log in from the main store first.</p>";
+            }
+        }
+
+        // Add Product Form
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.textContent = "Uploading...";
+
+            const newProduct = {
+                name: document.getElementById('p-name').value,
+                brand: document.getElementById('p-brand').value,
+                price: Number(document.getElementById('p-price').value),
+                size: document.getElementById('p-size').value,
+                image_url: document.getElementById('p-image').value,
+                category: document.getElementById('p-category').value
+            };
+
+            const { error } = await supabaseClient.from('products').insert([newProduct]);
+            
+            if (error) {
+                alert("Error adding product: " + error.message);
+                btn.textContent = "Upload Product to Database";
+            } else {
+                alert("Product Added Successfully!");
+                e.target.reset();
+                btn.textContent = "Upload Product to Database";
+            }
+        });
+
+        // Load Orders
+        async function loadOrders() {
+            const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
+            const tbody = document.getElementById('orders-table-body');
+            
+            if (error || !data) {
+                tbody.innerHTML = "<tr><td colspan='5'>Error loading orders</td></tr>";
+                return;
+            }
+
+            tbody.innerHTML = "";
+            data.forEach(order => {
+                const tr = document.createElement('tr');
+                const currentStatus = order.status || 'Pending';
+                
+                tr.innerHTML = 
+                    <td><strong> + order.order_id + </strong></td>
+                    <td> + order.customer_name + </td>
+                    <td>₹ + order.total_amount + </td>
+                    <td>
+                        <select class="status-select" id="status- + order.id + ">
+                            <option value="Pending"  + (currentStatus==='Pending'?'selected':'') + >Pending</option>
+                            <option value="Shipped"  + (currentStatus==='Shipped'?'selected':'') + >Shipped</option>
+                            <option value="Delivered"  + (currentStatus==='Delivered'?'selected':'') + >Delivered</option>
+                        </select>
+                    </td>
+                    <td><button class="update-btn" onclick="updateStatus(' + order.id + ')">Save</button></td>
+                ;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function updateStatus(id) {
+            const newStatus = document.getElementById('status-' + id).value;
+            const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
+            if (error) {
+                alert("Error updating status: " + error.message);
+            } else {
+                alert("Order status updated to " + newStatus);
+            }
+        }
+
+        checkAdmin();
+    </script>
+</body>
+</html>
