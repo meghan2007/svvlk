@@ -23,7 +23,7 @@
             <a href="#">Home</a>
             <a href="#products">Groceries</a>
             <a href="#cart">Cart <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='9' cy='21' r='1'></circle><circle cx='20' cy='21' r='1'></circle><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'></path></svg> (<span id="cart-count">0</span>)</a>
-            <a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
+            <a href="#" id="my-orders-btn" style="display: none; font-weight: bold; color: #27ae60;">My Orders</a><a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
         </nav>
 
     </header>
@@ -217,6 +217,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
+    <!-- ================= MY ORDERS MODAL ================= -->
+    <div id="orders-modal" style="display: none;">
+        <div class="orders-content">
+            <span id="close-orders">&times;</span>
+            <h2>My Purchase History</h2>
+            <div id="orders-list">
+                <p>Loading your orders...</p>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
