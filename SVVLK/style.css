@@ -739,3 +739,53 @@ footer {
     color: #155724;
     border: 1px solid #c3e6cb;
 }
+/* Floating Mobile Cart */
+#floating-cart {
+    display: none;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #27ae60;
+    color: white;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(39, 174, 96, 0.4);
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+
+#floating-cart:hover {
+    transform: scale(1.1);
+    background: #219150;
+}
+
+#floating-cart .icon {
+    width: 28px;
+    height: 28px;
+}
+
+#floating-cart-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #27ae60;
+}
+
+@media (max-width: 768px) {
+    #floating-cart {
+        display: flex;
+    }
+}
