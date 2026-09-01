@@ -426,10 +426,10 @@ checkoutForm.addEventListener("submit", async function(event) {
             ]);
 
         if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
     } catch (err) {
         console.error("Supabase Error:", err);
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
         showToast("Error saving order: " + err.message, "warning");
         return; // STOP execution so it doesn't say success!
     }
@@ -522,7 +522,7 @@ async function loadProducts() {
             .select('*');
 
         if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
 
         productsList.innerHTML = ''; 
 
@@ -595,7 +595,7 @@ if (googleBtn) {
                 
             });
             if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
         } catch (err) {
             showToast(err.message, "warning");
         }
@@ -627,7 +627,7 @@ authForm.addEventListener("submit", async (e) => {
         if (isSignUp) {
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
             showToast("Signup successful! You can now log in.", "success");
             
             // Switch back to login mode automatically
@@ -636,7 +636,7 @@ authForm.addEventListener("submit", async (e) => {
         } else {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
             showToast("Logged in successfully!", "success");
             authModal.style.display = "none";
             updateAuthState();
@@ -695,7 +695,7 @@ if (myOrdersBtn) {
                 .order('order_id', { ascending: false });
 
             if (error) throw error;
-        if (paymentOverlay) paymentOverlay.style.display = "none";
+
 
             if (!data || data.length === 0) {
                 ordersList.innerHTML = "<p>You haven't placed any orders yet!</p>";
