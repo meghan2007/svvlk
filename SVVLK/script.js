@@ -593,7 +593,7 @@ async function updateAuthState() {
     currentUser = session?.user || null;
     
     if (currentUser) {
-        loginBtn.innerHTML = "Logout";
+        loginBtn.innerHTML = "Logout";`n        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "inline-block";
         
         const nameInput = document.getElementById("customer-name");
         if (nameInput && !nameInput.value) {
@@ -605,10 +605,75 @@ async function updateAuthState() {
             }
         }
     } else {
-        loginBtn.innerHTML = "Login";
+        loginBtn.innerHTML = "Login";`n        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "none";
         
         // Clear auto-filled name on logout if we want, but usually it's fine to leave it.
     }
 }
 
 updateAuthState();
+
+// ===============================
+// MY ORDERS HISTORY
+// ===============================
+
+const myOrdersBtn = document.getElementById("my-orders-btn");
+const ordersModal = document.getElementById("orders-modal");
+const closeOrders = document.getElementById("close-orders");
+const ordersList = document.getElementById("orders-list");
+
+if (myOrdersBtn) {
+    myOrdersBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        ordersModal.style.display = "flex";
+        ordersList.innerHTML = "<p>Loading your past orders...</p>";
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .order('order_id', { ascending: false });
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                ordersList.innerHTML = "<p>You haven't placed any orders yet!</p>";
+                return;
+            }
+
+            ordersList.innerHTML = "";
+            data.forEach(order => {
+                const card = document.createElement("div");
+                card.className = "order-history-card";
+                
+                // Format items safely
+                let itemsText = "Items: ";
+                if (order.items && Array.isArray(order.items)) {
+                    itemsText += order.items.map(item => item.quantity + "x " + item.brand + " " + item.name).join(", ");
+                } else {
+                    itemsText += "Details unavailable";
+                }
+
+                card.innerHTML = 
+                    '<div class="order-history-header">' +
+                        '<span class="order-history-id">' + escapeHTML(order.order_id) + '</span>' +
+                        '<span class="order-history-amount">₹' + Number(order.total_amount).toLocaleString("en-IN") + '</span>' +
+                    '</div>' +
+                    '<div>Delivered to: ' + escapeHTML(order.customer_address) + '</div>' +
+                    '<div class="order-history-items">' + escapeHTML(itemsText) + '</div>';
+
+                ordersList.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error("Error fetching orders:", err);
+            ordersList.innerHTML = "<p style='color:red;'>Failed to load orders.</p>";
+        }
+    });
+}
+
+if (closeOrders) {
+    closeOrders.addEventListener("click", () => {
+        ordersModal.style.display = "none";
+    });
+}
