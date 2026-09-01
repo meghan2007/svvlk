@@ -789,3 +789,81 @@ footer {
         display: flex;
     }
 }
+/* ===============================
+   DARK MODE OVERRIDES
+   =============================== */
+body.dark-mode {
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+}
+body.dark-mode header {
+    background: rgba(26, 26, 46, 0.95);
+    border-bottom: 1px solid #333;
+}
+body.dark-mode header h1 a {
+    color: #2ecc71;
+}
+body.dark-mode nav a {
+    color: #ccc;
+}
+body.dark-mode nav a:hover {
+    background-color: #16213e;
+}
+body.dark-mode .hero {
+    background: linear-gradient(135deg, #16213e 0%, #0f3443 100%);
+}
+body.dark-mode .hero h2, 
+body.dark-mode .products h2, 
+body.dark-mode .cart h2, 
+body.dark-mode .checkout h2,
+body.dark-mode .orders-content h2,
+body.dark-mode .auth-content h2,
+body.dark-mode .order-history-header {
+    color: #fff;
+}
+body.dark-mode .hero p {
+    color: #ccc;
+}
+body.dark-mode .product-card, 
+body.dark-mode .cart, 
+body.dark-mode .checkout, 
+body.dark-mode .orders-content, 
+body.dark-mode .auth-content {
+    background: #16213e;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+body.dark-mode .product-card p:nth-of-type(1) {
+    color: #e0e0e0;
+}
+body.dark-mode .product-card button {
+    background: #1a1a2e;
+    color: #fff;
+    border-color: #333;
+}
+body.dark-mode #cart-items > div,
+body.dark-mode #checkout-form input,
+body.dark-mode #checkout-form textarea,
+body.dark-mode #auth-form input,
+body.dark-mode .search-box input {
+    background: #1a1a2e;
+    color: #fff;
+    border: 1px solid #333;
+}
+body.dark-mode .order-history-card {
+    background: #1a1a2e;
+    border-color: #333;
+}
+body.dark-mode .category-filter {
+    background: #16213e;
+    color: #ccc;
+    border: 1px solid #333;
+}
+body.dark-mode #close-orders,
+body.dark-mode #close-auth {
+    color: #ccc;
+}
+body.dark-mode #cart-items button {
+    background: #16213e;
+    color: #fff;
+    border-color: #555;
+}
