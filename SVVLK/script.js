@@ -1,4 +1,4 @@
-const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
+﻿const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsY3BkeWFpdGV0Z3lxaWF3c29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5ODU1MjksImV4cCI6MjEwMzU2MTUyOX0.rYePHXoZgy68see7wNZPz0QyGR7tsM1RdTvsA6BwttU";
 
 const supabaseClient = window.supabase.createClient(
