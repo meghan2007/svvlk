@@ -30,6 +30,27 @@ if (darkModeToggle) {
     });
 }
 
+
+// ===============================
+// PAYMENT METHOD TOGGLE
+// ===============================
+const paymentMethodSelect = document.getElementById("payment-method");
+const upiSection = document.getElementById("upi-section");
+const utrNumberInput = document.getElementById("utr-number");
+
+if (paymentMethodSelect && upiSection) {
+    paymentMethodSelect.addEventListener("change", function() {
+        if (this.value === "UPI") {
+            upiSection.style.display = "block";
+            utrNumberInput.required = true;
+        } else {
+            upiSection.style.display = "none";
+            utrNumberInput.required = false;
+            utrNumberInput.value = ""; // clear it
+        }
+    });
+}
+
 // ===============================
 // SECURITY HELPER
 // ===============================
@@ -376,8 +397,8 @@ checkoutForm.addEventListener("submit", async function(event) {
 
     const customerPhone = document.getElementById("customer-phone").value;
 
-    if (!/^\d{10}$/.test(customerPhone.replace(/\D/g, ""))) {
-        showToast("Please enter a valid 10-digit mobile number.", "warning");
+    if (!/^[6-9]\d{9}$/.test(customerPhone.replace(/\D/g, ""))) {
+        showToast("Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8, or 9).", "warning");
         return;
     }
 
@@ -396,7 +417,7 @@ checkoutForm.addEventListener("submit", async function(event) {
         return;
     }
 
-    // Show Payment Animation
+    // Show Processing Animation
     const paymentOverlay = document.getElementById("payment-overlay");
     if (paymentOverlay) {
         paymentOverlay.style.display = "flex";
@@ -404,8 +425,8 @@ checkoutForm.addEventListener("submit", async function(event) {
             paymentOverlay.querySelector("h3").textContent = "Confirming Order...";
             paymentOverlay.querySelector("p").textContent = "Preparing for Cash on Delivery";
         } else {
-            paymentOverlay.querySelector("h3").textContent = "Processing UPI Payment...";
-            paymentOverlay.querySelector("p").textContent = "Awaiting confirmation from your bank app";
+            paymentOverlay.querySelector("h3").textContent = "Verifying UTR...";
+            paymentOverlay.querySelector("p").textContent = "Checking transaction ID " + document.getElementById("utr-number").value;
         }
     }
     
@@ -424,6 +445,7 @@ checkoutForm.addEventListener("submit", async function(event) {
                     customer_address: customerAddress,
                     customer_city: customerCity,
                     payment_method: paymentMethod,
+                    utr_number: document.getElementById("utr-number") ? document.getElementById("utr-number").value : null,
                     total_amount: Number(totalAmount.replace(/,/g, '')),
                     items: cart
                 }
