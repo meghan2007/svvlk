@@ -374,8 +374,12 @@ checkoutForm.addEventListener("submit", async function(event) {
     const customerName =
         document.getElementById("customer-name").value;
 
-    const customerPhone =
-        document.getElementById("customer-phone").value;
+    const customerPhone = document.getElementById("customer-phone").value;
+
+    if (!/^\d{10}$/.test(customerPhone.replace(/\D/g, ""))) {
+        showToast("Please enter a valid 10-digit mobile number.", "warning");
+        return;
+    }
 
     const customerAddress =
         document.getElementById("customer-address").value;
