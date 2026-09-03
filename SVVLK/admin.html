@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -150,19 +150,18 @@
                 const tr = document.createElement('tr');
                 const currentStatus = order.status || 'Pending';
                 
-                tr.innerHTML = 
-                    <td><strong> + order.order_id + </strong></td>
-                    <td> + order.customer_name + </td>
-                    <td>₹ + order.total_amount + </td>
-                    <td>
-                        <select class="status-select" id="status- + order.id + ">
-                            <option value="Pending"  + (currentStatus==='Pending'?'selected':'') + >Pending</option>
-                            <option value="Shipped"  + (currentStatus==='Shipped'?'selected':'') + >Shipped</option>
-                            <option value="Delivered"  + (currentStatus==='Delivered'?'selected':'') + >Delivered</option>
-                        </select>
-                    </td>
-                    <td><button class="update-btn" onclick="updateStatus(' + order.id + ')">Save</button></td>
-                ;
+                                tr.innerHTML = 
+                    '<td><strong>' + order.order_id + '</strong></td>' +
+                    '<td>' + order.customer_name + '</td>' +
+                    '<td>₹' + order.total_amount + '</td>' +
+                    '<td>' +
+                        '<select class="status-select" id="status-' + order.id + '">' +
+                            '<option value="Pending" ' + (currentStatus==='Pending'?'selected':'') + '>Pending</option>' +
+                            '<option value="Shipped" ' + (currentStatus==='Shipped'?'selected':'') + '>Shipped</option>' +
+                            '<option value="Delivered" ' + (currentStatus==='Delivered'?'selected':'') + '>Delivered</option>' +
+                        '</select>' +
+                    '</td>' +
+                    '<td><button class="update-btn" onclick="updateStatus(\'' + order.id + '\')">Save</button></td>';
                 tbody.appendChild(tr);
             });
         }
