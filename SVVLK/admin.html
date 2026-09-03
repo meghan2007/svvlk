@@ -30,13 +30,26 @@
         
         #auth-warning { text-align: center; margin-top: 100px; }
         #admin-content { display: none; }
+        
+        /* Dark Mode Overrides */
+        body.dark-mode { background: #1a1a2e; color: #e0e0e0; }
+        body.dark-mode header { background: rgba(26, 26, 46, 0.95); border-bottom: 1px solid #333; }
+        body.dark-mode .card { background: #16213e; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        body.dark-mode .card h2 { color: #fff; border-bottom: 2px solid #333; }
+        body.dark-mode input, body.dark-mode select { background: #1a1a2e; color: #fff; border: 1px solid #333; }
+        body.dark-mode th { background: #1a1a2e; color: #ccc; border-bottom: 1px solid #333; }
+        body.dark-mode td { border-bottom: 1px solid #333; }
+        body.dark-mode .status-select { background: #1a1a2e; color: #fff; border: 1px solid #555; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>SVVLK Admin</h1>
-        <a href="index.html" style="color: white; text-decoration: none;">&larr; Back to Store</a>
+        <div>
+            <a href="#" id="dark-mode-toggle" style="font-size: 18px; text-decoration: none; margin-right: 20px;" title="Toggle Dark Mode">🌙</a>
+            <a href="index.html" style="color: white; text-decoration: none;">&larr; Back to Store</a>
+        </div>
     </header>
 
     <div id="auth-warning">
@@ -176,6 +189,24 @@
         }
 
         checkAdmin();
+
+        // Dark Mode Logic
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        if (localStorage.getItem('dark-mode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        }
+        darkModeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('dark-mode', 'enabled');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('dark-mode', 'disabled');
+                darkModeToggle.textContent = '🌙';
+            }
+        });
     </script>
 </body>
 </html>
