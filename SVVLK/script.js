@@ -71,7 +71,7 @@ function escapeHTML(str) {
 // SVVLK GROCERY CART
 // ===============================
 
-let cart = [];
+let cart = JSON.parse(localStorage.getItem("svvlk-cart")) || [];
 try {
     cart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
 } catch (e) {
@@ -405,8 +405,8 @@ checkoutForm.addEventListener("submit", async function(event) {
     const customerAddress =
         document.getElementById("customer-address").value;
 
-    const customerCity =
-        document.getElementById("customer-city").value;
+    const customerCity = document.getElementById("customer-city").value;
+    const deliveryTime = document.getElementById("delivery-time").value;
 
 
                 const totalAmount = document.getElementById("cart-total").textContent;

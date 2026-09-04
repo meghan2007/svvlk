@@ -57,7 +57,19 @@
         <p>Please wait.</p>
     </div>
 
-    <div class="container" id="admin-content">
+        <div class="container" id="admin-content">
+        
+        <!-- Analytics Dashboard -->
+        <div class="card" style="display: flex; justify-content: space-around; text-align: center; background: linear-gradient(135deg, #2ecc71, #219150); color: white; border: none;">
+            <div style="border: none;">
+                <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Revenue</h3>
+                <h2 id="total-revenue" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">₹0</h2>
+            </div>
+            <div style="border: none;">
+                <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Orders</h3>
+                <h2 id="total-orders" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">0</h2>
+            </div>
+        </div>
         
         <!-- Add Product -->
         <div class="card">
@@ -157,6 +169,16 @@
                 return;
             }
 
+            // Analytics Calculation
+            let totalRevenue = 0;
+            data.forEach(o => {
+                if (o.status !== 'Cancelled') {
+                    totalRevenue += Number(o.total_amount || 0);
+                }
+            });
+            document.getElementById('total-revenue').innerText = '₹' + totalRevenue.toLocaleString('en-IN');
+            document.getElementById('total-orders').innerText = data.length;
+
             tbody.innerHTML = "";
             data.forEach(order => {
                 const tr = document.createElement('tr');
@@ -165,6 +187,7 @@
                                 tr.innerHTML = 
                     '<td><strong>' + order.order_id + '</strong></td>' +
                     '<td>' + order.customer_name + '</td>' +
+                    '<td><strong style="color: #e67e22;">' + (order.delivery_time || 'Anytime') + '</strong></td>' +
                     '<td>₹' + order.total_amount + '</td>' +
                     '<td>' +
                         '<select class="status-select" id="status-' + order.id + '">' +
