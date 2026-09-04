@@ -96,6 +96,7 @@
                     <option value="oils">Oils</option>
                     <option value="dals">Dals</option>
                     <option value="salt">Salt</option>
+                    <option value="sugar">Sugar</option>
                     <option value="tamarind">Tamarind</option>
                 </select>
                 <button type="submit">Upload Product to Database</button>
@@ -218,12 +219,26 @@
         }
 
         async function toggleStock(id, currentState) {
-            const newState = !currentState;
-            const { error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id);
-            if (error) {
-                alert("Error updating inventory: " + error.message);
-            } else {
+            try {
+                // Force it to be a boolean just in case the DOM passed it weirdly
+                const isCurrentlyStocked = (currentState === true || currentState === 'true');
+                const newState = !isCurrentlyStocked;
+                
+                const { data, error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id).select();
+                
+                if (error) {
+                    alert("Error updating inventory: " + error.message);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    alert("Warning: Could not find product ID " + id + " in database. Update failed.");
+                    return;
+                }
+
                 loadInventory(); // reload table to show new colors
+            } catch (err) {
+                alert("Fatal error toggling stock: " + err.message);
             }
         }
 
