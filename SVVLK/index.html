@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -311,6 +311,21 @@
             <p>&copy; 2026 SVVLK Groceries. All rights reserved.<br><span style="font-size: 12px; color: #555; display: block; margin-top: 8px;">Developed & Designed by Meghan | Developer Contact: +91 7569898179 | vvramu9441@gmail.com</span></p>
         </div>
     </footer>
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <span class="close-profile-modal" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer; color: #888;">&times;</span>
+            <h2 style="margin-top: 0; color: #2c3e50;">My Profile</h2>
+            <p style="margin-bottom: 20px; color: #7f8c8d; font-size: 14px;">Save your details here for faster checkout!</p>
+            <form id="profile-form" style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" id="prof-name" placeholder="Full Name" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
+                <input type="tel" id="prof-phone" placeholder="10-digit Mobile Number" pattern="[6-9][0-9]{9}" maxlength="10" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
+                <textarea id="prof-address" placeholder="Full Delivery Address" rows="3" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;"></textarea>
+                <input type="text" id="prof-city" placeholder="City" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
+                <button type="submit" style="background: #2980b9; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px;">Save Profile</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
