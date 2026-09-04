@@ -167,12 +167,18 @@
             required
         ></textarea>
 
-        <input
-            type="text"
-            id="customer-city"
-            placeholder="Enter city"
-            required
-        >
+                    <input
+                type="text"
+                id="customer-city"
+                placeholder="Enter city"
+                required
+            >
+            <select id="delivery-time" required style="margin-bottom: 15px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; width: 100%; font-size: 16px;">
+                <option value="" disabled selected>Select Delivery Time</option>
+                <option value="Today (Within 2 Hours)">Fast Delivery (Within 2 Hours)</option>
+                <option value="Today (Evening)">Today (Evening)</option>
+                <option value="Tomorrow (Morning)">Tomorrow (Morning)</option>
+            </select>
             <select id="payment-method" required>
                 <option value="" disabled selected>Select Payment Method</option>
                 <option value="UPI">UPI (Google Pay, PhonePe, Paytm)</option>

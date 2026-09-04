@@ -7,6 +7,27 @@ const supabaseClient = window.supabase.createClient(
 );
 
 // ===============================
+// MAINTENANCE MODE CHECK
+// ===============================
+async function checkMaintenanceMode() {
+    try {
+        const { data } = await supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single();
+        if (data && data.maintenance_mode) {
+            document.body.innerHTML = 
+                <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: #f4f7f6; color: #333; font-family: sans-serif; padding: 20px;">
+                    <h1 style="font-size: 40px; color: #e74c3c; margin-bottom: 20px;">🚧 Under Maintenance</h1>
+                    <p style="font-size: 18px; max-width: 600px; line-height: 1.6;">SVVLK Groceries is currently upgrading our systems to serve you better. We will be back online shortly. Please check back in a few minutes!</p>
+                </div>
+            ;
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+    return false;
+}
+
+// ===============================
 // DARK MODE
 // ===============================
 const darkModeToggle = document.getElementById('dark-mode-toggle');
@@ -561,12 +582,18 @@ async function loadProducts() {
             card.dataset.size = product.size;
             card.dataset.price = product.price;
 
+                        let btnHtml = '<button class="add-to-cart">Add to Cart</button>';
+            if (product.is_in_stock === false) {
+                btnHtml = '<button disabled style="background: #95a5a6; cursor: not-allowed;">Out of Stock</button>';
+                card.style.opacity = '0.6';
+            }
+
             card.innerHTML = 
-                '<img src="' + product.image_url + '" alt="' + product.name + '">' +
+                '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '">' +
                 '<h3>' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
-                '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
-                '<button class="add-to-cart">Add to Cart</button>';
+                '<p>? ' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                btnHtml;
 
             productsList.appendChild(card);
         });

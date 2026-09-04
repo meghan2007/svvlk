@@ -71,6 +71,15 @@
             </div>
         </div>
         
+        <!-- Store Settings -->
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+            <div>
+                <h3 style="margin-bottom: 5px;">Maintenance Mode</h3>
+                <p style="font-size: 14px;">If turned ON, customers will be blocked from the store.</p>
+            </div>
+            <button id="maintenance-toggle-btn" style="background: #e74c3c; color: white;">Turn ON</button>
+        </div>
+
         <!-- Add Product -->
         <div class="card">
             <h2>Add New Grocery Product</h2>
@@ -91,6 +100,26 @@
                 </select>
                 <button type="submit">Upload Product to Database</button>
             </form>
+        </div>
+
+        <!-- Manage Inventory -->
+        <div class="card">
+            <h2>Live Inventory (ON/OFF)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Brand</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table-body">
+                        <tr><td colspan='4'>Loading inventory...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Manage Orders -->
@@ -127,6 +156,7 @@
                 document.getElementById('auth-warning').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 loadOrders();
+                loadInventory();
             } else {
                 document.getElementById('auth-warning').innerHTML = "<h2>Access Denied</h2><p>You must log in from the main store first.</p>";
             }
@@ -158,6 +188,44 @@
                 btn.textContent = "Upload Product to Database";
             }
         });
+
+        // Load Inventory
+        async function loadInventory() {
+            const { data, error } = await supabaseClient.from('products').select('*').order('name', { ascending: true });
+            const tbody = document.getElementById('inventory-table-body');
+            
+            if (error || !data) {
+                tbody.innerHTML = "<tr><td colspan='4'>Error loading inventory</td></tr>";
+                return;
+            }
+
+            tbody.innerHTML = "";
+            data.forEach(product => {
+                const tr = document.createElement('tr');
+                const isStocked = product.is_in_stock !== false; // defaults to true
+                
+                tr.innerHTML = 
+                    '<td><strong>' + product.name + '</strong> (' + product.size + ')</td>' +
+                    '<td>' + product.brand + '</td>' +
+                    '<td><span style="font-weight: bold; color: ' + (isStocked ? '#2ecc71' : '#e74c3c') + ';">' + (isStocked ? 'In Stock' : 'Out of Stock') + '</span></td>' +
+                    '<td>' +
+                        '<button class="update-btn" style="background: ' + (isStocked ? '#e74c3c' : '#2ecc71') + ';" onclick="toggleStock(\'' + product.id + '\', ' + isStocked + ')">' + 
+                            (isStocked ? 'Mark Out of Stock' : 'Mark In Stock') + 
+                        '</button>' +
+                    '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function toggleStock(id, currentState) {
+            const newState = !currentState;
+            const { error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id);
+            if (error) {
+                alert("Error updating inventory: " + error.message);
+            } else {
+                loadInventory(); // reload table to show new colors
+            }
+        }
 
         // Load Orders
         async function loadOrders() {
@@ -211,7 +279,36 @@
             }
         }
 
+        // Load Maintenance State
+        let currentMaintenanceState = false;
+        async function loadSettings() {
+            const { data } = await supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single();
+            if (data) {
+                currentMaintenanceState = data.maintenance_mode;
+                const btn = document.getElementById('maintenance-toggle-btn');
+                if (currentMaintenanceState) {
+                    btn.textContent = "Turn OFF";
+                    btn.style.background = "#2ecc71"; // Green to turn off
+                } else {
+                    btn.textContent = "Turn ON";
+                    btn.style.background = "#e74c3c"; // Red to turn on
+                }
+            }
+        }
+        
+        document.getElementById('maintenance-toggle-btn').addEventListener('click', async () => {
+            const newState = !currentMaintenanceState;
+            const { error } = await supabaseClient.from('store_settings').update({ maintenance_mode: newState }).eq('id', 1);
+            if (!error) {
+                alert(newState ? "Website is now FROZEN!" : "Website is now LIVE!");
+                loadSettings();
+            } else {
+                alert("Error: " + error.message);
+            }
+        });
+
         checkAdmin();
+        loadSettings();
 
         // Dark Mode Logic
         const darkModeToggle = document.getElementById('dark-mode-toggle');
