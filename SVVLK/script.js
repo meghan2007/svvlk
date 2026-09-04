@@ -679,6 +679,17 @@ async function updateAuthState() {
     if (currentUser) {
         loginBtn.innerHTML = "Logout";
         if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "inline-block";
+        if (document.getElementById("my-profile-btn")) document.getElementById("my-profile-btn").style.display = "inline-block";
+        
+        // Auto-fill checkout form
+        supabaseClient.from("profiles").select("*").eq("id", currentUser.id).single().then(({data}) => {
+            if (data) {
+                document.getElementById("customer-name").value = data.full_name || "";
+                document.getElementById("customer-phone").value = data.phone || "";
+                document.getElementById("customer-address").value = data.address || "";
+                document.getElementById("customer-city").value = data.city || "";
+            }
+        });
         
         const nameInput = document.getElementById("customer-name");
         if (nameInput && !nameInput.value) {
