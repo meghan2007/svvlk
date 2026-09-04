@@ -1,4 +1,4 @@
-﻿// ===============================
+// ===============================
 // SPLASH SCREEN LOGIC
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
@@ -627,7 +627,11 @@ async function loadProducts() {
 }
 
 // Call on load
-loadProducts();
+checkMaintenanceMode().then((isMaintenance) => {
+    if (!isMaintenance) {
+        loadProducts();
+    }
+});
 // ===============================
 // AUTHENTICATION
 // ===============================
