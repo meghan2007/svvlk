@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,12 +16,39 @@
     <!-- ========================================== -->
     <div id="splash-screen" class="splash-screen-container">
         
-        <!-- Golden Corner Temple Arches -->
-        <div style="position: absolute; top: 25px; left: 25px; border-top: 5px solid #f1c40f; border-left: 5px solid #f1c40f; width: 40px; height: 40px; opacity: 0.7; border-radius: 8px 0 0 0;"></div>
-        <div style="position: absolute; top: 25px; right: 25px; border-top: 5px solid #f1c40f; border-right: 5px solid #f1c40f; width: 40px; height: 40px; opacity: 0.7; border-radius: 0 8px 0 0;"></div>
-        <div style="position: absolute; bottom: 25px; left: 25px; border-bottom: 5px solid #f1c40f; border-left: 5px solid #f1c40f; width: 40px; height: 40px; opacity: 0.7; border-radius: 0 0 0 8px;"></div>
-        <div style="position: absolute; bottom: 25px; right: 25px; border-bottom: 5px solid #f1c40f; border-right: 5px solid #f1c40f; width: 40px; height: 40px; opacity: 0.7; border-radius: 0 0 8px 0;"></div>
+
         
+                <!-- Swinging Temple Bells -->
+        <svg class="temple-bell left-bell" width="70" height="120" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; left: 20px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));">
+            <defs>
+                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f1c40f" />
+                    <stop offset="50%" stop-color="#fff8b0" />
+                    <stop offset="100%" stop-color="#d35400" />
+                </linearGradient>
+            </defs>
+            <rect x="29" y="0" width="2" height="30" fill="#f1c40f"/>
+            <circle cx="30" cy="5" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <circle cx="30" cy="15" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <circle cx="30" cy="25" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <path d="M22 30 L38 30 Q42 30 42 35 L18 35 Q18 30 22 30" fill="#d35400"/>
+            <path d="M18 35 C 18 35, 12 70, 5 75 L 55 75 C 48 70, 42 35, 42 35 Z" fill="url(#goldGradient)"/>
+            <rect x="3" y="75" width="54" height="5" rx="2" fill="#d35400"/>
+            <circle cx="30" cy="83" r="5" fill="#f1c40f"/>
+        </svg>
+
+        <svg class="temple-bell right-bell" width="70" height="120" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; right: 20px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));">
+            <use href=".left-bell > *" />
+            <rect x="29" y="0" width="2" height="30" fill="#f1c40f"/>
+            <circle cx="30" cy="5" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <circle cx="30" cy="15" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <circle cx="30" cy="25" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
+            <path d="M22 30 L38 30 Q42 30 42 35 L18 35 Q18 30 22 30" fill="#d35400"/>
+            <path d="M18 35 C 18 35, 12 70, 5 75 L 55 75 C 48 70, 42 35, 42 35 Z" fill="url(#goldGradient)"/>
+            <rect x="3" y="75" width="54" height="5" rx="2" fill="#d35400"/>
+            <circle cx="30" cy="83" r="5" fill="#f1c40f"/>
+        </svg>
+
         <!-- Glowing Medallion Image -->
         <div style="position: relative; margin-bottom: 30px;">
             <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,15,0.6) 0%, rgba(241,196,15,0) 70%); animation: glowPulse 3s infinite;"></div>
@@ -60,6 +87,25 @@
             align-items: center; 
             cursor: pointer; 
             transition: opacity 0.8s ease-out;
+        }
+            .temple-bell {
+            transform-origin: top center;
+        }
+        .left-bell {
+            animation: swingLeft 4s ease-in-out infinite;
+        }
+        .right-bell {
+            animation: swingRight 5s ease-in-out infinite;
+        }
+        @keyframes swingLeft {
+            0% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+            100% { transform: rotate(15deg); }
+        }
+        @keyframes swingRight {
+            0% { transform: rotate(-10deg); }
+            50% { transform: rotate(20deg); }
+            100% { transform: rotate(-10deg); }
         }
     </style>
 
