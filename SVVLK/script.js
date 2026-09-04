@@ -741,7 +741,7 @@ updateAuthState();
 // MY ORDERS HISTORY
 // ===============================
 
-const myOrdersBtn = document.getElementById("my-orders-btn");
+const myOrdersBtn = document.getElementById("profile-view-orders-btn");
 const ordersModal = document.getElementById("orders-modal");
 const closeOrders = document.getElementById("close-orders");
 const ordersList = document.getElementById("orders-list");
@@ -749,6 +749,11 @@ const ordersList = document.getElementById("orders-list");
 if (myOrdersBtn) {
     myOrdersBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        
+        // Hide profile modal when opening orders modal
+        const profModal = document.getElementById("profile-modal");
+        if (profModal) profModal.style.display = "none";
+
         ordersModal.style.display = "flex";
         ordersList.innerHTML = "<p>Loading your past orders...</p>";
 
