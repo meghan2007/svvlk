@@ -594,7 +594,7 @@ async function loadProducts() {
                 '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '">' +
                 '<h3>' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
-                '<p>? ' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
                 btnHtml;
 
             productsList.appendChild(card);
