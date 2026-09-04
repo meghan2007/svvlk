@@ -709,7 +709,7 @@ async function updateAuthState() {
         if (document.getElementById("my-profile-btn")) document.getElementById("my-profile-btn").style.display = "inline-block";
         
         // Auto-fill checkout form
-        supabaseClient.from("profiles").select("*").eq("id", currentUser.id).single().then(({data}) => {
+        supabaseClient.from("profiles").select("*").eq("id", currentUser.id).maybeSingle().then(({data}) => {
             if (data) {
                 document.getElementById("customer-name").value = data.full_name || "";
                 document.getElementById("customer-phone").value = data.phone || "";
