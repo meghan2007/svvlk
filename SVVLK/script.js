@@ -810,3 +810,60 @@ if (closeOrders) {
         ordersModal.style.display = "none";
     });
 }
+
+// ===============================
+// USER PROFILE LOGIC
+// ===============================
+const navProfileBtn = document.getElementById("my-profile-btn");
+const profileModal = document.getElementById("profile-modal");
+const closeProfileBtn = document.querySelector(".close-profile-modal");
+const profileForm = document.getElementById("profile-form");
+
+if (navProfileBtn && profileModal) {
+    navProfileBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        profileModal.style.display = "flex";
+        
+        // Load existing profile data
+        if (currentUser) {
+            const { data } = await supabaseClient.from("profiles").select("*").eq("id", currentUser.id).maybeSingle();
+            if (data) {
+                document.getElementById("prof-name").value = data.full_name || "";
+                document.getElementById("prof-phone").value = data.phone || "";
+                document.getElementById("prof-address").value = data.address || "";
+                document.getElementById("prof-city").value = data.city || "";
+            }
+        }
+    });
+
+    closeProfileBtn.addEventListener("click", () => {
+        profileModal.style.display = "none";
+    });
+
+    profileForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentUser) return;
+
+        const profileData = {
+            id: currentUser.id,
+            full_name: document.getElementById("prof-name").value,
+            phone: document.getElementById("prof-phone").value,
+            address: document.getElementById("prof-address").value,
+            city: document.getElementById("prof-city").value
+        };
+
+        const { error } = await supabaseClient.from("profiles").upsert([profileData]);
+        if (error) {
+            showToast("Error saving profile: " + error.message, "warning");
+        } else {
+            showToast("Profile saved successfully!", "success");
+            profileModal.style.display = "none";
+            
+            // Auto-fill checkout form immediately
+            document.getElementById("customer-name").value = profileData.full_name;
+            document.getElementById("customer-phone").value = profileData.phone;
+            document.getElementById("customer-address").value = profileData.address;
+            document.getElementById("customer-city").value = profileData.city;
+        }
+    });
+}
