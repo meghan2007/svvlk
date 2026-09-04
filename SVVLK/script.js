@@ -1,4 +1,18 @@
-﻿const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
+﻿// ===============================
+// SPLASH SCREEN LOGIC
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    const splashScreen = document.getElementById("splash-screen");
+    if (splashScreen) {
+        splashScreen.addEventListener("click", () => {
+            splashScreen.style.opacity = "0";
+            setTimeout(() => {
+                splashScreen.style.display = "none";
+            }, 800); // Wait for the 0.8s CSS fade transition to finish
+        });
+    }
+});
+const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsY3BkeWFpdGV0Z3lxaWF3c29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5ODU1MjksImV4cCI6MjEwMzU2MTUyOX0.rYePHXoZgy68see7wNZPz0QyGR7tsM1RdTvsA6BwttU";
 
 const supabaseClient = window.supabase.createClient(
@@ -879,4 +893,13 @@ if (navProfileBtn && profileModal) {
             document.getElementById("customer-city").value = profileData.city;
         }
     });
+}
+
+// ===============================
+// PWA SERVICE WORKER (App Installation)
+// ===============================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(() => {
+    console.log("Service Worker Registered");
+  });
 }
