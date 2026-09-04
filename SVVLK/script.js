@@ -1,4 +1,4 @@
-const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
+﻿const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsY3BkeWFpdGV0Z3lxaWF3c29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5ODU1MjksImV4cCI6MjEwMzU2MTUyOX0.rYePHXoZgy68see7wNZPz0QyGR7tsM1RdTvsA6BwttU";
 
 const supabaseClient = window.supabase.createClient(
@@ -452,7 +452,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     }
     
     // Simulate 2.5 second bank processing delay
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    await new Promise(resolve => setTimeout(resolve, 800));
 
     try {
         const { error } = await supabaseClient
@@ -476,10 +476,12 @@ checkoutForm.addEventListener("submit", async function(event) {
 
     } catch (err) {
         console.error("Supabase Error:", err);
-
+        if (paymentOverlay) paymentOverlay.style.display = "none";
         showToast("Error saving order: " + err.message, "warning");
         return; // STOP execution so it doesn't say success!
     }
+
+    if (paymentOverlay) paymentOverlay.style.display = "none";
 
     const orderMessage =
         document.getElementById("order-message");
