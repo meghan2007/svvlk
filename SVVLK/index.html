@@ -24,7 +24,7 @@
             <a href="#">Home</a>
             <a href="#products">Groceries</a>
             <a href="#cart">Cart <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='9' cy='21' r='1'></circle><circle cx='20' cy='21' r='1'></circle><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'></path></svg> (<span id="cart-count">0</span>)</a>
-            <a href="#" id="my-profile-btn" style="display: none; font-weight: bold; color: #2980b9;">My Profile</a>`n            <a href="#" id="my-orders-btn" style="display: none; font-weight: bold; color: #27ae60;">My Orders</a><a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
+            <a href="#" id="my-profile-btn" style="display: none; font-weight: bold; color: #2980b9;">My Profile</a>`n            <a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
         </nav>
 
     </header>
@@ -322,6 +322,8 @@
                 <textarea id="prof-address" placeholder="Full Delivery Address" rows="3" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;"></textarea>
                 <input type="text" id="prof-city" placeholder="City" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
                 <button type="submit" style="background: #2980b9; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px;">Save Profile</button>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+                <button type="button" id="profile-view-orders-btn" style="background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">📦 View My Orders</button>
             </form>
         </div>
     </div>
