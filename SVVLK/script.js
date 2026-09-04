@@ -233,7 +233,13 @@ function updateCart() {
     const floatingCount = document.getElementById("floating-cart-count");
     if (floatingCount) floatingCount.textContent = totalItems;
 
-    cartTotal.textContent = total.toLocaleString("en-IN");
+        cartTotal.textContent = total.toLocaleString("en-IN");
+
+    // Auto-fill UPI amount (Must be raw number, no commas, strictly for UPI apps)
+    const upiBtn = document.getElementById("upi-pay-btn");
+    if (upiBtn) {
+        upiBtn.href = "upi://pay?pa=7569898179@ybl&pn=SVVLK%20Groceries&cu=INR&am=" + Number(total).toFixed(2);
+    }
 
     if (document.getElementById("proceed-checkout")) {
         document.getElementById("proceed-checkout").style.display = "inline-block";
