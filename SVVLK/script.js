@@ -1,4 +1,4 @@
-﻿const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
+const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsY3BkeWFpdGV0Z3lxaWF3c29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5ODU1MjksImV4cCI6MjEwMzU2MTUyOX0.rYePHXoZgy68see7wNZPz0QyGR7tsM1RdTvsA6BwttU";
 
 const supabaseClient = window.supabase.createClient(
@@ -13,12 +13,12 @@ async function checkMaintenanceMode() {
     try {
         const { data } = await supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single();
         if (data && data.maintenance_mode) {
-            document.body.innerHTML = 
+                        document.body.innerHTML = `
                 <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: #f4f7f6; color: #333; font-family: sans-serif; padding: 20px;">
                     <h1 style="font-size: 40px; color: #e74c3c; margin-bottom: 20px;">🚧 Under Maintenance</h1>
                     <p style="font-size: 18px; max-width: 600px; line-height: 1.6;">SVVLK Groceries is currently upgrading our systems to serve you better. We will be back online shortly. Please check back in a few minutes!</p>
                 </div>
-            ;
+            `;
             return true;
         }
     } catch (e) {
