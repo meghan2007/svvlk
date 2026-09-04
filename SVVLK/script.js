@@ -705,7 +705,7 @@ async function updateAuthState() {
     
     if (currentUser) {
         loginBtn.innerHTML = "Logout";
-        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "inline-block";
+        
         if (document.getElementById("my-profile-btn")) document.getElementById("my-profile-btn").style.display = "inline-block";
         
         // Auto-fill checkout form
@@ -729,7 +729,7 @@ async function updateAuthState() {
         }
     } else {
         loginBtn.innerHTML = "Login";
-        if (document.getElementById("my-orders-btn")) document.getElementById("my-orders-btn").style.display = "none";
+        
         
         // Clear auto-filled name on logout if we want, but usually it's fine to leave it.
     }
