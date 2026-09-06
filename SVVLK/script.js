@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // SPLASH SCREEN LOGIC
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
