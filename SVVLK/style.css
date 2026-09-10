@@ -392,7 +392,22 @@ nav a:hover {
     color: var(--text-dark);
 }
 
-.checkout-section {
+.checkout {
+    background: var(--card-bg);
+    max-width: 900px;
+    margin: 0 auto 60px;
+    padding: 50px;
+    border-radius: 6px;
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-soft);
+}
+.checkout h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 15px;
+}
     margin-top: 50px;
     padding-top: 40px;
     border-top: 1px solid var(--border-soft);
@@ -404,7 +419,7 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
-.form-row input, .checkout-form select, .checkout-form textarea {
+.form-row input, #checkout-form input, #checkout-form select, #checkout-form textarea {
     width: 100%;
     padding: 14px;
     border: 1px solid var(--border-soft);
@@ -416,12 +431,12 @@ nav a:hover {
     transition: border-color 0.3s;
 }
 
-.form-row input:focus, .checkout-form select:focus, .checkout-form textarea:focus {
+.form-row input:focus, #checkout-form select:focus, #checkout-form textarea:focus {
     border-color: var(--primary-forest);
     outline: none;
 }
 
-.checkout-form button[type="submit"] {
+#checkout-form button[type="submit"] {
     background: var(--primary-forest);
     color: var(--bg-cream);
     border: none;
@@ -435,7 +450,7 @@ nav a:hover {
     transition: background 0.3s;
 }
 
-.checkout-form button[type="submit"]:hover {
+#checkout-form button[type="submit"]:hover {
     background: var(--primary-hover);
 }
 
@@ -558,4 +573,77 @@ footer {
     .hero { padding: 60px 20px; }
     .hero h2 { font-size: 36px; }
     .form-row { flex-direction: column; gap: 0; }
+}
+.modal-content {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-soft) !important;
+    border-radius: 6px !important;
+    padding: 40px !important;
+    box-shadow: var(--shadow-soft) !important;
+    color: var(--text-dark) !important;
+}
+.modal-content h2, .modal-content p, .modal-content span {
+    color: var(--text-dark) !important;
+    font-family: var(--font-body) !important;
+}
+.modal-content input, .modal-content textarea {
+    background: var(--bg-cream) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--border-soft) !important;
+}
+.modal-content button[type="submit"] {
+    background: var(--primary-forest) !important;
+    color: var(--bg-cream) !important;
+}
+#profile-view-orders-btn {
+    background: var(--bg-cream) !important;
+    color: var(--primary-forest) !important;
+    border: 1px solid var(--primary-forest) !important;
+}
+#proceed-checkout {
+    background: var(--primary-forest) !important;
+    color: var(--bg-cream) !important;
+}.product-card button:disabled {
+    background: var(--bg-cream) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-soft) !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+#checkout-form select {
+    margin-bottom: 20px !important;
+    border-radius: 4px !important;
+}
+#checkout-form input, #checkout-form textarea {
+    margin-bottom: 20px;
+}
+#auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+#auth-form input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    background: var(--bg-cream);
+    color: var(--text-dark);
+}
+#auth-form button {
+    background: var(--primary-forest);
+    color: var(--bg-cream);
+    border: none;
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+#auth-form button:hover {
+    background: var(--primary-hover);
 }
