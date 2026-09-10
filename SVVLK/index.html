@@ -7,109 +7,35 @@
 
     <title>SVVLK - Grocery Store</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2026.1">
 </head>
 
 <body>
     <!-- ========================================== -->
-    <!-- PREMIUM LORD GANESHA SPLASH SCREEN -->
+        <!-- PREMIUM LORD GANESHA SPLASH SCREEN -->
     <!-- ========================================== -->
     <div id="splash-screen" class="splash-screen-container">
         
-
-        
-                <!-- Swinging Temple Bells -->
-        <svg class="temple-bell left-bell" width="70" height="120" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; left: 20px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));">
-            <defs>
-                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#f1c40f" />
-                    <stop offset="50%" stop-color="#fff8b0" />
-                    <stop offset="100%" stop-color="#d35400" />
-                </linearGradient>
-            </defs>
-            <rect x="29" y="0" width="2" height="30" fill="#f1c40f"/>
-            <circle cx="30" cy="5" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <circle cx="30" cy="15" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <circle cx="30" cy="25" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <path d="M22 30 L38 30 Q42 30 42 35 L18 35 Q18 30 22 30" fill="#d35400"/>
-            <path d="M18 35 C 18 35, 12 70, 5 75 L 55 75 C 48 70, 42 35, 42 35 Z" fill="url(#goldGradient)"/>
-            <rect x="3" y="75" width="54" height="5" rx="2" fill="#d35400"/>
-            <circle cx="30" cy="83" r="5" fill="#f1c40f"/>
-        </svg>
-
-        <svg class="temple-bell right-bell" width="70" height="120" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; right: 20px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));">
-            <use href=".left-bell > *" />
-            <rect x="29" y="0" width="2" height="30" fill="#f1c40f"/>
-            <circle cx="30" cy="5" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <circle cx="30" cy="15" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <circle cx="30" cy="25" r="3" fill="none" stroke="#f1c40f" stroke-width="2"/>
-            <path d="M22 30 L38 30 Q42 30 42 35 L18 35 Q18 30 22 30" fill="#d35400"/>
-            <path d="M18 35 C 18 35, 12 70, 5 75 L 55 75 C 48 70, 42 35, 42 35 Z" fill="url(#goldGradient)"/>
-            <rect x="3" y="75" width="54" height="5" rx="2" fill="#d35400"/>
-            <circle cx="30" cy="83" r="5" fill="#f1c40f"/>
-        </svg>
-
-        <!-- Glowing Medallion Image -->
+        <!-- Elegant Frame -->
         <div style="position: relative; margin-bottom: 30px;">
-            <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(241,196,15,0.6) 0%, rgba(241,196,15,0) 70%); animation: glowPulse 3s infinite;"></div>
-            <img src="ganesha.jpg" alt="Lord Ganesha" style="position: relative; width: 220px; height: 220px; object-fit: cover; border-radius: 50%; border: 4px solid #f1c40f; box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+            <img src="ganesha.jpg" alt="Lord Ganesha" style="width: 160px; height: 160px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-soft); padding: 10px; background: var(--card-bg);">
         </div>
 
-        <h2 style="color: #f1c40f; font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 15px; font-weight: 700; text-shadow: 0 4px 15px rgba(0,0,0,0.6); letter-spacing: 1px; text-align: center;">Om Sri Ganeshaya Namaha</h2>
-        <p style="color: #f39c12; font-size: 16px; font-weight: 600; text-shadow: 0 2px 5px rgba(0,0,0,0.8); animation: pulse 2s infinite;">Tap anywhere to enter</p>
+        <h2 style="color: var(--primary-forest); font-family: var(--font-heading); font-size: 28px; margin-bottom: 10px; font-weight: 600; letter-spacing: 1px;">Om Sri Ganeshaya Namaha</h2>
+        <p style="color: var(--text-muted); font-size: 14px; font-weight: 400; animation: pulse 2.5s infinite; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 2px;">Tap to Enter</p>
     </div>
-    
+
     <style>
         @keyframes pulse {
             0% { opacity: 0.4; }
             50% { opacity: 1; }
             100% { opacity: 0.4; }
         }
-        @keyframes glowPulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 0.5; }
-        }
-            .splash-screen-container {
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100vh; 
-            background-color: #590916; 
-            background-image: 
-                radial-gradient(circle at center, transparent 0%, #290208 100%), 
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23f1c40f' fill-opacity='0.08' d='M50 100c-27.614 0-50-22.386-50-50S22.386 0 50 0s50 22.386 50 50-22.386 50-50 50zm0-2c26.51 0 48-21.49 48-48S76.51 2 50 2 2 23.49 2 50s21.49 48 48 48zm0-8c-22.091 0-40-17.909-40-40S27.909 10 50 10s40 17.909 40 40-17.909 40-40 40zm0-2c20.987 0 38-17.013 38-38S70.987 12 50 12 12 29.013 12 50s17.013 38 38 38zm0-8c-16.569 0-30-13.431-30-30S33.431 20 50 20s30 13.431 30 30-13.431 30-30 30zm0-2c15.464 0 28-12.536 28-28S65.464 22 50 22 22 34.536 22 50s12.536 28 28 28zm0-8c-11.046 0-20-8.954-20-20S38.954 30 50 30s20 8.954 20 20-8.954 20-20 20zm0-2c9.941 0 18-8.059 18-18S59.941 32 50 32 32 40.059 32 50s8.059 18 18 18z'/%3E%3C/svg%3E");
-            z-index: 99999; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            cursor: pointer; 
-            transition: opacity 0.8s ease-out;
-        }
-            .temple-bell {
-            transform-origin: top center;
-        }
-        .left-bell {
-            animation: swingLeft 4s ease-in-out infinite;
-        }
-        .right-bell {
-            animation: swingRight 5s ease-in-out infinite;
-        }
-        @keyframes swingLeft {
-            0% { transform: rotate(15deg); }
-            50% { transform: rotate(-15deg); }
-            100% { transform: rotate(15deg); }
-        }
-        @keyframes swingRight {
-            0% { transform: rotate(-10deg); }
-            50% { transform: rotate(20deg); }
-            100% { transform: rotate(-10deg); }
-        }
     </style>
-
-    <!-- NAVIGATION -->
+    
+    <!-- ========================================== -->
+    <!-- HEADER -->
+    <!-- ========================================== -->
     <header>
 
         <h1>
@@ -427,7 +353,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2026.1"></script>
 </body>
 
 </html>
