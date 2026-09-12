@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <link rel="stylesheet" href="style.css?v=2026.4">
+    <link rel="stylesheet" href="style.css?v=2026.5">
 </head>
 
 <body>
@@ -352,7 +352,17 @@
                 <input type="text" id="prof-name" placeholder="Full Name" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
                 <input type="tel" id="prof-phone" placeholder="10-digit Mobile Number" pattern="[6-9][0-9]{9}" maxlength="10" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
                 <textarea id="prof-address" placeholder="Full Delivery Address" rows="3" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;"></textarea>
-                <input type="text" id="prof-city" placeholder="City" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;">
+                <select id="prof-city" required style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: white;">
+    <option value="" disabled selected>Select Delivery Area...</option>
+    <option value="Marripalem">Marripalem</option>
+    <option value="Urvasi">Urvasi</option>
+    <option value="ITI Junction">ITI Junction</option>
+    <option value="Kancharapalem">Kancharapalem</option>
+    <option value="Kapparada">Kapparada</option>
+    <option value="Thatichetlapalem">Thatichetlapalem</option>
+    <option value="NAD">NAD (Bulk 5+ items)</option>
+    <option value="Gopalapatnam">Gopalapatnam (Bulk 5+ items)</option>
+</select>
                 <button type="submit" style="background: #2980b9; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px;">Save Profile</button>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
                 <button type="button" id="profile-view-orders-btn" style="background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">📦 View My Orders</button>
@@ -361,7 +371,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=2026.4"></script>
+    <script src="script.js?v=2026.5"></script>
     <!-- ================= ORDER SUCCESS OVERLAY ================= -->
     <div id="order-success-overlay" class="success-overlay" style="display: none;">
         <div class="success-card">

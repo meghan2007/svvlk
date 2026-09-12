@@ -449,7 +449,19 @@ checkoutForm.addEventListener("submit", async function(event) {
     const customerAddress =
         document.getElementById("customer-address").value;
 
-    const customerCity = document.getElementById("customer-city").value;
+        const customerCity = document.getElementById("customer-city").value;
+    if (!customerCity) {
+        showToast("Please select a delivery location.", "warning");
+        return;
+    }
+
+    // Validate Bulk Locations (NAD, Gopalapatnam)
+    const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if ((customerCity === "NAD" || customerCity === "Gopalapatnam") && totalItemsCount < 5) {
+        showToast("Delivery to " + customerCity + " requires a bulk order of at least 5 bags/items.", "warning");
+        return;
+    }
+
     const deliveryTime = document.getElementById("delivery-time").value;
 
 
