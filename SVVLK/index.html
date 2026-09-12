@@ -11,6 +11,34 @@
 </head>
 
 <body>
+    <!-- DEBUG OVERLAY -->
+    <div id="debug-overlay" style="position: fixed; top: 0; left: 0; width: 100%; max-height: 50vh; overflow-y: auto; background: rgba(0,0,0,0.8); color: lime; z-index: 9999999; font-family: monospace; font-size: 12px; padding: 10px; pointer-events: none;">
+        <div>DEBUG LOG:</div>
+    </div>
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('debug-overlay');
+            if (debug) debug.innerHTML += '<br><span style="color:red">ERROR:</span> ' + message + ' at ' + lineno + ':' + colno;
+        };
+        window.onunhandledrejection = function(event) {
+            const debug = document.getElementById('debug-overlay');
+            if (debug) debug.innerHTML += '<br><span style="color:red">PROMISE REJECTION:</span> ' + event.reason;
+        };
+        console.log = (function(oldLog) {
+            return function(message) {
+                const debug = document.getElementById('debug-overlay');
+                if (debug) debug.innerHTML += '<br>LOG: ' + message;
+                oldLog.apply(console, arguments);
+            };
+        })(console.log);
+        console.error = (function(oldErr) {
+            return function(message) {
+                const debug = document.getElementById('debug-overlay');
+                if (debug) debug.innerHTML += '<br><span style="color:red">ERR:</span> ' + message;
+                oldErr.apply(console, arguments);
+            };
+        })(console.error);
+    </script>
     <!-- ========================================== -->
         <!-- PREMIUM LORD GANESHA SPLASH SCREEN -->
     <!-- ========================================== -->
