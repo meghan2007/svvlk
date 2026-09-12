@@ -2,14 +2,17 @@
 // SPLASH SCREEN LOGIC
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    const splashScreen = document.getElementById("splash-screen");
+        const splashScreen = document.getElementById("splash-screen");
     if (splashScreen) {
-        splashScreen.addEventListener("click", () => {
+        const hideSplash = () => {
             splashScreen.style.opacity = "0";
             setTimeout(() => {
                 splashScreen.style.display = "none";
-            }, 800); // Wait for the 0.8s CSS fade transition to finish
-        });
+            }, 800);
+        };
+        // Hide on click OR automatically after 2.5 seconds
+        splashScreen.addEventListener("click", hideSplash);
+        setTimeout(hideSplash, 2500);
     }
 });
 const SUPABASE_URL = "https://vlcpdyaitetgyqiawsoj.supabase.co";
@@ -503,34 +506,24 @@ checkoutForm.addEventListener("submit", async function(event) {
 
     if (paymentOverlay) paymentOverlay.style.display = "none";
 
-    const orderMessage =
-        document.getElementById("order-message");
-
-    orderMessage.innerHTML = `
-        <h3><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points='22 4 12 14.01 9 11.01'></polyline></svg> Order Placed Successfully!</h3>
-
-        <p>Thank you, ${escapeHTML(customerName)}!</p>
-
-        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect><line x1='12' y1='18' x2='12.01' y2='18'></line></svg> Mobile: ${escapeHTML(customerPhone)}</p>
-
-        <p><svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg> Delivery: ${escapeHTML(customerAddress)}, ${escapeHTML(customerCity)}</p>
-
-        <p>
-            <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'></circle><path d='M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8'></path><path d='M12 18V6'></path></svg> Order Total:
-            ₹${document.getElementById("cart-total").textContent}
-        </p>
-
-        <p>We will contact you regarding your order.</p>
-    `;
-
-
-    // Clear cart
+        // Show Premium Success Overlay
+    const successOverlay = document.getElementById("order-success-overlay");
+    if (successOverlay) {
+        document.getElementById("success-order-id").textContent = "#ORD-" + Date.now();
+        document.getElementById("success-order-total").textContent = "₹" + Number(totalAmount.replace(/,/g, '')).toLocaleString("en-IN");
+        
+        successOverlay.style.display = "flex";
+        // trigger reflow
+        void successOverlay.offsetWidth;
+        successOverlay.classList.add("active");
+    } else {
+        showToast("Order placed successfully!", "success");
+    }
 
     cart = [];
-
     updateCart();
-
     checkoutForm.reset();
+    document.getElementById("checkout").style.display = "none";
 
 });
 
