@@ -812,33 +812,33 @@ if (myOrdersBtn) {
                 if (statusText.toLowerCase() === "shipped") step = 2;
                 if (statusText.toLowerCase() === "delivered") step = 3;
 
-                card.innerHTML = 
+                card.innerHTML = `
                     <div class="order-history-header">
                         <div>
-                            <span class="order-history-id">Order #</span>
+                            <span class="order-history-id">Order #${escapeHTML(order.order_id)}</span>
                         </div>
-                        <span class="order-history-amount">₹</span>
+                        <span class="order-history-amount">₹${Number(order.total_amount).toLocaleString("en-IN")}</span>
                     </div>
                     
                     <div class="tracking-wrapper">
-                        <div class="track-step  + (step >= 1 ? 'active' : '') + ">
+                        <div class="track-step ${step >= 1 ? "active" : ""}">
                             <div class="track-dot"></div>
                             <div class="track-label">Placed</div>
                         </div>
-                        <div class="track-line  + (step >= 2 ? 'active' : '') + "></div>
-                        <div class="track-step  + (step >= 2 ? 'active' : '') + ">
+                        <div class="track-line ${step >= 2 ? "active" : ""}"></div>
+                        <div class="track-step ${step >= 2 ? "active" : ""}">
                             <div class="track-dot"></div>
                             <div class="track-label">Packed</div>
                         </div>
-                        <div class="track-line  + (step >= 3 ? 'active' : '') + "></div>
-                        <div class="track-step  + (step >= 3 ? 'active' : '') + ">
+                        <div class="track-line ${step >= 3 ? "active" : ""}"></div>
+                        <div class="track-step ${step >= 3 ? "active" : ""}">
                             <div class="track-dot"></div>
                             <div class="track-label">Delivered</div>
                         </div>
                     </div>
 
-                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">Delivered to: </div>
-                    <div class="order-history-items" style="font-size: 13px;"></div>;
+                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">Delivered to: ${escapeHTML(order.customer_address)}</div>
+                    <div class="order-history-items" style="font-size: 13px;">${escapeHTML(itemsText)}</div>`;
 
                 ordersList.appendChild(card);
             });
