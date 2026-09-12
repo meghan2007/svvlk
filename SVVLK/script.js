@@ -252,7 +252,7 @@ function updateCart() {
     // Auto-fill UPI amount (Must be raw number, no commas, strictly for UPI apps)
     const upiBtn = document.getElementById("upi-pay-btn");
     if (upiBtn) {
-        upiBtn.href = "upi://pay?pa=7569898179@ybl&pn=SVVLK%20Groceries&cu=INR&am=" + Number(total).toFixed(2);
+        upiBtn.href = "upi://pay?pa=7569898179@ybl&pn=SVVLK%20Traders&cu=INR&am=" + Number(total).toFixed(2);
     }
 
     if (document.getElementById("proceed-checkout")) {
@@ -815,16 +815,37 @@ if (myOrdersBtn) {
                 if (statusText.toLowerCase() === "shipped") statusClass = "status-shipped";
                 if (statusText.toLowerCase() === "delivered") statusClass = "status-delivered";
 
+                                let step = 1;
+                if (statusText.toLowerCase() === "shipped") step = 2;
+                if (statusText.toLowerCase() === "delivered") step = 3;
+
                 card.innerHTML = 
-                    `<div class="order-history-header">
+                    <div class="order-history-header">
                         <div>
-                            <span class="order-history-id">${escapeHTML(order.order_id)}</span>
-                            <span class="order-status-badge ${statusClass}">${escapeHTML(statusText)}</span>
+                            <span class="order-history-id">Order #</span>
                         </div>
-                        <span class="order-history-amount">₹${Number(order.total_amount).toLocaleString("en-IN")}</span>
+                        <span class="order-history-amount">₹</span>
                     </div>
-                    <div>Delivered to: ${escapeHTML(order.customer_address)}</div>
-                    <div class="order-history-items">${escapeHTML(itemsText)}</div>`;
+                    
+                    <div class="tracking-wrapper">
+                        <div class="track-step  + (step >= 1 ? 'active' : '') + ">
+                            <div class="track-dot"></div>
+                            <div class="track-label">Placed</div>
+                        </div>
+                        <div class="track-line  + (step >= 2 ? 'active' : '') + "></div>
+                        <div class="track-step  + (step >= 2 ? 'active' : '') + ">
+                            <div class="track-dot"></div>
+                            <div class="track-label">Packed</div>
+                        </div>
+                        <div class="track-line  + (step >= 3 ? 'active' : '') + "></div>
+                        <div class="track-step  + (step >= 3 ? 'active' : '') + ">
+                            <div class="track-dot"></div>
+                            <div class="track-label">Delivered</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">Delivered to: </div>
+                    <div class="order-history-items" style="font-size: 13px;"></div>;
 
                 ordersList.appendChild(card);
             });
@@ -907,3 +928,40 @@ if ('serviceWorker' in navigator) {
     console.log("Service Worker Registered");
   });
 }
+
+// Order Success Overlay Listeners
+document.addEventListener("DOMContentLoaded", () => {
+    const successOverlay = document.getElementById("order-success-overlay");
+    const trackBtn = document.getElementById("success-track-btn");
+    const continueBtn = document.getElementById("success-continue-btn");
+
+    if (continueBtn) {
+        continueBtn.addEventListener("click", () => {
+            successOverlay.classList.remove("active");
+            setTimeout(() => {
+                successOverlay.style.display = "none";
+                document.getElementById('products').scrollIntoView({behavior: 'smooth'});
+            }, 500);
+        });
+    }
+
+    if (trackBtn) {
+        trackBtn.addEventListener("click", () => {
+            successOverlay.classList.remove("active");
+            setTimeout(() => {
+                successOverlay.style.display = "none";
+                const myOrdersBtn = document.getElementById("profile-view-orders-btn");
+                if (myOrdersBtn) {
+                    // Open Profile/Orders Modal
+                    const profModal = document.getElementById("profile-modal");
+                    if (profModal) profModal.style.display = "none";
+                    
+                    const ordersModal = document.getElementById("orders-modal");
+                    if (ordersModal) ordersModal.style.display = "flex";
+                    
+                    myOrdersBtn.click();
+                }
+            }, 500);
+        });
+    }
+});

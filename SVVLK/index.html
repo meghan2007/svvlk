@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SVVLK - Grocery Store</title>
+    <title>SVVLK - Traders</title>
 
-    <link rel="stylesheet" href="style.css?v=2026.1">
+    <link rel="stylesheet" href="style.css?v=2026.4">
 </head>
 
 <body>
@@ -47,23 +47,33 @@
             <a href="#">Home</a>
             <a href="#products">Groceries</a>
             <a href="#cart">Cart <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='9' cy='21' r='1'></circle><circle cx='20' cy='21' r='1'></circle><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'></path></svg> (<span id="cart-count">0</span>)</a>
-            <a href="#" id="my-profile-btn" style="display: none; font-weight: bold; color: #2980b9;">My Profile</a>`n            <a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
+            <a href="#" id="my-profile-btn" style="display: none; font-weight: bold; color: #2980b9;">My Profile</a>
+            <a href="#" id="login-btn" style="font-weight: bold; background: white; color: #222; padding: 5px 12px; border-radius: 5px;">Login</a>
         </nav>
 
     </header>
 
 
     <!-- HERO -->
+        <!-- GLOSSY HERO SECTION -->
     <section class="hero">
-
-        <h2>Welcome to SVVLK <svg class='icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'></path><line x1='3' y1='6' x2='21' y2='6'></line><path d='M16 10a4 4 0 0 1-8 0'></path></svg></h2>
-
-        <p>Quality groceries at the best prices!</p>
-
-        <button id="shop-now">
-            Shop Now
-        </button>
-
+        <div class="hero-content">
+            <h2>Fresh Groceries, <br>Delivered Fast</h2>
+            <p>Your local store, now online. Shop the best quality products from the comfort of your home.</p>
+            <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card main-card">
+                <img src="ganesha.jpg" alt="Premium Groceries">
+            </div>
+            <div class="glass-card float-card">
+                <span>✨ 100% Organic</span>
+            </div>
+        </div>
+        <!-- Custom SVG Wave Divider -->
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="var(--bg-cream)" fill-opacity="1" d="M0,224L60,213.3C120,203,240,181,360,186.7C480,192,600,224,720,218.7C840,213,960,171,1080,149.3C1200,128,1320,128,1380,128L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+        </div>
     </section>
 
 
@@ -213,7 +223,7 @@
                 <h4 style="margin-bottom: 10px; color: #2c3e50;">Scan to Pay</h4>
                 <img src="qr.jpg" alt="UPI QR Code" style="width: 150px; height: 150px; margin-bottom: 10px; border-radius: 8px;">
                 <p style="font-size: 16px; font-weight: bold; color: #2ecc71; margin-bottom: 10px;">UPI ID: 7569898179@ybl</p>
-                <a id="upi-pay-btn" href="upi://pay?pa=7569898179@ybl&pn=SVVLK%20Groceries&cu=INR" style="display: inline-block; background: #8e44ad; color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; margin-bottom: 15px;">Pay Instantly with PhonePe / GPay</a>
+                <a id="upi-pay-btn" href="upi://pay?pa=7569898179@ybl&pn=SVVLK%20Traders&cu=INR" style="display: inline-block; background: #8e44ad; color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; margin-bottom: 15px;">Pay Instantly with PhonePe / GPay</a>
                 <input 
                     type="text" 
                     id="utr-number" 
@@ -238,12 +248,31 @@
 
     <!-- FOOTER -->
 
-    <footer>
-
-        <p>
-            © 2026 SVVLK. All Rights Reserved.
-        </p>
-
+        <footer>
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: left; padding-bottom: 40px;">
+            <div>
+                <h3 style="font-size: 28px; margin-bottom: 20px; color: var(--primary-forest);">SVVLK</h3>
+                <p style="color: var(--text-muted); line-height: 1.8;">Delivering the freshest, highest-quality groceries directly to your doorstep. Quality you can trust.</p>
+            </div>
+            <div>
+                <h3 style="font-size: 20px; margin-bottom: 20px;">Quick Links</h3>
+                <a href="#products" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">Shop Groceries</a>
+                <a href="about.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">About Us</a>
+                <a href="faq.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">FAQ</a>
+                <a href="contact.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">Contact Us</a>
+            </div>
+            <div>
+                <h3 style="font-size: 20px; margin-bottom: 20px;">Contact Proprietor</h3>
+                <p style="color: var(--text-muted); margin-bottom: 10px;"><strong>VELAGA VENKATA RAMU</strong></p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">+91 9441825349</p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">vvramu9441@gmail.com</p>
+                <p style="margin-top: 15px; color: var(--accent-gold); font-weight: 500; font-size: 14px;">🤝 For any bargaining, please contact the proprietor.</p>
+            </div>
+        </div>
+        <div style="border-top: 1px solid var(--border-soft); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center;">
+            <p style="color: var(--text-muted); font-size: 14px;">&copy; 2026 SVVLK Traders. All rights reserved.</p>
+            <p style="color: var(--text-muted); font-size: 12px;">Developed by Meghan | Developer Contact: +91 7569898179 | vvramu9441@gmail.com</p>
+        </div>
     </footer>
 
 
@@ -305,33 +334,30 @@
         </div>
     </div>
     <!-- ================= FOOTER ================= -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>Contact Us</h3>
-                <p><strong>Proprietor:</strong> VELAGA VENKATA RAMU</p>
-                <p><strong>Phone:</strong> +91 9441825349</p>
-                <p><strong>Email:</strong> vvramu9441@gmail.com</p>
-                <p style="margin-top: 10px;">Delivering the freshest groceries directly to your doorstep. Quality you can trust.</p>
-                <p style="margin-top: 8px; color: #f1c40f; font-weight: bold; font-size: 14px;">💬 For any bargaining, please contact the proprietor.</p>
+        <footer>
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: left; padding-bottom: 40px;">
+            <div>
+                <h3 style="font-size: 28px; margin-bottom: 20px; color: var(--primary-forest);">SVVLK</h3>
+                <p style="color: var(--text-muted); line-height: 1.8;">Delivering the freshest, highest-quality groceries directly to your doorstep. Quality you can trust.</p>
             </div>
-            <div class="footer-col">
-                <h3>Quick Links</h3>
-                <a href="#products">Shop</a>
-                <a href="#cart">My Cart</a>
-                <a href="#" id="footer-orders">My Orders</a>
+            <div>
+                <h3 style="font-size: 20px; margin-bottom: 20px;">Quick Links</h3>
+                <a href="#products" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">Shop Groceries</a>
+                <a href="about.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">About Us</a>
+                <a href="faq.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">FAQ</a>
+                <a href="contact.html" style="display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px;">Contact Us</a>
             </div>
-            <div class="footer-col">
-                <h3>Payment Methods</h3>
-                <p>🔒 100% Secure Payments</p>
-                <div class="payment-methods">
-                    <span>📱 UPI</span>
-                    <span>💵 COD</span>
-                </div>
+            <div>
+                <h3 style="font-size: 20px; margin-bottom: 20px;">Contact Proprietor</h3>
+                <p style="color: var(--text-muted); margin-bottom: 10px;"><strong>VELAGA VENKATA RAMU</strong></p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">+91 9441825349</p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">vvramu9441@gmail.com</p>
+                <p style="margin-top: 15px; color: var(--accent-gold); font-weight: 500; font-size: 14px;">🤝 For any bargaining, please contact the proprietor.</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 SVVLK Groceries. All rights reserved.<br><span style="font-size: 12px; color: #555; display: block; margin-top: 8px;">Developed & Designed by Meghan | Developer Contact: +91 7569898179 | vvramu9441@gmail.com</span></p>
+        <div style="border-top: 1px solid var(--border-soft); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center;">
+            <p style="color: var(--text-muted); font-size: 14px;">&copy; 2026 SVVLK Traders. All rights reserved.</p>
+            <p style="color: var(--text-muted); font-size: 12px;">Developed by Meghan | Developer Contact: +91 7569898179 | vvramu9441@gmail.com</p>
         </div>
     </footer>
     <!-- Profile Modal -->
@@ -353,7 +379,25 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=2026.1"></script>
+    <script src="script.js?v=2026.4"></script>
+    <!-- ================= ORDER SUCCESS OVERLAY ================= -->
+    <div id="order-success-overlay" class="success-overlay" style="display: none;">
+        <div class="success-card">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <h2>Order Confirmed!</h2>
+            <p>Thank you for shopping with SVVLK Traders. Your fresh groceries are being prepared.</p>
+            <div class="success-details">
+                <p><strong>Order ID:</strong> <span id="success-order-id">#</span></p>
+                <p><strong>Total Amount:</strong> <span id="success-order-total">₹0.00</span></p>
+            </div>
+            <div class="success-actions">
+                <button id="success-track-btn">Track My Order</button>
+                <button id="success-continue-btn" class="secondary-btn">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
