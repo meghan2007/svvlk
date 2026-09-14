@@ -652,39 +652,7 @@ const authTitle = document.getElementById("auth-title");
 const authSubmit = document.getElementById("auth-submit");
 const authToggleText = document.getElementById("auth-toggle-text");
 
-function handleToggle(e) {
-    e.preventDefault();
-    isSignUp = !isSignUp;
-    authTitle.textContent = isSignUp ? "Sign Up for SVVLK" : "Login to SVVLK";
-    authSubmit.textContent = isSignUp ? "Sign Up" : "Login";
-    authToggleText.innerHTML = isSignUp 
-        ? 'Already have an account? <a href="#" id="auth-toggle-link">Login</a>' 
-        : 'Don\'t have an account? <a href="#" id="auth-toggle-link">Sign up</a>';
-    
-    document.getElementById("auth-toggle-link").addEventListener("click", handleToggle);
-}
 
-document.getElementById("auth-toggle-link").addEventListener("click", handleToggle);
-
-// Google OAuth
-const googleBtn = document.getElementById("auth-google-btn");
-if (googleBtn) {
-    googleBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        googleBtn.innerHTML = "Redirecting to Google...";
-        googleBtn.style.opacity = "0.5";
-        try {
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                
-            });
-            if (error) throw error;
-
-        } catch (err) {
-            showToast(err.message, "warning");
-        }
-    });
-}
 
 loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
