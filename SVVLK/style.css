@@ -703,3 +703,78 @@ body.dark-mode .success-card {
     background: var(--bg-cream);
     color: var(--text-dark);
 }
+
+/* ===============================
+   MOBILE RESPONSIVENESS
+   =============================== */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+    .hero {
+        flex-direction: column;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: 40px;
+    }
+    .hero-content h1 {
+        font-size: 42px;
+    }
+    .hero-image-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .hero-image {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        aspect-ratio: 3/4;
+    }
+    .category-filter {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+        padding: 0 15px;
+    }
+    .product-card {
+        padding: 15px;
+    }
+    .product-card h3 {
+        font-size: 16px;
+    }
+    .checkout-container {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .checkout-form-section, .checkout-summary-section {
+        padding: 20px;
+    }
+    .success-card {
+        padding: 30px 20px;
+    }
+    .success-card h2 {
+        font-size: 28px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr !important;
+        text-align: center;
+    }
+    .footer-container div {
+        margin-bottom: 20px;
+    }
+}

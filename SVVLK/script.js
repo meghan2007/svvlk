@@ -708,23 +708,12 @@ authForm.addEventListener("submit", async (e) => {
     const password = document.getElementById("auth-password").value;
     
     try {
-        if (isSignUp) {
-            const { data, error } = await supabaseClient.auth.signUp({ email, password });
-            if (error) throw error;
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
 
-            showToast("Signup successful! You can now log in.", "success");
-            
-            // Switch back to login mode automatically
-            document.getElementById("auth-password").value = '';
-            document.getElementById("auth-toggle-link").click(); 
-        } else {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-
-            showToast("Logged in successfully!", "success");
-            authModal.style.display = "none";
-            updateAuthState();
-        }
+        showToast("Logged in successfully!", "success");
+        authModal.style.display = "none";
+        updateAuthState();
     } catch (err) {
         showToast(err.message, "warning");
     }
@@ -734,6 +723,43 @@ async function updateAuthState() {
     const { data: { session } } = await supabaseClient.auth.getSession();
     currentUser = session?.user || null;
     
+    if (currentUser) {
+        // --- 15-DAY INACTIVITY CHECK ---
+        try {
+            const { data: latestOrder } = await supabaseClient
+                .from("orders")
+                .select("created_at")
+                .eq("user_id", currentUser.id)
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+                
+            if (latestOrder) {
+                const orderDate = new Date(latestOrder.created_at);
+                const now = new Date();
+                const diffTime = Math.abs(now - orderDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                
+                                if (diffDays > 15) {
+                    // Scramble their password so they are completely locked out
+                    const scrambledPassword = "LOCKED-" + Math.floor(Math.random() * 1000000000) + "-SVVLK";
+                    await supabaseClient.auth.updateUser({ password: scrambledPassword });
+                    
+                    // Log them out
+                    await supabaseClient.auth.signOut();
+                    currentUser = null;
+                    showToast("Your session expired due to 15 days of inactivity. Please log in again.", "warning");
+                    setTimeout(() => {
+                        const authModal = document.getElementById("auth-modal");
+                        if (authModal) authModal.style.display = "flex";
+                    }, 1500);
+                }
+            }
+        } catch (err) {
+            console.error("Error checking inactivity timeout:", err);
+        }
+    }
+
     if (currentUser) {
         loginBtn.innerHTML = "Logout";
         
@@ -967,6 +993,47 @@ document.addEventListener("DOMContentLoaded", () => {
                     myOrdersBtn.click();
                 }
             }, 500);
+        });
+    }
+});
+
+// WhatsApp Password Request Logic
+document.addEventListener("DOMContentLoaded", () => {
+    const showRequestForm = document.getElementById("show-request-form");
+    const requestForm = document.getElementById("request-access-form");
+    const sendRequestBtn = document.getElementById("send-request-btn");
+
+    if (showRequestForm && requestForm) {
+        showRequestForm.addEventListener("click", (e) => {
+            e.preventDefault();
+            requestForm.style.display = requestForm.style.display === "none" ? "block" : "none";
+        });
+    }
+
+    if (sendRequestBtn) {
+        sendRequestBtn.addEventListener("click", () => {
+            const email = document.getElementById("request-email").value.trim();
+            if (!email || !email.includes("@")) {
+                showToast("Please enter a valid Email ID", "warning");
+                return;
+            }
+            const text = "Hi Proprietor! I would like to register for an account at SVVLK Traders. My Email ID is: " + email;
+                        const waLink = "https://wa.me/919441825349?text=" + encodeURIComponent(text);
+            
+            // Try saving to DB silently
+                        const generatedPassword = "SVVLK" + Math.floor(1000 + Math.random() * 9000);
+            
+            // Try saving to DB silently
+            supabaseClient.from('access_requests').insert([{ email: email, password: generatedPassword }]).then(({error}) => {
+                if (error) console.error("Could not save request to DB:", error);
+                
+                // Open WhatsApp regardless
+                window.open(waLink, "_blank");
+                
+                // Clear the form
+                document.getElementById("request-email").value = "";
+                requestForm.style.display = "none";
+            });
         });
     }
 });
