@@ -4,10 +4,19 @@
 document.addEventListener("DOMContentLoaded", () => {
         const splashScreen = document.getElementById("splash-screen");
     if (splashScreen) {
-        const hideSplash = () => {
+                const hideSplash = () => {
             splashScreen.style.opacity = "0";
             setTimeout(() => {
                 splashScreen.style.display = "none";
+                
+                // Gate Logic
+                if (currentUser) {
+                    document.getElementById("store-content").style.display = "block";
+                    document.getElementById("login-gate").style.display = "none";
+                } else {
+                    document.getElementById("store-content").style.display = "none";
+                    document.getElementById("login-gate").style.display = "flex";
+                }
             }, 800);
         };
         // Hide on click OR automatically after 2.5 seconds
@@ -708,7 +717,19 @@ async function updateAuthState() {
                 const diffTime = Math.abs(now - orderDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
                 
-                                if (diffDays > 15) {
+                                                // Give a 24-hour grace period if the Proprietor just reset their password
+                const accountUpdatedDate = new Date(currentUser.updated_at);
+                const diffUpdateDays = Math.ceil(Math.abs(now - accountUpdatedDate) / (1000 * 60 * 60 * 24));
+
+                                                const vipEmails = [
+                    'vvramu9441@gmail.com',
+                    'meghan4167@gmail.com',
+                    'svvlktraders@gmail.com',
+                    'venkatasunitha85@gmail.com'
+                ];
+                const isAdmin = vipEmails.includes(currentUser.email.toLowerCase());
+                
+                if (!isAdmin && diffDays > 15 && diffUpdateDays > 1) {
                     // Scramble their password so they are completely locked out
                     const scrambledPassword = "LOCKED-" + Math.floor(Math.random() * 1000000000) + "-SVVLK";
                     await supabaseClient.auth.updateUser({ password: scrambledPassword });
@@ -728,7 +749,15 @@ async function updateAuthState() {
         }
     }
 
-    if (currentUser) {
+        if (currentUser) {
+        // Reveal store if they just logged in from the gate
+        const storeContent = document.getElementById("store-content");
+        const loginGate = document.getElementById("login-gate");
+        if (storeContent && loginGate) {
+            storeContent.style.display = "block";
+            loginGate.style.display = "none";
+        }
+
         loginBtn.innerHTML = "Logout";
         
         if (document.getElementById("my-profile-btn")) document.getElementById("my-profile-btn").style.display = "inline-block";
@@ -1001,6 +1030,59 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Clear the form
                 document.getElementById("request-email").value = "";
                 requestForm.style.display = "none";
+            });
+        });
+    }
+});
+
+// ===============================
+// LOGIN GATE LOGIC
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    const gateForm = document.getElementById("gate-auth-form");
+    if (gateForm) {
+        gateForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("gate-email").value;
+            const password = document.getElementById("gate-password").value;
+            
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+        
+                showToast("Logged in successfully!", "success");
+                updateAuthState();
+            } catch (err) {
+                showToast(err.message, "warning");
+            }
+        });
+    }
+
+    const gateRequestBtn = document.getElementById("gate-request-btn");
+    const gateRequestForm = document.getElementById("gate-request-form");
+    if (gateRequestBtn && gateRequestForm) {
+        gateRequestBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            gateRequestForm.style.display = gateRequestForm.style.display === "none" ? "block" : "none";
+        });
+    }
+
+    const gateSendBtn = document.getElementById("gate-send-request");
+    if (gateSendBtn) {
+        gateSendBtn.addEventListener("click", () => {
+            const email = document.getElementById("gate-request-email").value.trim();
+            if (!email || !email.includes("@")) {
+                showToast("Please enter a valid Email ID", "warning");
+                return;
+            }
+            const text = "Hi Proprietor! I would like to register for an account at SVVLK Traders. My Email ID is: " + email;
+            const waLink = "https://wa.me/919441825349?text=" + encodeURIComponent(text);
+            
+            const generatedPassword = "SVVLK" + Math.floor(1000 + Math.random() * 9000);
+            supabaseClient.from('access_requests').insert([{ email: email, password: generatedPassword }]).then(() => {
+                window.open(waLink, "_blank");
+                document.getElementById("gate-request-email").value = "";
+                gateRequestForm.style.display = "none";
             });
         });
     }
