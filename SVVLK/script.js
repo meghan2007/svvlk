@@ -727,7 +727,7 @@ async function updateAuthState() {
                     'svvlktraders@gmail.com',
                     'venkatasunitha85@gmail.com'
                 ];
-                const isAdmin = vipEmails.includes(currentUser.email.toLowerCase());
+                const isAdmin = currentUser && currentUser.email ? vipEmails.includes(currentUser.email.toLowerCase()) : false;
                 
                 if (!isAdmin && diffDays > 15 && diffUpdateDays > 1) {
                     // Scramble their password so they are completely locked out

@@ -297,32 +297,47 @@
         // Load Maintenance State
         let currentMaintenanceState = false;
         async function loadSettings() {
-            const { data } = await supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single();
-            if (data) {
-                currentMaintenanceState = data.maintenance_mode;
-                const btn = document.getElementById('maintenance-toggle-btn');
-                if (currentMaintenanceState) {
-                    btn.textContent = "Turn OFF";
-                    btn.style.background = "#2ecc71"; // Green to turn off
-                } else {
-                    btn.textContent = "Turn ON";
-                    btn.style.background = "#e74c3c"; // Red to turn on
+            supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single().then(({data}) => {
+                if (data) {
+                    currentMaintenanceState = data.maintenance_mode;
+                    const btn = document.getElementById('maintenance-toggle-btn');
+                    if (currentMaintenanceState) {
+                        btn.textContent = "Turn OFF";
+                        btn.style.background = "#2ecc71";
+                    } else {
+                        btn.textContent = "Turn ON";
+                        btn.style.background = "#e74c3c";
+                    }
                 }
-            }
+            });
         }
-        
-        document.getElementById('maintenance-toggle-btn').addEventListener('click', async () => {
-            const newState = !currentMaintenanceState;
-            const { error } = await supabaseClient.from('store_settings').update({ maintenance_mode: newState }).eq('id', 1);
-            if (!error) {
-                alert(newState ? "Website is now FROZEN!" : "Website is now LIVE!");
-                loadSettings();
-            } else {
-                alert("Error: " + error.message);
+
+        async function loadRequests() {
+            const list = document.getElementById("requests-list");
+            const { data, error } = await supabaseClient.from('access_requests').select('*').order('created_at', { ascending: false });
+            if (error || !data) {
+                list.innerHTML = "<p>Error loading requests: " + (error ? error.message : "Unknown") + "</p>";
+                return;
             }
-        });
+            if (data.length === 0) {
+                list.innerHTML = "<p style='color: #888;'>No pending requests.</p>";
+                return;
+            }
+            list.innerHTML = data.map(req => 
+                "<div style='padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;'>" +
+                "<div><strong>Email:</strong> " + req.email + "<br><strong>Generated Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + (req.password || "N/A") + "</span></div>" +
+                "<button onclick='deleteRequest(" + req.id + ")' style='background: #e74c3c; padding: 10px;'>Clear</button>" +
+                "</div>"
+            ).join("");
+        }
+
+        window.deleteRequest = async function(id) {
+            await supabaseClient.from('access_requests').delete().eq('id', id);
+            loadRequests();
+        };
 
         checkAdmin();
+        loadRequests();
         loadSettings();
 
         // Dark Mode Logic
