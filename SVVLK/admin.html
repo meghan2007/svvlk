@@ -155,7 +155,10 @@
             <div class="card" id="vault-lock-screen" style="border-left: 5px solid #e74c3c; text-align: center; max-width: 500px; margin: 0 auto;">
                 <h2 style="color: #e74c3c; margin-bottom: 10px;">Vault Locked</h2>
                 <p style="color: #666; margin-bottom: 20px;">Enter the Master Password to access customer credentials.</p>
-                <input type="password" id="vault-master-pwd" placeholder="Master Password" style="width: 100%; max-width: 300px; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
+                <div style="position: relative; width: 100%; max-width: 300px; margin: 0 auto 15px auto;">
+                    <input type="password" id="vault-master-pwd" placeholder="Master Password" style="width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;">
+                    <span id="vault-toggle-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 14px; font-weight: bold; color: #666; user-select: none;">Show</span>
+                </div>
                 <br>
                 <button onclick="unlockVault()" style="background: #e74c3c; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">Unlock Vault</button>
             </div>
