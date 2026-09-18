@@ -889,8 +889,29 @@ body.dark-mode .success-card {
     0% { transform: translateX(100vw); }
     100% { transform: translateX(-100%); }
 }
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
+/* Night Fireflies Animation */
+.firefly {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #f1c40f;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 3px rgba(241, 196, 15, 0.8);
+    animation: fireflyMove 4s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+.f1 { top: 15%; left: 15%; animation-duration: 4s; }
+.f2 { top: 75%; left: 85%; animation-duration: 5.5s; animation-delay: 1s; }
+.f3 { top: 45%; left: 75%; animation-duration: 4.5s; animation-delay: 2s; }
+.f4 { top: 85%; left: 25%; animation-duration: 6s; animation-delay: 1.5s; }
+.f5 { top: 25%; left: 80%; animation-duration: 5s; animation-delay: 0.5s; }
+.f6 { top: 55%; left: 10%; animation-duration: 4.2s; animation-delay: 2.5s; }
+
+@keyframes fireflyMove {
+    0% { transform: translate(0, 0); opacity: 0.1; }
+    50% { opacity: 1; }
+    100% { transform: translate(40px, -30px); opacity: 0.1; }
+}
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }

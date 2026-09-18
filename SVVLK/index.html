@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <link rel="stylesheet" href="style.css?v=2026.29">
+    <link rel="stylesheet" href="style.css?v=2026.30">
 </head>
 
 <body>
@@ -43,41 +43,44 @@
     <!-- ========================================== -->
     <!-- LOGIN GATE -->
     <!-- ========================================== -->
-    <div id="login-gate" style="display: none; min-height: 100vh; width: 100%; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(-45deg, #FBF9F6, #eaf2ed, #FBF9F6, #f4eee1); background-size: 400% 400%; animation: gradientBG 12s ease infinite; padding: 20px; box-sizing: border-box;">
-        <div class="auth-content" style="box-shadow: var(--shadow-gloss); border: 1px solid var(--border-soft); background: var(--card-bg); width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; text-align: center;">
-            <h2 style="color: var(--primary-forest); margin-bottom: 15px; font-family: var(--font-heading);">Login to SVVLK</h2>
-
-<p style="color: #555; font-size: 14px; margin-bottom: 10px; line-height: 1.4;">
-    <strong>Store Address:</strong><br>
-    SVVLK Traders, Visakhapatnam
-</p>
-
-<a href="https://maps.app.goo.gl/SxXVjT6xXh5q1MPx8?g_st=ac" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #eef2f5; color: #2c3e50; text-decoration: none; padding: 10px 20px; border-radius: 25px; font-size: 14px; font-weight: 600; margin-bottom: 25px; transition: 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-    <span style="font-size: 16px;">📍</span> View Store on Google Maps
-</a>
-            <form id="gate-auth-form">
-                <input type="email" id="gate-email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: #ffffff; color: #000000; box-sizing: border-box;">
-                <div style="position: relative; width: 100%; margin-bottom: 20px;">
-                    <input type="password" id="gate-password" placeholder="Password" required minlength="6" style="width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: #ffffff; color: #000000; box-sizing: border-box;">
-                    <span id="gate-toggle-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; user-select: none; display: flex; align-items: center; justify-content: center;" title="Show Password"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
-                </div>
-                <button type="submit" style="width: 100%; padding: 14px; background: var(--primary-forest); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">Enter Store</button>
-                
-                
-            </form>
-            <p style="color: var(--text-muted); font-size: 14px; margin-top: 20px;">Don't have an account? <br><a href="#" id="gate-request-btn" style="color: var(--primary-forest); font-weight: bold; display: inline-block; margin-top: 5px;">Request a Password</a></p>
-            
-            <div id="gate-request-form" style="display: none; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 20px;">
-                <input type="email" id="gate-request-email" placeholder="Your Email Address" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; box-sizing: border-box;">
-                <button type="button" id="gate-send-request" style="width: 100%; padding: 12px; background: #25D366; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 15px;">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    WhatsApp Proprietor
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
+    <div id="login-gate" style="display: none; min-height: 100vh; width: 100%; flex-direction: column; justify-content: center; align-items: center; background: #0c120f; padding: 20px; box-sizing: border-box; position: relative; overflow: hidden;">
+    <!-- Night Fireflies -->
+    <div class="firefly f1"></div><div class="firefly f2"></div><div class="firefly f3"></div><div class="firefly f4"></div><div class="firefly f5"></div><div class="firefly f6"></div>
+        <div class="auth-content" style="box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.15); background: rgba(20, 30, 25, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; text-align: center; position: relative; z-index: 10;">
+              <h2 style="color: #ffffff; margin-bottom: 15px; font-family: var(--font-heading); font-weight: bold; letter-spacing: 1px;">Login to SVVLK</h2>
+              
+              <p style="color: #cccccc; font-size: 14px; margin-bottom: 10px; line-height: 1.4;">
+                  <strong style="color: #ffffff;">Store Address:</strong><br>
+                  SVVLK Traders, Visakhapatnam
+              </p>
+              
+              <a href="https://maps.app.goo.gl/SxXVjT6xXh5q1MPx8?g_st=ac" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); text-decoration: none; padding: 10px 20px; border-radius: 25px; font-size: 14px; font-weight: 600; margin-bottom: 25px; transition: 0.2s;">
+                  <span style="font-size: 16px;">📍</span> View Store on Google Maps
+              </a>
+              
+              <form id="gate-auth-form">
+                  <input type="email" id="gate-email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 16px; background: rgba(0,0,0,0.5); color: #ffffff; box-sizing: border-box; outline: none;">
+                  
+                  <div style="position: relative; width: 100%; margin-bottom: 20px;">
+                      <input type="password" id="gate-password" placeholder="Password" required minlength="6" style="width: 100%; padding: 12px; padding-right: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 16px; background: rgba(0,0,0,0.5); color: #ffffff; box-sizing: border-box; outline: none;">
+                      <span id="gate-toggle-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #cccccc; user-select: none; display: flex; align-items: center; justify-content: center;" title="Show Password"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                  </div>
+                  
+                  <button type="submit" style="width: 100%; padding: 14px; background: #2ecc71; color: #000000; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.2s;">Enter Store</button>
+              </form>
+              
+              <p style="color: #aaaaaa; font-size: 14px; margin-top: 20px;">Don't have an account? <br><a href="#" id="gate-request-btn" style="color: #2ecc71; font-weight: bold; display: inline-block; margin-top: 5px; text-decoration: none;">Request a Password</a></p>
+              
+              <div id="gate-request-form" style="display: none; margin-top: 20px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px;">
+                  <p style="color: #cccccc; font-size: 13px; margin-bottom: 15px;">Enter your email and click the button to message the proprietor on WhatsApp for an access password.</p>
+                  <input type="email" id="gate-request-email" placeholder="Your Email ID" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px; background: rgba(0,0,0,0.5); color: #ffffff; box-sizing: border-box; outline: none;">
+                  <button id="gate-send-request" style="width: 100%; padding: 12px; background: #25D366; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                      WhatsApp Proprietor
+                  </button>
+              </div>
+          </div>
+      </div>
+      <!-- ========================================== -->
     <!-- STORE CONTENT (HIDDEN BY DEFAULT) -->
     <!-- ========================================== -->
     <div id="store-content" style="display: none;">
@@ -424,7 +427,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=2026.29"></script>
+    <script src="script.js?v=2026.30"></script>
     <!-- ================= ORDER SUCCESS OVERLAY ================= -->
     <div id="order-success-overlay" class="success-overlay" style="display: none;">
         <div class="success-card">
