@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://svvlktraders.vercel.app/sitemap.xml
