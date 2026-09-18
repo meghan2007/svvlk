@@ -97,6 +97,18 @@
         <!-- VAULT TAB -->
         <!-- ========================= -->
         <div id="tab-vault" style="display: none;">
+        
+        <!-- Vault Lock Screen -->
+        <div class="card" id="vault-lock-screen" style="border-left: 5px solid #e74c3c; text-align: center; max-width: 500px; margin: 0 auto;">
+            <h2 style="color: #e74c3c; margin-bottom: 10px;">Vault Locked</h2>
+            <p style="color: #666; margin-bottom: 20px;">Enter the Master Password to access customer credentials.</p>
+            <input type="password" id="vault-master-pwd" placeholder="Master Password" style="width: 100%; max-width: 300px; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
+            <br>
+            <button onclick="unlockVault()" style="background: #e74c3c; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">Unlock Vault</button>
+        </div>
+
+        <!-- Password Vault Content (Hidden initially) -->
+        <div id="vault-content" style="display: none;">
         <!-- Password Vault -->
         <div class="card" id="passwords-vault" style="border-left: 5px solid #3498db;">
             <h2>Passwords Vault & Access Requests</h2>
@@ -107,70 +119,7 @@
                 <p style="color: #888;">Loading records...</p>
             </div>
         </div>
-
-        <!-- Add Product -->
-        <div class="card">
-            <h2>Add New Grocery Product</h2>
-            <form id="add-product-form">
-                <input type="text" id="p-name" placeholder="Product Name (e.g., Organic Bananas)" required>
-                <input type="text" id="p-brand" placeholder="Brand Name" required>
-                <input type="number" step="0.01" id="p-price" placeholder="Price (₹)" required>
-                <input type="text" id="p-size" placeholder="Size/Weight (e.g., 1 kg)" required>
-                <input type="url" id="p-image" placeholder="Image URL (Optional)">
-                <select id="p-category" required>
-                    <option value="flours">Flours</option>
-                    <option value="retail">Retail</option>
-                    <option value="rice">Rice</option>
-                    <option value="oils">Oils</option>
-                    <option value="dals">Dals</option>
-                    <option value="salt">Salt</option>
-                    <option value="sugar">Sugar</option>
-                    <option value="tamarind">Tamarind</option>
-                </select>
-                <button type="submit">Upload Product to Database</button>
-            </form>
-        </div>
-
-        <!-- Manage Inventory -->
-        <div class="card">
-            <h2>Live Inventory (ON/OFF)</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Brand</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-table-body">
-                        <tr><td colspan='4'>Loading inventory...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Manage Orders -->
-        <div class="card">
-            <h2>Live Order Management</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="orders-table-body">
-                        <tr><td colspan="5">Loading orders...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        </div> <!-- End Vault Content -->
         </div> <!-- End Vault Tab -->
     </div>
 
@@ -390,6 +339,16 @@
                 checkAdmin();
         loadRequests();
         loadSettings();
+
+        window.unlockVault = function() {
+            const pwd = document.getElementById("vault-master-pwd").value;
+            if (pwd === "Jai Sri Ram") { // Master Password
+                document.getElementById("vault-lock-screen").style.display = "none";
+                document.getElementById("vault-content").style.display = "block";
+            } else {
+                alert("Incorrect Master Password!");
+            }
+        };
 
         window.switchTab = function(tabName) {
             if (tabName === 'store') {
