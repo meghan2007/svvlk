@@ -885,3 +885,7 @@ body.dark-mode .success-card {
 .product-card:active .product-image {
     transform: scale(0.95);
 }
+@keyframes scrollLeft {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+}

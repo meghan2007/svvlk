@@ -81,6 +81,16 @@
                 <button id="maintenance-toggle-btn" style="background: #e74c3c; color: white;">Turn ON</button>
             </div>
 
+            <!-- Banner Settings -->
+            <div class="card" style="background: #e8f4f8; border: 1px solid #bce0ee;">
+                <h3 style="margin-bottom: 5px; color: #2980b9;">📰 Scrolling Announcement Banner</h3>
+                <p style="font-size: 14px; margin-bottom: 15px; color: #555;">Type a message to scroll across the top of the customer store.</p>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="admin-banner-input" placeholder="e.g. Fresh stock of Sona Masuri just arrived!" style="flex: 1;">
+                    <button onclick="updateBanner()" style="background: #2980b9;">Update Banner</button>
+                </div>
+            </div>
+
             <!-- Add Product -->
             <div class="card">
                 <h2>Add New Grocery Product</h2>
@@ -275,6 +285,9 @@
             supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single().then(({data}) => {
                 if (data) {
                     currentMaintenanceState = data.maintenance_mode;
+                    if (data.banner_text) {
+                        document.getElementById('admin-banner-input').value = data.banner_text;
+                    }
                     const btn = document.getElementById('maintenance-toggle-btn');
                     if (currentMaintenanceState) { btn.textContent = "Turn OFF"; btn.style.background = "#2ecc71"; } 
                     else { btn.textContent = "Turn ON"; btn.style.background = "#e74c3c"; }
@@ -319,6 +332,13 @@
                 document.getElementById("vault-lock-screen").style.display = "none";
                 document.getElementById("vault-content").style.display = "block";
             } else { alert("Incorrect Master Password!"); }
+        };
+
+        window.updateBanner = async function() {
+            const newText = document.getElementById('admin-banner-input').value;
+            const { error } = await supabaseClient.from('store_settings').update({ banner_text: newText }).eq('id', 1);
+            if (error) { alert("Error updating banner: " + error.message); }
+            else { alert("Banner instantly updated on the live store!"); }
         };
 
         window.switchTab = function(tabName) {
