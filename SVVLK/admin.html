@@ -14,24 +14,17 @@
         .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px; }
         .card h2 { margin-bottom: 20px; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
-        /* Form */
         form { display: flex; flex-direction: column; gap: 15px; }
         input, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
         button { background: #27ae60; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         button:hover { background: #219150; }
-        
-        /* Table */
         table { width: 100%; border-collapse: collapse; }
         th, td { text-align: left; padding: 15px; border-bottom: 1px solid #eee; }
         th { background: #f8f9fa; color: #555; }
         .status-select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
         .update-btn { padding: 8px 12px; background: #3498db; font-size: 14px; margin-left: 10px; }
-        
         #auth-warning { text-align: center; margin-top: 100px; }
         #admin-content { display: none; }
-        
-        /* Dark Mode Overrides */
         body.dark-mode { background: #1a1a2e; color: #e0e0e0; }
         body.dark-mode header { background: rgba(26, 26, 46, 0.95); border-bottom: 1px solid #333; }
         body.dark-mode .card { background: #16213e; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
@@ -43,11 +36,10 @@
     </style>
 </head>
 <body>
-
     <header>
         <h1>SVVLK Admin</h1>
         <div>
-            <a href="#" id="dark-mode-toggle" style="font-size: 18px; text-decoration: none; margin-right: 20px;" title="Toggle Dark Mode">🌙</a>
+            <a href="#" id="dark-mode-toggle" style="font-size: 18px; text-decoration: none; margin-right: 20px;" title="Toggle Dark Mode">☀️</a>
             <a href="index.html" style="color: white; text-decoration: none;">&larr; Back to Store</a>
         </div>
     </header>
@@ -57,8 +49,7 @@
         <p>Please wait.</p>
     </div>
 
-        <div class="container" id="admin-content">
-
+    <div class="container" id="admin-content">
         <!-- Admin Navigation Tabs -->
         <div style="display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
             <button id="tab-btn-store" onclick="switchTab('store')" style="background: var(--primary-forest, #2c3e50); flex: 1;">🛒 Store Management</button>
@@ -69,57 +60,117 @@
         <!-- STORE TAB -->
         <!-- ========================= -->
         <div id="tab-store">
-        
-        <!-- Analytics Dashboard -->
-        <div class="card" style="display: flex; justify-content: space-around; text-align: center; background: linear-gradient(135deg, #2ecc71, #219150); color: white; border: none;">
-            <div style="border: none;">
-                <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Revenue</h3>
-                <h2 id="total-revenue" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">₹0</h2>
+            <!-- Analytics Dashboard -->
+            <div class="card" style="display: flex; justify-content: space-around; text-align: center; background: linear-gradient(135deg, #2ecc71, #219150); color: white; border: none;">
+                <div style="border: none;">
+                    <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Revenue</h3>
+                    <h2 id="total-revenue" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">₹0</h2>
+                </div>
+                <div style="border: none;">
+                    <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Orders</h3>
+                    <h2 id="total-orders" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">0</h2>
+                </div>
             </div>
-            <div style="border: none;">
-                <h3 style="font-size: 16px; opacity: 0.9; margin-bottom: 5px; color: white; border: none; padding: 0;">Total Orders</h3>
-                <h2 id="total-orders" style="font-size: 42px; color: white; border: none; margin: 0; padding: 0;">0</h2>
+            
+            <!-- Store Settings -->
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+                <div>
+                    <h3 style="margin-bottom: 5px;">Maintenance Mode</h3>
+                    <p style="font-size: 14px;">If turned ON, customers will be blocked from the store.</p>
+                </div>
+                <button id="maintenance-toggle-btn" style="background: #e74c3c; color: white;">Turn ON</button>
             </div>
-        </div>
-        
-        <!-- Store Settings -->
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
-            <div>
-                <h3 style="margin-bottom: 5px;">Maintenance Mode</h3>
-                <p style="font-size: 14px;">If turned ON, customers will be blocked from the store.</p>
-            </div>
-            <button id="maintenance-toggle-btn" style="background: #e74c3c; color: white;">Turn ON</button>
-        </div>
 
-                </div> <!-- End Store Tab -->
+            <!-- Add Product -->
+            <div class="card">
+                <h2>Add New Grocery Product</h2>
+                <form id="add-product-form">
+                    <input type="text" id="p-name" placeholder="Product Name (e.g., Organic Bananas)" required>
+                    <input type="text" id="p-brand" placeholder="Brand Name" required>
+                    <input type="number" step="0.01" id="p-price" placeholder="Price (₹)" required>
+                    <input type="text" id="p-size" placeholder="Size/Weight (e.g., 1 kg)" required>
+                    <input type="url" id="p-image" placeholder="Image URL (Optional)">
+                    <select id="p-category" required>
+                        <option value="flours">Flours</option>
+                        <option value="retail">Retail</option>
+                        <option value="rice">Rice</option>
+                        <option value="oils">Oils</option>
+                        <option value="dals">Dals</option>
+                        <option value="dry_fruits">Dry Fruits</option>
+                        <option value="millets">Millets</option>
+                        <option value="spices">Spices & Powders</option>
+                    </select>
+                    <button type="submit">Upload Product to Database</button>
+                </form>
+            </div>
+
+            <!-- Live Inventory -->
+            <div class="card">
+                <h2>Live Inventory (ON/OFF)</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Brand</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <tr><td colspan="4">Loading inventory...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Live Order Management -->
+            <div class="card">
+                <h2>Live Order Management</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Delivery Time</th>
+                                <th>Total (₹)</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <tr><td colspan="5">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- End Store Tab -->
 
         <!-- ========================= -->
         <!-- VAULT TAB -->
         <!-- ========================= -->
         <div id="tab-vault" style="display: none;">
-        
-        <!-- Vault Lock Screen -->
-        <div class="card" id="vault-lock-screen" style="border-left: 5px solid #e74c3c; text-align: center; max-width: 500px; margin: 0 auto;">
-            <h2 style="color: #e74c3c; margin-bottom: 10px;">Vault Locked</h2>
-            <p style="color: #666; margin-bottom: 20px;">Enter the Master Password to access customer credentials.</p>
-            <input type="password" id="vault-master-pwd" placeholder="Master Password" style="width: 100%; max-width: 300px; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
-            <br>
-            <button onclick="unlockVault()" style="background: #e74c3c; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">Unlock Vault</button>
-        </div>
-
-        <!-- Password Vault Content (Hidden initially) -->
-        <div id="vault-content" style="display: none;">
-        <!-- Password Vault -->
-        <div class="card" id="passwords-vault" style="border-left: 5px solid #3498db;">
-            <h2>Passwords Vault & Access Requests</h2>
-            <p style="color: #555; margin-bottom: 20px; font-size: 14px;">When customers request access, their emails will automatically appear here. Type the password you created for them and click Save to lock it in your vault.</p>
-
-            <h3 style="margin-bottom: 15px; font-size: 16px; color: #555;">Vault Records</h3>
-            <div id="requests-list">
-                <p style="color: #888;">Loading records...</p>
+            <!-- Vault Lock Screen -->
+            <div class="card" id="vault-lock-screen" style="border-left: 5px solid #e74c3c; text-align: center; max-width: 500px; margin: 0 auto;">
+                <h2 style="color: #e74c3c; margin-bottom: 10px;">Vault Locked</h2>
+                <p style="color: #666; margin-bottom: 20px;">Enter the Master Password to access customer credentials.</p>
+                <input type="password" id="vault-master-pwd" placeholder="Master Password" style="width: 100%; max-width: 300px; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
+                <br>
+                <button onclick="unlockVault()" style="background: #e74c3c; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">Unlock Vault</button>
             </div>
-        </div>
-        </div> <!-- End Vault Content -->
+
+            <!-- Password Vault Content (Hidden initially) -->
+            <div id="vault-content" style="display: none;">
+                <div class="card" id="passwords-vault" style="border-left: 5px solid #3498db;">
+                    <h2>Passwords Vault & Access Requests</h2>
+                    <p style="color: #555; margin-bottom: 20px; font-size: 14px;">When customers request access, their emails will automatically appear here. Type the password you created for them and click Save to lock it in your vault.</p>
+                    <h3 style="margin-bottom: 15px; font-size: 16px; color: #555;">Vault Records</h3>
+                    <div id="requests-list">
+                        <p style="color: #888;">Loading records...</p>
+                    </div>
+                </div>
+            </div> <!-- End Vault Content -->
         </div> <!-- End Vault Tab -->
     </div>
 
@@ -140,12 +191,10 @@
             }
         }
 
-        // Add Product Form
         document.getElementById('add-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
             btn.textContent = "Uploading...";
-
             const newProduct = {
                 name: document.getElementById('p-name').value,
                 brand: document.getElementById('p-brand').value,
@@ -155,95 +204,57 @@
                 category: document.getElementById('p-category').value,
                 is_in_stock: true
             };
-
             const { error } = await supabaseClient.from('products').insert([newProduct]);
-            
-            if (error) {
-                alert("Error adding product: " + error.message);
-                btn.textContent = "Upload Product to Database";
-            } else {
-                alert("Product Added Successfully!");
-                e.target.reset();
-                btn.textContent = "Upload Product to Database";
-            }
+            if (error) { alert("Error adding product: " + error.message); btn.textContent = "Upload Product to Database"; } 
+            else { alert("Product Added Successfully!"); e.target.reset(); btn.textContent = "Upload Product to Database"; }
         });
 
-        // Load Inventory
         async function loadInventory() {
             const { data, error } = await supabaseClient.from('products').select('*').order('name', { ascending: true });
             const tbody = document.getElementById('inventory-table-body');
-            
-            if (error || !data) {
-                tbody.innerHTML = "<tr><td colspan='4'>Error loading inventory</td></tr>";
-                return;
-            }
-
+            if (error || !data) { tbody.innerHTML = "<tr><td colspan='4'>Error loading inventory</td></tr>"; return; }
             tbody.innerHTML = "";
             data.forEach(product => {
                 const tr = document.createElement('tr');
-                const isStocked = product.is_in_stock !== false; // defaults to true
-                
-                tr.innerHTML = 
-                    '<td><strong>' + product.name + '</strong> (' + product.size + ')</td>' +
+                const isStocked = product.is_in_stock !== false;
+                tr.innerHTML = '<td><strong>' + product.name + '</strong> (' + product.size + ')</td>' +
                     '<td>' + product.brand + '</td>' +
                     '<td><span style="font-weight: bold; color: ' + (isStocked ? '#2ecc71' : '#e74c3c') + ';">' + (isStocked ? 'In Stock' : 'Out of Stock') + '</span></td>' +
-                    '<td>' +
-                        '<button class="update-btn" style="background: ' + (isStocked ? '#e74c3c' : '#2ecc71') + ';" onclick="toggleStock(\'' + product.id + '\', ' + isStocked + ')">' + 
-                            (isStocked ? 'Mark Out of Stock' : 'Mark In Stock') + 
-                        '</button>' +
-                    '</td>';
+                    '<td><button class="update-btn" style="background: ' + (isStocked ? '#e74c3c' : '#2ecc71') + ';" onclick="toggleStock(\'' + product.id + '\', ' + isStocked + ')">' + (isStocked ? 'Mark Out of Stock' : 'Mark In Stock') + '</button></td>';
                 tbody.appendChild(tr);
             });
         }
 
         window.toggleStock = async function(id, currentState) {
             try {
-                const isCurrentlyStocked = (currentState === true || currentState === 'true');
-                const newState = !isCurrentlyStocked;
-                const { data, error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id).select();
+                const newState = !(currentState === true || currentState === 'true');
+                const { error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id);
                 if (error) { alert("Error updating inventory: " + error.message); return; }
                 loadInventory();
-            } catch (err) {
-                alert("Fatal error toggling stock: " + err.message);
-            }
+            } catch (err) { alert("Fatal error: " + err.message); }
         };
 
-        // Load Orders
         async function loadOrders() {
             const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false });
             const tbody = document.getElementById('orders-table-body');
-            
-            if (error || !data) {
-                tbody.innerHTML = "<tr><td colspan='5'>Error loading orders</td></tr>";
-                return;
-            }
-
+            if (error || !data) { tbody.innerHTML = "<tr><td colspan='5'>Error loading orders</td></tr>"; return; }
             let totalRevenue = 0;
-            data.forEach(o => {
-                if (o.status !== 'Cancelled') {
-                    totalRevenue += Number(o.total_amount || 0);
-                }
-            });
-            document.getElementById('total-revenue').innerText = '?' + totalRevenue.toLocaleString('en-IN');
+            data.forEach(o => { if (o.status !== 'Cancelled') totalRevenue += Number(o.total_amount || 0); });
+            document.getElementById('total-revenue').innerText = '₹' + totalRevenue.toLocaleString('en-IN');
             document.getElementById('total-orders').innerText = data.length;
-
             tbody.innerHTML = "";
             data.forEach(order => {
                 const tr = document.createElement('tr');
                 const currentStatus = order.status || 'Pending';
-                
-                tr.innerHTML = 
-                    '<td><strong>' + order.order_id + '</strong></td>' +
+                tr.innerHTML = '<td><strong>' + order.order_id + '</strong></td>' +
                     '<td>' + order.customer_name + '</td>' +
                     '<td><strong style="color: #e67e22;">' + (order.delivery_time || 'Anytime') + '</strong></td>' +
-                    '<td>?' + order.total_amount + '</td>' +
-                    '<td>' +
-                        '<select class="status-select" id="status-' + order.id + '">' +
+                    '<td>₹' + order.total_amount + '</td>' +
+                    '<td><select class="status-select" id="status-' + order.id + '">' +
                             '<option value="Pending" ' + (currentStatus==='Pending'?'selected':'') + '>Pending</option>' +
                             '<option value="Shipped" ' + (currentStatus==='Shipped'?'selected':'') + '>Shipped</option>' +
                             '<option value="Delivered" ' + (currentStatus==='Delivered'?'selected':'') + '>Delivered</option>' +
-                        '</select>' +
-                    '</td>' +
+                        '</select></td>' +
                     '<td><button class="update-btn" onclick="updateStatus(\'' + order.id + '\')">Save</button></td>';
                 tbody.appendChild(tr);
             });
@@ -252,11 +263,8 @@
         window.updateStatus = async function(id) {
             const newStatus = document.getElementById('status-' + id).value;
             const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
-            if (error) {
-                alert("Error updating status: " + error.message);
-            } else {
-                alert("Order status updated to " + newStatus);
-            }
+            if (error) alert("Error updating status: " + error.message);
+            else alert("Order status updated to " + newStatus);
         };
 
         let currentMaintenanceState = false;
@@ -265,13 +273,8 @@
                 if (data) {
                     currentMaintenanceState = data.maintenance_mode;
                     const btn = document.getElementById('maintenance-toggle-btn');
-                    if (currentMaintenanceState) {
-                        btn.textContent = "Turn OFF";
-                        btn.style.background = "#2ecc71";
-                    } else {
-                        btn.textContent = "Turn ON";
-                        btn.style.background = "#e74c3c";
-                    }
+                    if (currentMaintenanceState) { btn.textContent = "Turn OFF"; btn.style.background = "#2ecc71"; } 
+                    else { btn.textContent = "Turn ON"; btn.style.background = "#e74c3c"; }
                 }
             });
         }
@@ -279,69 +282,40 @@
         document.getElementById('maintenance-toggle-btn').addEventListener('click', async () => {
             const newState = !currentMaintenanceState;
             const { error } = await supabaseClient.from('store_settings').update({ maintenance_mode: newState }).eq('id', 1);
-            if (!error) {
-                alert(newState ? "Website is now FROZEN!" : "Website is now LIVE!");
-                loadSettings();
-            } else {
-                alert("Error: " + error.message);
-            }
+            if (!error) { alert(newState ? "Website is now FROZEN!" : "Website is now LIVE!"); loadSettings(); } 
+            else alert("Error: " + error.message);
         });
 
         async function loadRequests() {
             const list = document.getElementById("requests-list");
             const { data, error } = await supabaseClient.from('access_requests').select('*').order('created_at', { ascending: false });
-            if (error || !data) {
-                list.innerHTML = "<p>Error loading records: " + (error ? error.message : "Unknown") + "</p>";
-                return;
-            }
-            if (data.length === 0) {
-                list.innerHTML = "<p style='color: #888;'>Vault is empty.</p>";
-                return;
-            }
+            if (error || !data) { list.innerHTML = "<p>Error loading records: " + (error ? error.message : "Unknown") + "</p>"; return; }
+            if (data.length === 0) { list.innerHTML = "<p style='color: #888;'>Vault is empty.</p>"; return; }
             list.innerHTML = data.map(req => {
                 const hasPassword = req.password && req.password.trim() !== "";
                 return "<div style='padding: 15px; border: 1px solid rgba(136, 136, 136, 0.2); border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: rgba(52, 152, 219, 0.05); flex-wrap: wrap; gap: 10px;'>" +
                     "<div><strong style='color: #888;'>Email:</strong> <span style='color: #2ecc71; font-weight: bold; font-size: 17px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);'>" + req.email + "</span></div>" +
-                    (hasPassword 
-                        ? "<div><strong>Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + req.password + "</span></div>"
-                        : "<div style='display: flex; gap: 10px;'><input type='text' id='pwd-input-" + req.id + "' placeholder='Type Assigned Password' style='padding: 8px; font-size: 14px;'><button onclick='updatePassword(" + req.id + ")' style='background: #3498db; padding: 8px 12px; font-size: 14px;'>Save</button></div>"
-                    ) +
-                    "<button onclick='deleteRequest(" + req.id + ")' style='background: #e74c3c; padding: 10px; border-radius: 6px;'>Delete</button>" +
-                "</div>";
+                    (hasPassword ? "<div><strong>Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + req.password + "</span></div>" : "<div style='display: flex; gap: 10px;'><input type='text' id='pwd-input-" + req.id + "' placeholder='Type Assigned Password' style='padding: 8px; font-size: 14px;'><button onclick='updatePassword(" + req.id + ")' style='background: #3498db; padding: 8px 12px; font-size: 14px;'>Save</button></div>") +
+                    "<button onclick='deleteRequest(" + req.id + ")' style='background: #e74c3c; padding: 10px; border-radius: 6px;'>Delete</button></div>";
             }).join("");
         }
 
-        window.deleteRequest = async function(id) {
-            await supabaseClient.from('access_requests').delete().eq('id', id);
-            loadRequests();
-        };
-
+        window.deleteRequest = async function(id) { await supabaseClient.from('access_requests').delete().eq('id', id); loadRequests(); };
         window.updatePassword = async function(id) {
             const pwdInput = document.getElementById("pwd-input-" + id);
             if (!pwdInput) return;
             const password = pwdInput.value.trim();
-            
-            if (!password) {
-                alert("Please type a password before saving.");
-                return;
-            }
-
+            if (!password) { alert("Please type a password before saving."); return; }
             const { error } = await supabaseClient.from('access_requests').update({ password: password }).eq('id', id);
-            if (error) {
-                alert("Error saving to vault: " + error.message);
-            } else {
-                loadRequests();
-            }
+            if (error) alert("Error saving to vault: " + error.message); else loadRequests();
         };
 
         window.unlockVault = function() {
             const pwd = document.getElementById("vault-master-pwd").value;
-            if (pwd === "ramu9441") { // Master Password
+            if (pwd === "ramu9441") {
                 document.getElementById("vault-lock-screen").style.display = "none";
                 document.getElementById("vault-content").style.display = "block";
-            } else {
-                alert("Incorrect Master Password!");
-            }
+            } else { alert("Incorrect Master Password!"); }
         };
 
         window.switchTab = function(tabName) {
@@ -362,7 +336,6 @@
             }
         };
 
-        // Dark Mode Logic
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         if (localStorage.getItem('dark-mode') === 'enabled') {
             document.body.classList.add('dark-mode');
@@ -380,7 +353,6 @@
             }
         });
 
-        // Initialize
         checkAdmin();
         loadRequests();
         loadSettings();
