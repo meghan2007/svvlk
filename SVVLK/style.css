@@ -874,3 +874,14 @@ body.dark-mode .success-card {
     from { transform: translateX(120%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.product-image {
+    transition: transform 0.2s;
+}
+.product-card:active .product-image {
+    transform: scale(0.95);
+}

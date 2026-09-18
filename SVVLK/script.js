@@ -1086,3 +1086,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+window.openProductModal = function(product) {
+    document.getElementById('pm-image').src = product.image_url || 'https://via.placeholder.com/400?text=SVVLK';
+    document.getElementById('pm-brand').innerText = product.brand;
+    document.getElementById('pm-title').innerText = product.name;
+    document.getElementById('pm-size').innerText = product.size;
+    document.getElementById('pm-price').innerText = '₹' + product.price;
+    
+    const btn = document.getElementById('pm-add-btn');
+    btn.onclick = () => {
+        addToCart(product.id, product.name, product.price);
+        closeProductModal();
+    };
+    
+    document.getElementById('product-modal').style.display = 'flex';
+};
+
+window.closeProductModal = function() {
+    document.getElementById('product-modal').style.display = 'none';
+};
