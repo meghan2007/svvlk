@@ -625,11 +625,22 @@ async function loadProducts() {
             }
 
             card.innerHTML = 
-                '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '">' +
-                '<h3>' + product.brand + '</h3>' +
+                '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
+                '<h3 class="product-title">' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
                 '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
                 btnHtml;
+
+            const imgEl = card.querySelector('img');
+            const h3El = card.querySelector('h3');
+            if (imgEl) {
+                imgEl.style.cursor = 'pointer';
+                imgEl.onclick = () => openProductModal(product);
+            }
+            if (h3El) {
+                h3El.style.cursor = 'pointer';
+                h3El.onclick = () => openProductModal(product);
+            }
 
             productsList.appendChild(card);
         });
@@ -1095,7 +1106,21 @@ window.openProductModal = function(product) {
     
     const btn = document.getElementById('pm-add-btn');
     btn.onclick = () => {
-        addToCart(product.id, product.name, product.price);
+        // Find existing cart logic or just add directly
+        const cartItem = cart.find(i => i.name === product.name && i.size === product.size);
+        if (cartItem) {
+            cartItem.quantity++;
+        } else {
+            cart.push({
+                name: product.name,
+                brand: product.brand,
+                size: product.size,
+                price: Number(product.price),
+                quantity: 1
+            });
+        }
+        updateCart();
+        showToast(product.name + " added to cart", "success");
         closeProductModal();
     };
     
