@@ -58,6 +58,17 @@
     </div>
 
         <div class="container" id="admin-content">
+
+        <!-- Admin Navigation Tabs -->
+        <div style="display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
+            <button id="tab-btn-store" onclick="switchTab('store')" style="background: var(--primary-forest, #2c3e50); flex: 1;">🛒 Store Management</button>
+            <button id="tab-btn-vault" onclick="switchTab('vault')" style="background: #ccc; color: #333; flex: 1;">🔐 Passwords Vault</button>
+        </div>
+        
+        <!-- ========================= -->
+        <!-- STORE TAB -->
+        <!-- ========================= -->
+        <div id="tab-store">
         
         <!-- Analytics Dashboard -->
         <div class="card" style="display: flex; justify-content: space-around; text-align: center; background: linear-gradient(135deg, #2ecc71, #219150); color: white; border: none;">
@@ -80,6 +91,12 @@
             <button id="maintenance-toggle-btn" style="background: #e74c3c; color: white;">Turn ON</button>
         </div>
 
+                </div> <!-- End Store Tab -->
+
+        <!-- ========================= -->
+        <!-- VAULT TAB -->
+        <!-- ========================= -->
+        <div id="tab-vault" style="display: none;">
         <!-- Password Vault -->
         <div class="card" id="passwords-vault" style="border-left: 5px solid #3498db;">
             <h2>Passwords Vault & Access Requests</h2>
@@ -154,7 +171,7 @@
                 </table>
             </div>
         </div>
-
+        </div> <!-- End Vault Tab -->
     </div>
 
     <script>
@@ -336,8 +353,8 @@
             }
             list.innerHTML = data.map(req => {
                 const hasPassword = req.password && req.password.trim() !== "";
-                return "<div style='padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: white; flex-wrap: wrap; gap: 10px;'>" +
-                    "<div><strong>Email:</strong> " + req.email + "</div>" +
+                return "<div style='padding: 15px; border: 1px solid rgba(136, 136, 136, 0.2); border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: rgba(52, 152, 219, 0.05); flex-wrap: wrap; gap: 10px;'>" +
+                    "<div><strong style='color: #888;'>Email:</strong> <span style='color: #2ecc71; font-weight: bold; font-size: 17px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);'>" + req.email + "</span></div>" +
                     (hasPassword 
                         ? "<div><strong>Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + req.password + "</span></div>"
                         : "<div style='display: flex; gap: 10px;'><input type='text' id='pwd-input-" + req.id + "' placeholder='Type Assigned Password' style='padding: 8px; font-size: 14px;'><button onclick='updatePassword(" + req.id + ")' style='background: #3498db; padding: 8px 12px; font-size: 14px;'>Save</button></div>"
@@ -370,9 +387,27 @@
             }
         };
 
-        checkAdmin();
+                checkAdmin();
         loadRequests();
         loadSettings();
+
+        window.switchTab = function(tabName) {
+            if (tabName === 'store') {
+                document.getElementById('tab-store').style.display = 'block';
+                document.getElementById('tab-vault').style.display = 'none';
+                document.getElementById('tab-btn-store').style.background = '#2c3e50';
+                document.getElementById('tab-btn-store').style.color = 'white';
+                document.getElementById('tab-btn-vault').style.background = '#ccc';
+                document.getElementById('tab-btn-vault').style.color = '#333';
+            } else {
+                document.getElementById('tab-store').style.display = 'none';
+                document.getElementById('tab-vault').style.display = 'block';
+                document.getElementById('tab-btn-vault').style.background = '#3498db';
+                document.getElementById('tab-btn-vault').style.color = 'white';
+                document.getElementById('tab-btn-store').style.background = '#ccc';
+                document.getElementById('tab-btn-store').style.color = '#333';
+            }
+        };
 
         // Dark Mode Logic
         const darkModeToggle = document.getElementById('dark-mode-toggle');

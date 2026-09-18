@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <link rel="stylesheet" href="style.css?v=2026.22">
+    <link rel="stylesheet" href="style.css?v=2026.23">
 </head>
 
 <body>
@@ -47,8 +47,11 @@
         <div class="auth-content" style="box-shadow: var(--shadow-gloss); border: 1px solid var(--border-soft); background: var(--card-bg); width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; text-align: center;">
             <h2 style="color: var(--primary-forest); margin-bottom: 25px; font-family: var(--font-heading);">Login to SVVLK</h2>
             <form id="gate-auth-form">
-                <input type="email" id="gate-email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 16px; background: var(--bg-cream); box-sizing: border-box;">
-                <input type="password" id="gate-password" placeholder="Password" required minlength="6" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 16px; background: var(--bg-cream); box-sizing: border-box;">
+                <input type="email" id="gate-email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: #ffffff; color: #000000; box-sizing: border-box;">
+                <div style="position: relative; width: 100%; margin-bottom: 20px;">
+                    <input type="password" id="gate-password" placeholder="Password" required minlength="6" style="width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: #ffffff; color: #000000; box-sizing: border-box;">
+                    <span id="gate-toggle-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 14px; font-weight: bold; color: #666; user-select: none;">Show</span>
+                </div>
                 <button type="submit" style="width: 100%; padding: 14px; background: var(--primary-forest); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">Enter Store</button>
                 
                 
@@ -408,7 +411,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=2026.22"></script>
+    <script src="script.js?v=2026.23"></script>
     <!-- ================= ORDER SUCCESS OVERLAY ================= -->
     <div id="order-success-overlay" class="success-overlay" style="display: none;">
         <div class="success-card">
@@ -427,6 +430,21 @@
             </div>
         </div>
     </div>
+    <script>
+        const togglePwd = document.getElementById("gate-toggle-pwd");
+        if (togglePwd) {
+            togglePwd.addEventListener("click", () => {
+                const pwdInput = document.getElementById("gate-password");
+                if (pwdInput.type === "password") {
+                    pwdInput.type = "text";
+                    togglePwd.textContent = "Hide"; // Hide icon
+                } else {
+                    pwdInput.type = "password";
+                    togglePwd.textContent = "Show"; // Show icon
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
