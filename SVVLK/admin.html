@@ -130,7 +130,7 @@
 
         async function checkAdmin() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session?.user && (session.user.email === 'meghan4167@gmail.com' || session.user.email === 'svvlktraders@gmail.com')) {
+            if (session?.user && (session.user.email === 'meghan4167@gmail.com' || session.user.email === 'svvlktraders@gmail.com' || session.user.email === 'vvramu9441@gmail.com')) {
                 document.getElementById('auth-warning').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 loadOrders();
@@ -152,7 +152,8 @@
                 price: Number(document.getElementById('p-price').value),
                 size: document.getElementById('p-size').value,
                 image_url: document.getElementById('p-image').value,
-                category: document.getElementById('p-category').value
+                category: document.getElementById('p-category').value,
+                is_in_stock: true
             };
 
             const { error } = await supabaseClient.from('products').insert([newProduct]);
@@ -195,29 +196,17 @@
             });
         }
 
-        async function toggleStock(id, currentState) {
+        window.toggleStock = async function(id, currentState) {
             try {
-                // Force it to be a boolean just in case the DOM passed it weirdly
                 const isCurrentlyStocked = (currentState === true || currentState === 'true');
                 const newState = !isCurrentlyStocked;
-                
                 const { data, error } = await supabaseClient.from('products').update({ is_in_stock: newState }).eq('id', id).select();
-                
-                if (error) {
-                    alert("Error updating inventory: " + error.message);
-                    return;
-                }
-                
-                if (!data || data.length === 0) {
-                    alert("Warning: Could not find product ID " + id + " in database. Update failed.");
-                    return;
-                }
-
-                loadInventory(); // reload table to show new colors
+                if (error) { alert("Error updating inventory: " + error.message); return; }
+                loadInventory();
             } catch (err) {
                 alert("Fatal error toggling stock: " + err.message);
             }
-        }
+        };
 
         // Load Orders
         async function loadOrders() {
@@ -229,14 +218,13 @@
                 return;
             }
 
-            // Analytics Calculation
             let totalRevenue = 0;
             data.forEach(o => {
                 if (o.status !== 'Cancelled') {
                     totalRevenue += Number(o.total_amount || 0);
                 }
             });
-            document.getElementById('total-revenue').innerText = '₹' + totalRevenue.toLocaleString('en-IN');
+            document.getElementById('total-revenue').innerText = '?' + totalRevenue.toLocaleString('en-IN');
             document.getElementById('total-orders').innerText = data.length;
 
             tbody.innerHTML = "";
@@ -244,11 +232,11 @@
                 const tr = document.createElement('tr');
                 const currentStatus = order.status || 'Pending';
                 
-                                tr.innerHTML = 
+                tr.innerHTML = 
                     '<td><strong>' + order.order_id + '</strong></td>' +
                     '<td>' + order.customer_name + '</td>' +
                     '<td><strong style="color: #e67e22;">' + (order.delivery_time || 'Anytime') + '</strong></td>' +
-                    '<td>₹' + order.total_amount + '</td>' +
+                    '<td>?' + order.total_amount + '</td>' +
                     '<td>' +
                         '<select class="status-select" id="status-' + order.id + '">' +
                             '<option value="Pending" ' + (currentStatus==='Pending'?'selected':'') + '>Pending</option>' +
@@ -261,7 +249,7 @@
             });
         }
 
-        async function updateStatus(id) {
+        window.updateStatus = async function(id) {
             const newStatus = document.getElementById('status-' + id).value;
             const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
             if (error) {
@@ -269,9 +257,8 @@
             } else {
                 alert("Order status updated to " + newStatus);
             }
-        }
+        };
 
-        // Load Maintenance State
         let currentMaintenanceState = false;
         async function loadSettings() {
             supabaseClient.from('store_settings').select('maintenance_mode').eq('id', 1).single().then(({data}) => {
@@ -288,6 +275,17 @@
                 }
             });
         }
+
+        document.getElementById('maintenance-toggle-btn').addEventListener('click', async () => {
+            const newState = !currentMaintenanceState;
+            const { error } = await supabaseClient.from('store_settings').update({ maintenance_mode: newState }).eq('id', 1);
+            if (!error) {
+                alert(newState ? "Website is now FROZEN!" : "Website is now LIVE!");
+                loadSettings();
+            } else {
+                alert("Error: " + error.message);
+            }
+        });
 
         async function loadRequests() {
             const list = document.getElementById("requests-list");
@@ -336,13 +334,9 @@
             }
         };
 
-                checkAdmin();
-        loadRequests();
-        loadSettings();
-
         window.unlockVault = function() {
             const pwd = document.getElementById("vault-master-pwd").value;
-            if (pwd === "Jai Sri Ram") { // Master Password
+            if (pwd === "ramu9441") { // Master Password
                 document.getElementById("vault-lock-screen").style.display = "none";
                 document.getElementById("vault-content").style.display = "block";
             } else {
@@ -385,6 +379,11 @@
                 darkModeToggle.textContent = '🌙';
             }
         });
+
+        // Initialize
+        checkAdmin();
+        loadRequests();
+        loadSettings();
     </script>
 </body>
 </html>
