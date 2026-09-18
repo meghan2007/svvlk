@@ -316,24 +316,47 @@
             const list = document.getElementById("requests-list");
             const { data, error } = await supabaseClient.from('access_requests').select('*').order('created_at', { ascending: false });
             if (error || !data) {
-                list.innerHTML = "<p>Error loading requests: " + (error ? error.message : "Unknown") + "</p>";
+                list.innerHTML = "<p>Error loading records: " + (error ? error.message : "Unknown") + "</p>";
                 return;
             }
             if (data.length === 0) {
-                list.innerHTML = "<p style='color: #888;'>No pending requests.</p>";
+                list.innerHTML = "<p style='color: #888;'>Vault is empty.</p>";
                 return;
             }
-            list.innerHTML = data.map(req => 
-                "<div style='padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;'>" +
-                "<div><strong>Email:</strong> " + req.email + "<br><strong>Generated Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + (req.password || "N/A") + "</span></div>" +
-                "<button onclick='deleteRequest(" + req.id + ")' style='background: #e74c3c; padding: 10px;'>Clear</button>" +
-                "</div>"
-            ).join("");
+            list.innerHTML = data.map(req => {
+                const hasPassword = req.password && req.password.trim() !== "";
+                return "<div style='padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: white; flex-wrap: wrap; gap: 10px;'>" +
+                    "<div><strong>Email:</strong> " + req.email + "</div>" +
+                    (hasPassword 
+                        ? "<div><strong>Password:</strong> <span style='color: #e74c3c; font-weight: bold;'>" + req.password + "</span></div>"
+                        : "<div style='display: flex; gap: 10px;'><input type='text' id='pwd-input-" + req.id + "' placeholder='Type Assigned Password' style='padding: 8px; font-size: 14px;'><button onclick='updatePassword(" + req.id + ")' style='background: #3498db; padding: 8px 12px; font-size: 14px;'>Save</button></div>"
+                    ) +
+                    "<button onclick='deleteRequest(" + req.id + ")' style='background: #e74c3c; padding: 10px; border-radius: 6px;'>Delete</button>" +
+                "</div>";
+            }).join("");
         }
 
         window.deleteRequest = async function(id) {
             await supabaseClient.from('access_requests').delete().eq('id', id);
             loadRequests();
+        };
+
+        window.updatePassword = async function(id) {
+            const pwdInput = document.getElementById("pwd-input-" + id);
+            if (!pwdInput) return;
+            const password = pwdInput.value.trim();
+            
+            if (!password) {
+                alert("Please type a password before saving.");
+                return;
+            }
+
+            const { error } = await supabaseClient.from('access_requests').update({ password: password }).eq('id', id);
+            if (error) {
+                alert("Error saving to vault: " + error.message);
+            } else {
+                loadRequests();
+            }
         };
 
         checkAdmin();

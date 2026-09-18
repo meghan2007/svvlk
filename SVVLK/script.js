@@ -729,7 +729,7 @@ async function updateAuthState() {
                 ];
                 const isAdmin = currentUser && currentUser.email ? vipEmails.includes(currentUser.email.toLowerCase()) : false;
                 
-                if (!isAdmin && diffDays > 15 && diffUpdateDays > 1) {
+                                if (!isAdmin && diffDays > 15 && diffUpdateDays > 1) {
                     // Scramble their password so they are completely locked out
                     const scrambledPassword = "LOCKED-" + Math.floor(Math.random() * 1000000000) + "-SVVLK";
                     await supabaseClient.auth.updateUser({ password: scrambledPassword });
@@ -1078,8 +1078,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const text = "Hi Proprietor! I would like to register for an account at SVVLK Traders. My Email ID is: " + email;
             const waLink = "https://wa.me/919441825349?text=" + encodeURIComponent(text);
             
-            const generatedPassword = "SVVLK" + Math.floor(1000 + Math.random() * 9000);
-            supabaseClient.from('access_requests').insert([{ email: email, password: generatedPassword }]).then(() => {
+            supabaseClient.from('access_requests').insert([{ email: email }]).then(() => {
                 window.open(waLink, "_blank");
                 document.getElementById("gate-request-email").value = "";
                 gateRequestForm.style.display = "none";
