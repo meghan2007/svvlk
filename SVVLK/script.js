@@ -49,12 +49,11 @@ async function checkMaintenanceMode() {
             }
             
             if (data.maintenance_mode) {
-                document.body.innerHTML = 
-                <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: var(--bg-cream, #FBF9F6); color: var(--text-dark, #2A332C); font-family: var(--font-body, sans-serif); padding: 20px;">
+                document.body.innerHTML = `<div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: var(--bg-cream, #FBF9F6); color: var(--text-dark, #2A332C); font-family: var(--font-body, sans-serif); padding: 20px;">
                     <h1 style="font-size: 44px; font-family: var(--font-heading, serif); color: var(--primary-forest, #1A3B26); margin-bottom: 20px;">Market Closed</h1>
                     <p style="font-size: 16px; color: var(--text-muted, #5C6E61); max-width: 600px; line-height: 1.6;">We are currently curating our fresh selection and upgrading our systems. SVVLK will reopen shortly. Thank you for your patience.</p>
                 </div>
-                ;
+                `;
                 return true;
             }
         }
