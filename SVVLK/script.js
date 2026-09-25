@@ -684,7 +684,7 @@ const authToggleText = document.getElementById("auth-toggle-text");
 
 
 
-loginBtn.addEventListener("click", (e) => {
+if (loginBtn) { loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
     if (currentUser) {
         supabaseClient.auth.signOut().then(() => {
@@ -715,7 +715,7 @@ authForm.addEventListener("submit", async (e) => {
     } catch (err) {
         showToast(err.message, "warning");
     }
-});
+}); }
 
 async function updateAuthState() {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -779,7 +779,7 @@ async function updateAuthState() {
             loginGate.style.display = "none";
         }
 
-        loginBtn.innerHTML = "Logout";
+        if (loginBtn) loginBtn.innerHTML = "Logout";
         
         if (document.getElementById("my-profile-btn")) document.getElementById("my-profile-btn").style.display = "inline-block";
         
@@ -803,7 +803,7 @@ async function updateAuthState() {
             }
         }
     } else {
-        loginBtn.innerHTML = "Login";
+        if (loginBtn) loginBtn.innerHTML = "Login";
         
         
         // Clear auto-filled name on logout if we want, but usually it's fine to leave it.
