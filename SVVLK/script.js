@@ -1165,7 +1165,7 @@ if (installBtn) {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            console.log(User response to the install prompt: );
+            console.log("User response to the install prompt: " + outcome);
             deferredPrompt = null;
         }
     });
