@@ -1140,3 +1140,39 @@ window.openProductModal = function(product) {
 window.closeProductModal = function() {
     document.getElementById('product-modal').style.display = 'none';
 };
+// ===============================
+// PWA INSTALL BANNER
+// ===============================
+let deferredPrompt;
+const installBanner = document.getElementById("pwa-install-banner");
+const installBtn = document.getElementById("pwa-install-btn");
+const closeInstallBtn = document.getElementById("pwa-close-btn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI notify the user they can add to home screen
+    if (installBanner) {
+        installBanner.style.display = "flex";
+    }
+});
+
+if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+        if (installBanner) installBanner.style.display = "none";
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(User response to the install prompt: );
+            deferredPrompt = null;
+        }
+    });
+}
+
+if (closeInstallBtn) {
+    closeInstallBtn.addEventListener("click", () => {
+        if (installBanner) installBanner.style.display = "none";
+    });
+}
