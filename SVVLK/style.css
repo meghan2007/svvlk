@@ -6,12 +6,12 @@
     --text-muted: #6E7681;
     --primary-forest: #0D1117;
     --primary-light: #161B22;
-    --accent-gold: #00D26A;
-    --accent-hover: #00FF85;
-    --border-soft: rgba(0, 210, 106, 0.2);
+    --accent-gold: #0052FF; /* Tech Blue */
+    --accent-hover: #0037B3;
+    --border-soft: rgba(0, 82, 255, 0.15);
     --card-bg: #FFFFFF;
-    --shadow-base: 0 10px 30px rgba(14, 64, 45, 0.05);
-    --shadow-gloss: inset 0 2px 0 rgba(255,255,255,0.7), 0 15px 35px rgba(14,64,45,0.1);
+    --shadow-base: 0 10px 30px rgba(0, 82, 255, 0.05);
+    --shadow-gloss: inset 0 2px 0 rgba(255,255,255,0.7), 0 15px 35px rgba(0, 82, 255,0.1);
     
     --font-heading: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px;
     --font-body: 'Outfit', sans-serif;
@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5, h6 {
    GLOSSY HEADER
    =============================== */
 header {
-    background: rgba(251, 249, 246, 0.7);
+    background: rgba(240, 244, 248, 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 20px 50px;
@@ -164,7 +164,7 @@ body.dark-mode .hero-content h2 {
 }
 .hero button {
     background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-forest) 100%);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 8px 20px rgba(14,64,45,0.2);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 8px 20px rgba(0, 82, 255,0.2);
     color: white;
     border: none;
     border-radius: 50px;
@@ -176,7 +176,7 @@ body.dark-mode .hero-content h2 {
 }
 .hero button:hover {
     transform: translateY(-2px);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.3), 0 12px 25px rgba(14,64,45,0.35);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.3), 0 12px 25px rgba(0, 82, 255,0.35);
 }
 
 .hero-visual {
@@ -192,7 +192,7 @@ body.dark-mode .hero-content h2 {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.6);
     border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(14,64,45,0.1), inset 0 2px 0 rgba(255,255,255,0.8);
+    box-shadow: 0 20px 40px rgba(0, 82, 255,0.1), inset 0 2px 0 rgba(255,255,255,0.8);
 }
 body.dark-mode .glass-card {
     background: rgba(0,0,0,0.3);
@@ -316,7 +316,7 @@ body.dark-mode .search-box input {
 .category-filter:hover, .category-filter.active {
     background: var(--primary-forest);
     color: white;
-    box-shadow: 0 8px 20px rgba(14,64,45,0.2);
+    box-shadow: 0 8px 20px rgba(0, 82, 255,0.2);
     border-color: transparent;
 }
 
@@ -400,7 +400,7 @@ body.dark-mode .product-card {
 .product-card button:hover {
     background: var(--primary-forest);
     color: white;
-    box-shadow: 0 6px 15px rgba(14,64,45,0.2);
+    box-shadow: 0 6px 15px rgba(0, 82, 255,0.2);
 }
 .product-card button:disabled {
     background: var(--bg-cream) !important;
@@ -434,7 +434,7 @@ body.dark-mode .product-card {
     align-items: center;
     font-size: 24px;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(14, 64, 45, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 82, 255, 0.4);
     z-index: 1000;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -585,7 +585,7 @@ footer {
 .success-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100vh;
-    background: rgba(251, 249, 246, 0.9);
+    background: rgba(240, 244, 248, 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     z-index: 999999;
@@ -611,7 +611,7 @@ body.dark-mode .success-overlay {
     max-width: 500px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 30px 60px rgba(14, 64, 45, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 82, 255, 0.15);
     transform: translateY(50px) scale(0.95);
     transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -687,11 +687,11 @@ body.dark-mode .success-card {
     background: linear-gradient(180deg, var(--primary-light), var(--primary-forest));
     color: white;
     border: none;
-    box-shadow: 0 8px 20px rgba(14,64,45,0.2);
+    box-shadow: 0 8px 20px rgba(0, 82, 255,0.2);
 }
 #success-track-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(14,64,45,0.3);
+    box-shadow: 0 12px 25px rgba(0, 82, 255,0.3);
 }
 #success-continue-btn {
     background: transparent;
@@ -918,7 +918,7 @@ body.dark-mode .success-card {
 header {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    background: rgba(251, 249, 246, 0.85);
+    background: rgba(240, 244, 248, 0.85);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -937,7 +937,7 @@ body.dark-mode header {
 
 .product-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(14, 64, 45, 0.15);
+    box-shadow: 0 15px 35px rgba(0, 82, 255, 0.15);
 }
 
 .product-card img {
@@ -963,7 +963,7 @@ body.dark-mode header {
 }
 
 .product-card:hover {
-    box-shadow: 0 0 30px rgba(0, 255, 157, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 82, 255, 0.15);
     border-color: var(--accent-gold);
 }
 
@@ -976,12 +976,15 @@ button {
 }
 
 button:hover {
-    box-shadow: 0 0 20px var(--accent-gold);
+    box-shadow: 0 8px 20px rgba(0, 82, 255, 0.3);
     transform: scale(1.02);
 }
 
 body.dark-mode .product-card:hover {
-    box-shadow: 0 0 40px rgba(0, 255, 157, 0.7);
+    box-shadow: 0 0 40px rgba(0, 255, 157, 0.5);
+}
+body.dark-mode button:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
 }
 
 
@@ -1020,11 +1023,11 @@ body.dark-mode {
     border: none;
     border-left: 2px solid var(--accent-gold);
     border-bottom: 2px solid var(--accent-gold);
-    background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(6,9,15,0.95));
+    background: var(--card-bg);
 }
 
 /* CRT Scanline Overlay Effect on whole body */
-body::after {
+body.dark-mode::after {
     content: '';
     position: fixed;
     top: 0;
@@ -1061,7 +1064,7 @@ button:hover::before {
 }
 
 /* Neon Text Glows */
-h1, h2, h3 {
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
     text-shadow: 0 0 10px rgba(0, 255, 157, 0.4);
 }
 
