@@ -1211,3 +1211,44 @@ body.dark-mode .product-card:hover {
     transform: translateY(-8px);
 }
 
+
+/* ========================================= */
+/* FLOATING PARTICLES ANIMATION */
+/* ========================================= */
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    opacity: 0.3;
+    animation: floatUp linear infinite;
+    box-shadow: 0 0 8px var(--accent-gold);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+    }
+}
+

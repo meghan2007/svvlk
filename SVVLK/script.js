@@ -1677,3 +1677,43 @@ document.addEventListener('click', (e) => {
     }
 });
 
+
+// =========================================
+// FLOATING PARTICLES GENERATOR
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const particleContainer = document.getElementById('particle-container');
+    if (!particleContainer) return;
+
+    const numParticles = 40; // Number of particles on screen
+    
+    for (let i = 0; i < numParticles; i++) {
+        createParticle();
+    }
+
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Randomize size, position, and duration
+        const size = Math.random() * 4 + 1; // 1px to 5px
+        const posX = Math.random() * 100; // 0vw to 100vw
+        const duration = Math.random() * 15 + 10; // 10s to 25s
+        const delay = Math.random() * 15; // 0s to 15s delay
+
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = posX + 'vw';
+        particle.style.animationDuration = duration + 's';
+        particle.style.animationDelay = '-' + delay + 's'; // Negative delay so they start already on screen
+
+        particleContainer.appendChild(particle);
+        
+        // Re-generate particle when animation ends to keep it infinite without dom bloat
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+            createParticle();
+        });
+    }
+});
+
