@@ -1574,3 +1574,106 @@ window.updateB2BUI = function() {
 // Init on load
 updateB2BUI();
 
+
+// =========================================
+// TERMINAL BOOT SEQUENCE
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    if (bootScreen && bootText) {
+        // Only show boot screen once per session to not annoy the user
+        if (sessionStorage.getItem('svvlk-booted')) {
+            bootScreen.style.display = 'none';
+            return;
+        }
+        
+        const lines = [
+            'INITIATING SECURE CONNECTION...',
+            'BYPASSING MAINFRAME FIREWALL...',
+            'LOADING INVENTORY DATABASES...',
+            'DECRYPTING WHOLESALE PRICING...',
+            'ACCESS GRANTED. WELCOME TO SVVLK.'
+        ];
+        
+        let delay = 0;
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                bootText.innerHTML += line + '<br>';
+                playClickSound(); // Play typing sound
+            }, delay);
+            delay += 400 + Math.random() * 300;
+        });
+        
+        setTimeout(() => {
+            bootScreen.style.opacity = '0';
+            playBootSuccessSound();
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                sessionStorage.setItem('svvlk-booted', 'true');
+            }, 500);
+        }, delay + 500);
+    }
+});
+
+// =========================================
+// SCI-FI UI SOUND EFFECTS (Web Audio API)
+// =========================================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+window.playClickSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+    gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+};
+
+window.playAddCartSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.2);
+};
+
+window.playBootSuccessSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.3);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+};
+
+// Attach click sound to all buttons
+document.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+        if (e.target.classList.contains('add-to-cart')) {
+            playAddCartSound();
+        } else {
+            playClickSound();
+        }
+    }
+});
+

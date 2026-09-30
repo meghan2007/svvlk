@@ -1161,3 +1161,9 @@ h1, h2, h3 {
     100% { clip: rect(82px, 9999px, 37px, 0); }
 }
 
+
+@keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
