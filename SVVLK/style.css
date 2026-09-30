@@ -915,3 +915,41 @@ body.dark-mode .success-card {
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+/* Advanced UI Improvements */
+header {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(251, 249, 246, 0.85);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-soft);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+body.dark-mode header {
+    background: rgba(11, 23, 17, 0.85);
+}
+
+.product-card {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(14, 64, 45, 0.15);
+}
+
+.product-card img {
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.hero-section a:hover {
+    transform: translateY(-3px);
+}
+

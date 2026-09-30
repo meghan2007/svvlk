@@ -1,4 +1,4 @@
-﻿// ===============================
+// ===============================
 // SPLASH SCREEN LOGIC
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
@@ -482,8 +482,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     }
 
     const deliveryTime = document.getElementById("delivery-time").value;
-
-
+    
                 const totalAmount = document.getElementById("cart-total").textContent;
 
     const paymentMethod = document.getElementById("payment-method").value;
@@ -513,15 +512,16 @@ checkoutForm.addEventListener("submit", async function(event) {
             .from('orders')
             .insert([
                 {
-                                        order_id: "ORD-" + Date.now(),
+                    order_id: "ORD-" + Date.now(),
                     user_id: currentUser.id,
                     customer_name: customerName,
                     customer_phone: customerPhone,
                     customer_address: customerAddress,
                     customer_city: customerCity,
+                    delivery_time: deliveryTime,
                     payment_method: paymentMethod,
                     utr_number: document.getElementById("utr-number") ? document.getElementById("utr-number").value : null,
-                    total_amount: Number(totalAmount.replace(/,/g, '')),
+                    total_amount: window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, '')),
                     items: cart
                 }
             ]);
@@ -541,7 +541,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     const successOverlay = document.getElementById("order-success-overlay");
     if (successOverlay) {
         document.getElementById("success-order-id").textContent = "#ORD-" + Date.now();
-        document.getElementById("success-order-total").textContent = "₹" + Number(totalAmount.replace(/,/g, '')).toLocaleString("en-IN");
+        document.getElementById("success-order-total").textContent = "₹" + (window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, ''))).toLocaleString("en-IN");
         
         successOverlay.style.display = "flex";
         // trigger reflow
@@ -634,11 +634,19 @@ async function loadProducts() {
                 card.style.opacity = '0.6';
             }
 
+            // Check if this product is in favorites
+            const favs = JSON.parse(localStorage.getItem('svvlk-favorites')) || [];
+            const isFav = favs.some(f => f.name === product.name && f.brand === product.brand && f.size === product.size);
+            const heartStyle = isFav ? "color: #e74c3c; font-variation-settings: 'FILL' 1;" : "color: #ccc;";
+
             card.innerHTML = 
-                '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
+                '<div style="position: relative;">' +
+                    '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
+                    '<div class="fav-btn" data-brand="' + product.brand + '" data-name="' + product.name + '" data-size="' + product.size + '" data-price="' + product.price + '" data-img="' + (product.image_url || '') + '" style="position: absolute; top: 10px; right: 10px; background: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); ' + heartStyle + ' font-size: 18px; transition: 0.2s;">' + (isFav ? '❤️' : '🤍') + '</div>' +
+                '</div>' +
                 '<h3 class="product-title">' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
-                '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                '<p>' + (product.b2bOriginalPriceStr || '') + '₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
                 btnHtml;
 
             const imgEl = card.querySelector('img');
@@ -935,6 +943,7 @@ if (navProfileBtn && profileModal) {
                 document.getElementById("prof-city").value = data.city || "";
             }
         }
+        document.getElementById("prof-wholesale").checked = localStorage.getItem("svvlk-is-b2b") === "true";
     });
 
     closeProfileBtn.addEventListener("click", () => {
@@ -944,6 +953,11 @@ if (navProfileBtn && profileModal) {
     profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!currentUser) return;
+
+        const isB2B = document.getElementById("prof-wholesale").checked;
+        localStorage.getItem("svvlk-is-b2b") !== (isB2B ? "true" : "false") && localStorage.setItem("svvlk-is-b2b", isB2B ? "true" : "false");
+        if(typeof updateB2BUI === "function") updateB2BUI();
+        if (typeof loadProducts === "function") loadProducts();
 
         const profileData = {
             id: currentUser.id,
@@ -1176,3 +1190,387 @@ if (closeInstallBtn) {
         if (installBanner) installBanner.style.display = "none";
     });
 }
+// ===============================
+// PINCODE CHECKER
+// ===============================
+const pincodeBtn = document.getElementById('pincode-check-btn');
+const pincodeInput = document.getElementById('pincode-input');
+const pincodeResult = document.getElementById('pincode-result');
+
+if (pincodeBtn && pincodeInput && pincodeResult) {
+    // Valid pincodes for Visakhapatnam delivery areas
+    const validPincodes = ['530018', '530008', '530024', '530007', '530016', '530009', '530027'];
+
+    pincodeBtn.addEventListener('click', () => {
+        const enteredPin = pincodeInput.value.trim();
+        
+        pincodeResult.style.display = 'block';
+        
+        if (!/^\d{6}$/.test(enteredPin)) {
+            pincodeResult.textContent = 'Please enter a valid 6-digit Pincode.';
+            pincodeResult.style.color = '#e74c3c';
+            pincodeResult.style.backgroundColor = '#fdeaea';
+            return;
+        }
+
+        if (validPincodes.includes(enteredPin)) {
+            pincodeResult.textContent = '🎉 Great news! We deliver to ' + enteredPin + '. Delivery within 2 hours.';
+            pincodeResult.style.color = '#27ae60';
+            pincodeResult.style.backgroundColor = '#eafaf1';
+        } else {
+            pincodeResult.textContent = 'Sorry, we do not currently deliver to ' + enteredPin + '. Please contact the proprietor for bulk orders.';
+            pincodeResult.style.color = '#e67e22';
+            pincodeResult.style.backgroundColor = '#fdf2e9';
+        }
+    });
+
+    // Check on Enter key press
+    pincodeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            pincodeBtn.click();
+        }
+    });
+}
+
+
+// ===============================
+// PRODUCT MODAL LOGIC FIX
+// ===============================
+const productModal = document.getElementById('product-modal');
+const closePmBtn = document.getElementById('close-pm');
+
+if (closePmBtn) {
+    closePmBtn.addEventListener('click', () => {
+        if (productModal) productModal.style.display = 'none';
+    });
+}
+
+// Ensure clicking outside the modal content closes it
+if (productModal) {
+    productModal.addEventListener('click', (e) => {
+        if (e.target === productModal) {
+            productModal.style.display = 'none';
+        }
+    });
+}
+
+// Override the existing openProductModal to ensure it displays the modal
+const originalOpenProductModal = window.openProductModal;
+window.openProductModal = function(product) {
+    if (originalOpenProductModal) {
+        originalOpenProductModal(product); // Call original to set data
+    }
+    // Now explicitly show it
+    if (productModal) {
+        productModal.style.display = 'flex';
+    }
+};
+
+
+// ===============================
+// FAVORITES / WATCHLIST LOGIC
+// ===============================
+const favIcon = document.getElementById('fav-icon');
+const favCount = document.getElementById('fav-count');
+const favModal = document.getElementById('favorites-modal');
+const closeFavModal = document.getElementById('close-favorites');
+const favListContainer = document.getElementById('favorites-list-container');
+
+let favorites = JSON.parse(localStorage.getItem('svvlk-favorites')) || [];
+
+function updateFavCount() {
+    if (favCount) {
+        favCount.textContent = favorites.length;
+    }
+}
+
+function saveFavorites() {
+    localStorage.setItem('svvlk-favorites', JSON.stringify(favorites));
+    updateFavCount();
+}
+
+function renderFavorites() {
+    if (!favListContainer) return;
+    favListContainer.innerHTML = '';
+    
+    if (favorites.length === 0) {
+        favListContainer.innerHTML = '<p style="color: var(--text-muted); font-style: italic;">No favorites saved yet. Click the heart icon on products to save them for later!</p>';
+        return;
+    }
+
+    favorites.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.style = 'border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; position: relative;';
+        
+        card.innerHTML = 
+            '<div onclick="removeFavorite(' + index + ')" style="position: absolute; top: 5px; right: 5px; cursor: pointer; color: #e74c3c; font-size: 18px;">✖</div>' +
+            '<img src="' + (item.img || 'https://via.placeholder.com/400?text=SVVLK') + '" style="width: 100%; height: 100px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">' +
+            '<h4 style="font-size: 13px; margin: 0 0 5px 0; color: var(--text-dark);">' + item.brand + ' ' + item.name + '</h4>' +
+            '<p style="font-size: 12px; color: var(--text-muted); margin: 0 0 5px 0;">' + item.size + '</p>' +
+            '<p style="font-size: 14px; font-weight: bold; color: var(--accent-gold); margin: 0 0 10px 0;">₹' + Number(item.price).toLocaleString('en-IN') + '</p>' +
+            '<button onclick="addFavToCart(' + index + ')" style="background: var(--primary-forest); color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Add to Cart</button>';
+        
+        favListContainer.appendChild(card);
+    });
+}
+
+window.removeFavorite = function(index) {
+    favorites.splice(index, 1);
+    saveFavorites();
+    renderFavorites();
+    // Re-render products to update heart icons
+    if (typeof loadProducts === 'function') loadProducts();
+};
+
+window.addFavToCart = function(index) {
+    const item = favorites[index];
+    const productId = item.name + '-' + item.brand + '-' + item.size;
+    const existingProduct = cart.find(i => i.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ id: productId, name: item.name, brand: item.brand, size: item.size, price: item.price, quantity: 1 });
+    }
+
+    updateCart();
+    showToast(item.brand + ' ' + item.name + ' added to cart!', 'success');
+};
+
+if (favIcon) {
+    favIcon.addEventListener('click', () => {
+        renderFavorites();
+        favModal.style.display = 'flex';
+    });
+}
+
+if (closeFavModal) {
+    closeFavModal.addEventListener('click', () => {
+        favModal.style.display = 'none';
+    });
+}
+
+// Close when clicking outside
+if (favModal) {
+    favModal.addEventListener('click', (e) => {
+        if (e.target === favModal) {
+            favModal.style.display = 'none';
+        }
+    });
+}
+
+// Global click delegation for heart icons on product cards
+document.addEventListener('click', (e) => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+        e.stopPropagation();
+        const brand = favBtn.dataset.brand;
+        const name = favBtn.dataset.name;
+        const size = favBtn.dataset.size;
+        const price = Number(favBtn.dataset.price);
+        const img = favBtn.dataset.img;
+        
+        const existingIndex = favorites.findIndex(f => f.name === name && f.brand === brand && f.size === size);
+        
+        if (existingIndex > -1) {
+            // Remove
+            favorites.splice(existingIndex, 1);
+            favBtn.innerHTML = '🤍';
+            favBtn.style.color = '#ccc';
+            showToast('Removed from favorites', 'success');
+        } else {
+            // Add
+            favorites.push({ brand, name, size, price, img });
+            favBtn.innerHTML = '❤️';
+            favBtn.style.color = '#e74c3c';
+            showToast('Added to favorites!', 'success');
+        }
+        
+        saveFavorites();
+    }
+});
+
+// Init
+updateFavCount();
+
+
+
+// ===============================
+// DYNAMIC DELIVERY FEE LOGIC
+// ===============================
+const checkoutCity = document.getElementById('customer-city');
+const deliveryFeeDisplay = document.getElementById('delivery-fee-display');
+const deliveryFeeAmount = document.getElementById('delivery-fee-amount');
+const checkoutFinalTotalDisplay = document.getElementById('checkout-final-total-display');
+const checkoutFinalAmount = document.getElementById('checkout-final-amount');
+
+const DELIVERY_FEES = {
+    'Marripalem': 20,
+    'Urvasi': 30,
+    'ITI Junction': 30,
+    'Kancharapalem': 40,
+    'Kapparada': 35,
+    'Thatichetlapalem': 40,
+    'NAD': 50,
+    'Gopalapatnam': 60
+};
+
+// Global checkout fee state
+window.currentDeliveryFee = 0;
+window.checkoutFinalTotal = 0;
+
+// Also we need to initialize checkoutFinalTotal when proceeding to checkout
+const proceedBtn = document.getElementById('proceed-checkout');
+if (proceedBtn) {
+    proceedBtn.addEventListener('click', () => {
+        const baseTotalStr = document.getElementById('cart-total').textContent.replace(/,/g, '');
+        window.checkoutFinalTotal = Number(baseTotalStr) || 0;
+        
+        // Trigger city change if already selected
+        if (checkoutCity && checkoutCity.value) {
+            checkoutCity.dispatchEvent(new Event('change'));
+        }
+    });
+}
+
+if (checkoutCity) {
+    checkoutCity.addEventListener('change', function() {
+        const city = this.value;
+        const fee = DELIVERY_FEES[city] || 0;
+        window.currentDeliveryFee = fee;
+        
+        const baseTotalStr = document.getElementById('cart-total').textContent.replace(/,/g, '');
+        const baseTotal = Number(baseTotalStr) || 0;
+        
+        window.checkoutFinalTotal = baseTotal + fee;
+        
+        if (fee > 0) {
+            if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'flex';
+            if(deliveryFeeAmount) deliveryFeeAmount.textContent = '₹' + fee;
+        } else {
+            if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'none';
+        }
+        
+        if(checkoutFinalTotalDisplay) checkoutFinalTotalDisplay.style.display = 'flex';
+        if(checkoutFinalAmount) checkoutFinalAmount.textContent = '₹' + window.checkoutFinalTotal.toLocaleString('en-IN');
+        
+        // Update UPI button if they choose UPI
+        const upiBtn = document.getElementById('upi-pay-btn');
+        if (upiBtn) {
+            upiBtn.href = 'upi://pay?pa=7569898179@ybl&pn=SVVLK%20Traders&cu=INR&am=' + window.checkoutFinalTotal.toFixed(2);
+        }
+    });
+}
+
+
+// ===============================
+// ABANDONED CART NUDGE
+// ===============================
+setTimeout(() => {
+    try {
+        const storedCart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
+        if (storedCart.length > 0) {
+            const lastNudge = localStorage.getItem('svvlk-last-nudge');
+            const now = Date.now();
+            
+            // If never nudged, or nudged more than 4 hours ago (14400000 ms)
+            if (!lastNudge || (now - Number(lastNudge)) > 14400000) { 
+                
+                // Show custom elegant nudge
+                const nudge = document.createElement('div');
+                nudge.style = 'position: fixed; bottom: 100px; left: 20px; background: white; border-left: 4px solid var(--accent-gold); padding: 15px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; gap: 15px; transform: translateX(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 300px;';
+                
+                nudge.innerHTML = `
+                    <div style="font-size: 24px;">🛒</div>
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: var(--primary-forest); font-size: 15px;">You left items in your cart!</h4>
+                        <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Don't miss out on your fresh groceries.</p>
+                        <a href="#cart" onclick="this.parentElement.parentElement.style.transform='translateX(-150%)';" style="display: inline-block; margin-top: 8px; font-size: 13px; font-weight: bold; color: var(--accent-gold); text-decoration: none;">View Cart &rarr;</a>
+                    </div>
+                    <div onclick="this.parentElement.style.transform='translateX(-150%)'" style="position: absolute; top: 5px; right: 8px; cursor: pointer; color: #aaa; font-size: 18px;">&times;</div>
+                `;
+                
+                document.body.appendChild(nudge);
+                
+                // Slide in after 2.5 seconds of page load
+                setTimeout(() => {
+                    nudge.style.transform = 'translateX(0)';
+                }, 2500);
+                
+                localStorage.setItem('svvlk-last-nudge', now.toString());
+            }
+        }
+    } catch (e) {
+        console.error('Cart nudge error', e);
+    }
+}, 1000);
+
+
+// ===============================
+// SMART DELIVERY SLOTS
+// ===============================
+function updateDeliverySlots() {
+    const deliveryTimeSelect = document.getElementById('delivery-time');
+    if (!deliveryTimeSelect) return;
+    
+    const currentHour = new Date().getHours();
+    const options = deliveryTimeSelect.options;
+
+    // Reset options
+    for (let i = 1; i < options.length; i++) {
+        options[i].disabled = false;
+        options[i].text = options[i].text.replace(/ \(.*?\)/, ''); // Remove old warnings
+    }
+
+    // Fast Delivery (Within 2 Hours) - Disable if after 8 PM (20:00)
+    if (currentHour >= 20) {
+        options[1].disabled = true;
+        options[1].text = 'Fast Delivery (Unavailable after 8 PM)';
+    } else {
+        options[1].text = 'Fast Delivery (Within 2 Hours)';
+    }
+    
+    // Today (Evening) - Disable if after 6 PM (18:00)
+    if (currentHour >= 18) {
+        options[2].disabled = true;
+        options[2].text = 'Today Evening (Too late to order)';
+    } else {
+        options[2].text = 'Today (Evening)';
+    }
+}
+
+// Run on load and whenever checkout is opened
+updateDeliverySlots();
+if (document.getElementById('proceed-checkout')) {
+    document.getElementById('proceed-checkout').addEventListener('click', updateDeliverySlots);
+}
+
+
+// ===============================
+// B2B WHOLESALE LOGIC
+// ===============================
+window.updateB2BUI = function() {
+    const isB2B = localStorage.getItem('svvlk-is-b2b') === 'true';
+    
+    let badge = document.getElementById('b2b-badge');
+    if (isB2B) {
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.id = 'b2b-badge';
+            badge.innerHTML = '?? B2B Mode';
+            badge.style = 'background: #2c3e50; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; margin-right: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);';
+            
+            // Insert into header
+            const headerActions = document.querySelector('header > div:last-child');
+            if (headerActions) {
+                headerActions.insertBefore(badge, headerActions.firstChild);
+            }
+        }
+    } else {
+        if (badge) badge.remove();
+    }
+};
+
+// Init on load
+updateB2BUI();
+

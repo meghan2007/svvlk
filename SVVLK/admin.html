@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -97,7 +97,10 @@
                 <form id="add-product-form">
                     <input type="text" id="p-name" placeholder="Product Name (e.g., Organic Bananas)" required>
                     <input type="text" id="p-brand" placeholder="Brand Name" required>
-                    <input type="number" step="0.01" id="p-price" placeholder="Price (₹)" required>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" step="0.01" id="p-price" placeholder="Retail Price (₹)" required style="flex: 1;">
+                        <input type="number" step="0.01" id="p-wholesale-price" placeholder="Wholesale Price (₹) [Optional]" style="flex: 1;">
+                    </div>
                     <input type="text" id="p-size" placeholder="Size/Weight (e.g., 1 kg)" required>
                     <input type="url" id="p-image" placeholder="Image URL (Optional)">
                     <select id="p-category" required>
@@ -212,6 +215,7 @@
                 name: document.getElementById('p-name').value,
                 brand: document.getElementById('p-brand').value,
                 price: Number(document.getElementById('p-price').value),
+                wholesale_price: document.getElementById('p-wholesale-price').value ? Number(document.getElementById('p-wholesale-price').value) : null,
                 size: document.getElementById('p-size').value,
                 image_url: document.getElementById('p-image').value,
                 category: document.getElementById('p-category').value,
