@@ -1558,7 +1558,7 @@ window.updateB2BUI = function() {
             badge = document.createElement('div');
             badge.id = 'b2b-badge';
             badge.innerHTML = '?? B2B Mode';
-            badge.style = 'background: rgba(0, 255, 157, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 4px 10px; border-radius: 0px; font-size: 12px; font-weight: bold; display: flex; align-items: center; margin-right: 10px; box-shadow: 0 0 10px rgba(0, 255, 157, 0.5); clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);';
+            badge.className = 'b2b-badge-futuristic';
             
             // Insert into header
             const headerActions = document.querySelector('header > div:last-child');
