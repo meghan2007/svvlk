@@ -1,34 +1,33 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
 
 :root {
-    --bg-cream: #FBF9F6;
-    --text-dark: #1F2E23;
-    --text-muted: #4B6353;
-    --primary-forest: #0E402D;
-    --primary-light: #1A6B4C;
-    --accent-gold: #D4AF37;
-    --accent-hover: #E8C14A;
-    --border-soft: rgba(26, 107, 76, 0.1);
+    --bg-cream: #F0F4F8;
+    --text-dark: #0D1117;
+    --text-muted: #6E7681;
+    --primary-forest: #0D1117;
+    --primary-light: #161B22;
+    --accent-gold: #00D26A;
+    --accent-hover: #00FF85;
+    --border-soft: rgba(0, 210, 106, 0.2);
     --card-bg: #FFFFFF;
     --shadow-base: 0 10px 30px rgba(14, 64, 45, 0.05);
     --shadow-gloss: inset 0 2px 0 rgba(255,255,255,0.7), 0 15px 35px rgba(14,64,45,0.1);
     
-    --font-heading: 'Cormorant Garamond', serif;
-    --font-body: 'Poppins', sans-serif;
+    --font-heading: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+    --font-body: 'Outfit', sans-serif;
 }
 
 body.dark-mode {
-    --bg-cream: #0B1711;
-    --text-dark: #F0F4F2;
-    --text-muted: #8AA392;
-    --primary-forest: #8FBC9F; 
-    --primary-light: #4A8C67;
-    --accent-gold: #D4AF37; 
-    --accent-hover: #E3C15B;
-    --border-soft: rgba(255,255,255,0.05);
-    --card-bg: rgba(255,255,255,0.03);
-    --shadow-base: 0 10px 30px rgba(0, 0, 0, 0.4);
-    --shadow-gloss: inset 0 1px 0 rgba(255,255,255,0.1), 0 15px 35px rgba(0,0,0,0.6);
+    --bg-cream: #06090F;
+    --text-dark: #E2E8F0;
+    --text-muted: #94A3B8;
+    --primary-forest: #00FF9D;
+    --primary-light: #1E293B;
+    --accent-gold: #00FF9D;
+    --accent-hover: #33FFB3;
+    --border-soft: rgba(0, 255, 157, 0.25);
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --shadow-base: 0 0 25px rgba(0, 255, 157, 0.15);
 }
 
 * {
@@ -951,5 +950,37 @@ body.dark-mode header {
 
 .hero-section a:hover {
     transform: translateY(-3px);
+}
+
+
+/* Futuristic Enhancements */
+.product-card {
+    border: 1px solid var(--border-soft);
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 15px;
+}
+
+.product-card:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.4);
+    border-color: var(--accent-gold);
+}
+
+button {
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: var(--font-heading);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    box-shadow: 0 0 20px var(--accent-gold);
+    transform: scale(1.02);
+}
+
+body.dark-mode .product-card:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 157, 0.7);
 }
 
