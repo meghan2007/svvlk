@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // SPLASH SCREEN LOGIC
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
@@ -43,7 +43,7 @@ async function checkMaintenanceMode() {
                 const bContainer = document.getElementById('store-banner-container');
                 const bText = document.getElementById('store-banner-text');
                 if (bContainer && bText) {
-                    bText.innerText = "🚀 " + data.banner_text + " 🚀";
+                    bText.innerText = "ðŸš€ " + data.banner_text + " ðŸš€";
                     bContainer.style.display = 'block';
                 }
             }
@@ -70,7 +70,7 @@ const darkModeToggle = document.getElementById('dark-mode-toggle');
 if (darkModeToggle) {
     if (localStorage.getItem('dark-mode') === 'enabled') {
         document.body.classList.add('dark-mode');
-        darkModeToggle.textContent = '☀️';
+        darkModeToggle.textContent = 'â˜€ï¸';
     }
 
     darkModeToggle.addEventListener('click', (e) => {
@@ -79,10 +79,10 @@ if (darkModeToggle) {
         
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('dark-mode', 'enabled');
-            darkModeToggle.textContent = '☀️';
+            darkModeToggle.textContent = 'â˜€ï¸';
         } else {
             localStorage.setItem('dark-mode', 'disabled');
-            darkModeToggle.textContent = '🌙';
+            darkModeToggle.textContent = 'ðŸŒ™';
         }
     });
 }
@@ -227,13 +227,13 @@ function updateCart() {
             <div>
                 <h3>${item.brand} ${item.name}</h3>
                 <p>Size: ${item.size}</p>
-                <p>Price: ₹${item.price.toLocaleString("en-IN")}</p>
+                <p>Price: â‚¹${item.price.toLocaleString("en-IN")}</p>
             </div>
 
             <div>
 
                 <button onclick="decreaseQuantity(${index})">
-                    −
+                    âˆ’
                 </button>
 
                 <span>
@@ -249,7 +249,7 @@ function updateCart() {
             <div>
 
                 <p>
-                    ₹${itemTotal.toLocaleString("en-IN")}
+                    â‚¹${itemTotal.toLocaleString("en-IN")}
                 </p>
 
                 <button onclick="removeItem(${index})">
@@ -541,7 +541,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     const successOverlay = document.getElementById("order-success-overlay");
     if (successOverlay) {
         document.getElementById("success-order-id").textContent = "#ORD-" + Date.now();
-        document.getElementById("success-order-total").textContent = "₹" + (window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, ''))).toLocaleString("en-IN");
+        document.getElementById("success-order-total").textContent = "â‚¹" + (window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, ''))).toLocaleString("en-IN");
         
         successOverlay.style.display = "flex";
         // trigger reflow
@@ -642,11 +642,11 @@ async function loadProducts() {
             card.innerHTML = 
                 '<div style="position: relative;">' +
                     '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
-                    '<div class="fav-btn" data-brand="' + product.brand + '" data-name="' + product.name + '" data-size="' + product.size + '" data-price="' + product.price + '" data-img="' + (product.image_url || '') + '" style="position: absolute; top: 10px; right: 10px; background: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); ' + heartStyle + ' font-size: 18px; transition: 0.2s;">' + (isFav ? '❤️' : '🤍') + '</div>' +
+                    '<div class="fav-btn" data-brand="' + product.brand + '" data-name="' + product.name + '" data-size="' + product.size + '" data-price="' + product.price + '" data-img="' + (product.image_url || '') + '" style="position: absolute; top: 10px; right: 10px; background: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); ' + heartStyle + ' font-size: 18px; transition: 0.2s;">' + (isFav ? 'â¤ï¸' : 'ðŸ¤') + '</div>' +
                 '</div>' +
                 '<h3 class="product-title">' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
-                '<p>' + (product.b2bOriginalPriceStr || '') + '₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                '<p>' + (product.b2bOriginalPriceStr || '') + 'â‚¹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
                 btnHtml;
 
             const imgEl = card.querySelector('img');
@@ -881,7 +881,7 @@ if (myOrdersBtn) {
                         <div>
                             <span class="order-history-id">Order #${escapeHTML(order.order_id)}</span>
                         </div>
-                        <span class="order-history-amount">₹${Number(order.total_amount).toLocaleString("en-IN")}</span>
+                        <span class="order-history-amount">â‚¹${Number(order.total_amount).toLocaleString("en-IN")}</span>
                     </div>
                     
                     <div class="tracking-wrapper">
@@ -1126,7 +1126,7 @@ window.openProductModal = function(product) {
     document.getElementById('pm-brand').innerText = product.brand;
     document.getElementById('pm-title').innerText = product.name;
     document.getElementById('pm-size').innerText = product.size;
-    document.getElementById('pm-price').innerText = '₹' + product.price;
+    document.getElementById('pm-price').innerText = 'â‚¹' + product.price;
     
     const btn = document.getElementById('pm-add-btn');
     btn.onclick = () => {
@@ -1214,7 +1214,7 @@ if (pincodeBtn && pincodeInput && pincodeResult) {
         }
 
         if (validPincodes.includes(enteredPin)) {
-            pincodeResult.textContent = '🎉 Great news! We deliver to ' + enteredPin + '. Delivery within 2 hours.';
+            pincodeResult.textContent = 'ðŸŽ‰ Great news! We deliver to ' + enteredPin + '. Delivery within 2 hours.';
             pincodeResult.style.color = '#27ae60';
             pincodeResult.style.backgroundColor = '#eafaf1';
         } else {
@@ -1303,11 +1303,11 @@ function renderFavorites() {
         card.style = 'border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; position: relative;';
         
         card.innerHTML = 
-            '<div onclick="removeFavorite(' + index + ')" style="position: absolute; top: 5px; right: 5px; cursor: pointer; color: #e74c3c; font-size: 18px;">✖</div>' +
+            '<div onclick="removeFavorite(' + index + ')" style="position: absolute; top: 5px; right: 5px; cursor: pointer; color: #e74c3c; font-size: 18px;">âœ–</div>' +
             '<img src="' + (item.img || 'https://via.placeholder.com/400?text=SVVLK') + '" style="width: 100%; height: 100px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">' +
             '<h4 style="font-size: 13px; margin: 0 0 5px 0; color: var(--text-dark);">' + item.brand + ' ' + item.name + '</h4>' +
             '<p style="font-size: 12px; color: var(--text-muted); margin: 0 0 5px 0;">' + item.size + '</p>' +
-            '<p style="font-size: 14px; font-weight: bold; color: var(--accent-gold); margin: 0 0 10px 0;">₹' + Number(item.price).toLocaleString('en-IN') + '</p>' +
+            '<p style="font-size: 14px; font-weight: bold; color: var(--accent-gold); margin: 0 0 10px 0;">â‚¹' + Number(item.price).toLocaleString('en-IN') + '</p>' +
             '<button onclick="addFavToCart(' + index + ')" style="background: var(--primary-forest); color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Add to Cart</button>';
         
         favListContainer.appendChild(card);
@@ -1375,13 +1375,13 @@ document.addEventListener('click', (e) => {
         if (existingIndex > -1) {
             // Remove
             favorites.splice(existingIndex, 1);
-            favBtn.innerHTML = '🤍';
+            favBtn.innerHTML = 'ðŸ¤';
             favBtn.style.color = '#ccc';
             showToast('Removed from favorites', 'success');
         } else {
             // Add
             favorites.push({ brand, name, size, price, img });
-            favBtn.innerHTML = '❤️';
+            favBtn.innerHTML = 'â¤ï¸';
             favBtn.style.color = '#e74c3c';
             showToast('Added to favorites!', 'success');
         }
@@ -1446,13 +1446,13 @@ if (checkoutCity) {
         
         if (fee > 0) {
             if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'flex';
-            if(deliveryFeeAmount) deliveryFeeAmount.textContent = '₹' + fee;
+            if(deliveryFeeAmount) deliveryFeeAmount.textContent = 'â‚¹' + fee;
         } else {
             if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'none';
         }
         
         if(checkoutFinalTotalDisplay) checkoutFinalTotalDisplay.style.display = 'flex';
-        if(checkoutFinalAmount) checkoutFinalAmount.textContent = '₹' + window.checkoutFinalTotal.toLocaleString('en-IN');
+        if(checkoutFinalAmount) checkoutFinalAmount.textContent = 'â‚¹' + window.checkoutFinalTotal.toLocaleString('en-IN');
         
         // Update UPI button if they choose UPI
         const upiBtn = document.getElementById('upi-pay-btn');
@@ -1481,7 +1481,7 @@ setTimeout(() => {
                 nudge.style = 'position: fixed; bottom: 100px; left: 20px; background: white; border-left: 4px solid var(--accent-gold); padding: 15px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; gap: 15px; transform: translateX(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 300px;';
                 
                 nudge.innerHTML = `
-                    <div style="font-size: 24px;">🛒</div>
+                    <div style="font-size: 24px;">ðŸ›’</div>
                     <div>
                         <h4 style="margin: 0 0 5px 0; color: var(--primary-forest); font-size: 15px;">You left items in your cart!</h4>
                         <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Don't miss out on your fresh groceries.</p>
@@ -1557,7 +1557,7 @@ window.updateB2BUI = function() {
         if (!badge) {
             badge = document.createElement('div');
             badge.id = 'b2b-badge';
-            badge.innerHTML = '?? B2B Mode';
+            badge.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg> B2B Mode';
             badge.className = 'b2b-badge-futuristic';
             
             // Insert into header
