@@ -233,7 +233,7 @@ function updateCart() {
             <div>
 
                 <button onclick="decreaseQuantity(${index})">
-                    −
+                    âˆ’
                 </button>
 
                 <span>
@@ -341,21 +341,18 @@ const searchButton = document.getElementById("search-button");
 
 
 // Search when button is clicked
-
-searchButton.addEventListener("click", function() {
-
-    searchProducts();
-
-});
-
+if (searchButton) {
+    searchButton.addEventListener("click", function() {
+        searchProducts();
+    });
+}
 
 // Search when typing
-
-searchInput.addEventListener("input", function() {
-
-    searchProducts();
-
-});
+if (searchInput) {
+    searchInput.addEventListener("input", function() {
+        searchProducts();
+    });
+}
 
 
 function searchProducts() {
@@ -439,6 +436,7 @@ categoryButtons.forEach(button => {
 const checkoutForm =
     document.getElementById("checkout-form");
 
+if (checkoutForm) {
 checkoutForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
@@ -482,8 +480,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     }
 
     const deliveryTime = document.getElementById("delivery-time").value;
-
-
+    
                 const totalAmount = document.getElementById("cart-total").textContent;
 
     const paymentMethod = document.getElementById("payment-method").value;
@@ -513,15 +510,16 @@ checkoutForm.addEventListener("submit", async function(event) {
             .from('orders')
             .insert([
                 {
-                                        order_id: "ORD-" + Date.now(),
+                    order_id: "ORD-" + Date.now(),
                     user_id: currentUser.id,
                     customer_name: customerName,
                     customer_phone: customerPhone,
                     customer_address: customerAddress,
                     customer_city: customerCity,
+                    delivery_time: deliveryTime,
                     payment_method: paymentMethod,
                     utr_number: document.getElementById("utr-number") ? document.getElementById("utr-number").value : null,
-                    total_amount: Number(totalAmount.replace(/,/g, '')),
+                    total_amount: window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, '')),
                     items: cart
                 }
             ]);
@@ -541,7 +539,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     const successOverlay = document.getElementById("order-success-overlay");
     if (successOverlay) {
         document.getElementById("success-order-id").textContent = "#ORD-" + Date.now();
-        document.getElementById("success-order-total").textContent = "₹" + Number(totalAmount.replace(/,/g, '')).toLocaleString("en-IN");
+        document.getElementById("success-order-total").textContent = "₹" + (window.checkoutFinalTotal || Number(totalAmount.replace(/,/g, ''))).toLocaleString("en-IN");
         
         successOverlay.style.display = "flex";
         // trigger reflow
@@ -557,6 +555,7 @@ checkoutForm.addEventListener("submit", async function(event) {
     document.getElementById("checkout").style.display = "none";
 
 });
+}
 
 
 
@@ -634,11 +633,19 @@ async function loadProducts() {
                 card.style.opacity = '0.6';
             }
 
+            // Check if this product is in favorites
+            const favs = JSON.parse(localStorage.getItem('svvlk-favorites')) || [];
+            const isFav = favs.some(f => f.name === product.name && f.brand === product.brand && f.size === product.size);
+            const heartStyle = isFav ? "color: #e74c3c; font-variation-settings: 'FILL' 1;" : "color: #ccc;";
+
             card.innerHTML = 
-                '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
+                '<div style="position: relative;">' +
+                    '<img src="' + (product.image_url || 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=400&q=80') + '" alt="' + product.name + '" class="product-image">' +
+                    '<div class="fav-btn" data-brand="' + product.brand + '" data-name="' + product.name + '" data-size="' + product.size + '" data-price="' + product.price + '" data-img="' + (product.image_url || '') + '" style="position: absolute; top: 10px; right: 10px; background: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); ' + heartStyle + ' font-size: 18px; transition: 0.2s;">' + (isFav ? "❤️" : "🤍") + '</div>' +
+                '</div>' +
                 '<h3 class="product-title">' + product.brand + '</h3>' +
                 '<p>' + product.name + ' - ' + product.size + '</p>' +
-                '<p>₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
+                '<p>' + (product.b2bOriginalPriceStr || '') + '₹' + Number(product.price).toLocaleString("en-IN") + '</p>' +
                 btnHtml;
 
             const imgEl = card.querySelector('img');
@@ -654,6 +661,10 @@ async function loadProducts() {
 
             productsList.appendChild(card);
         });
+
+        if (typeof applyLanguage === 'function') {
+            applyLanguage(currentLang);
+        }
 
     } catch (err) {
         console.error("Error loading products:", err);
@@ -696,26 +707,34 @@ if (loginBtn) { loginBtn.addEventListener("click", (e) => {
     }
 });
 
-closeAuth.addEventListener("click", () => {
-    authModal.style.display = "none";
-});
-
-authForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("auth-email").value;
-    const password = document.getElementById("auth-password").value;
-    
-    try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        showToast("Logged in successfully!", "success");
+if (closeAuth && authModal) {
+    closeAuth.addEventListener("click", () => {
         authModal.style.display = "none";
-        updateAuthState();
-    } catch (err) {
-        showToast(err.message, "warning");
-    }
-}); }
+    });
+}
+
+if (authForm) {
+    authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const emailEl = document.getElementById("auth-email");
+        const passwordEl = document.getElementById("auth-password");
+        if (!emailEl || !passwordEl) return;
+        const email = emailEl.value;
+        const password = passwordEl.value;
+        
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+
+            showToast("Logged in successfully!", "success");
+            if (authModal) authModal.style.display = "none";
+            updateAuthState();
+        } catch (err) {
+            showToast(err.message, "warning");
+        }
+    });
+}
+}
 
 async function updateAuthState() {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -935,15 +954,26 @@ if (navProfileBtn && profileModal) {
                 document.getElementById("prof-city").value = data.city || "";
             }
         }
+        document.getElementById("prof-wholesale").checked = localStorage.getItem("svvlk-is-b2b") === "true";
     });
 
+}
+
+if (closeProfileBtn && profileModal) {
     closeProfileBtn.addEventListener("click", () => {
         profileModal.style.display = "none";
     });
+}
 
+if (profileForm) {
     profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!currentUser) return;
+
+        const isB2B = document.getElementById("prof-wholesale").checked;
+        localStorage.getItem("svvlk-is-b2b") !== (isB2B ? "true" : "false") && localStorage.setItem("svvlk-is-b2b", isB2B ? "true" : "false");
+        if(typeof updateB2BUI === "function") updateB2BUI();
+        if (typeof loadProducts === "function") loadProducts();
 
         const profileData = {
             id: currentUser.id,
@@ -1176,3 +1206,935 @@ if (closeInstallBtn) {
         if (installBanner) installBanner.style.display = "none";
     });
 }
+// ===============================
+// PINCODE CHECKER
+// ===============================
+const pincodeBtn = document.getElementById('pincode-check-btn');
+const pincodeInput = document.getElementById('pincode-input');
+const pincodeResult = document.getElementById('pincode-result');
+
+if (pincodeBtn && pincodeInput && pincodeResult) {
+    // Valid pincodes for Visakhapatnam delivery areas
+    const validPincodes = ['530018', '530008', '530024', '530007', '530016', '530009', '530027'];
+
+    pincodeBtn.addEventListener('click', () => {
+        const enteredPin = pincodeInput.value.trim();
+        
+        pincodeResult.style.display = 'block';
+        
+        if (!/^\d{6}$/.test(enteredPin)) {
+            pincodeResult.textContent = 'Please enter a valid 6-digit Pincode.';
+            pincodeResult.style.color = '#e74c3c';
+            pincodeResult.style.backgroundColor = '#fdeaea';
+            return;
+        }
+
+        if (validPincodes.includes(enteredPin)) {
+            pincodeResult.textContent = '🎉 Great news! We deliver to ' + enteredPin + '. Delivery within 2 hours.';
+            pincodeResult.style.color = '#27ae60';
+            pincodeResult.style.backgroundColor = '#eafaf1';
+        } else {
+            pincodeResult.textContent = 'Sorry, we do not currently deliver to ' + enteredPin + '. Please contact the proprietor for bulk orders.';
+            pincodeResult.style.color = '#e67e22';
+            pincodeResult.style.backgroundColor = '#fdf2e9';
+        }
+    });
+
+    // Check on Enter key press
+    if (pincodeInput && pincodeBtn) {
+        pincodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                pincodeBtn.click();
+            }
+        });
+    }
+}
+
+
+// ===============================
+// PRODUCT MODAL LOGIC FIX
+// ===============================
+const productModal = document.getElementById('product-modal');
+const closePmBtn = document.getElementById('close-pm');
+
+if (closePmBtn) {
+    closePmBtn.addEventListener('click', () => {
+        if (productModal) productModal.style.display = 'none';
+    });
+}
+
+// Ensure clicking outside the modal content closes it
+if (productModal) {
+    productModal.addEventListener('click', (e) => {
+        if (e.target === productModal) {
+            productModal.style.display = 'none';
+        }
+    });
+}
+
+// Override the existing openProductModal to ensure it displays the modal
+const originalOpenProductModal = window.openProductModal;
+window.openProductModal = function(product) {
+    if (originalOpenProductModal) {
+        originalOpenProductModal(product); // Call original to set data
+    }
+    // Now explicitly show it
+    if (productModal) {
+        productModal.style.display = 'flex';
+    }
+};
+
+
+// ===============================
+// FAVORITES / WATCHLIST LOGIC
+// ===============================
+const favIcon = document.getElementById('fav-icon');
+const favCount = document.getElementById('fav-count');
+const favModal = document.getElementById('favorites-modal');
+const closeFavModal = document.getElementById('close-favorites');
+const favListContainer = document.getElementById('favorites-list-container');
+
+let favorites = JSON.parse(localStorage.getItem('svvlk-favorites')) || [];
+
+function updateFavCount() {
+    if (favCount) {
+        favCount.textContent = favorites.length;
+    }
+}
+
+function saveFavorites() {
+    localStorage.setItem('svvlk-favorites', JSON.stringify(favorites));
+    updateFavCount();
+}
+
+function renderFavorites() {
+    if (!favListContainer) return;
+    favListContainer.innerHTML = '';
+    
+    if (favorites.length === 0) {
+        favListContainer.innerHTML = '<p style="color: var(--text-muted); font-style: italic;">No favorites saved yet. Click the heart icon on products to save them for later!</p>';
+        return;
+    }
+
+    favorites.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.style = 'border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; position: relative;';
+        
+        card.innerHTML = 
+            '<div onclick="removeFavorite(' + index + ')" style="position: absolute; top: 5px; right: 5px; cursor: pointer; color: #e74c3c; font-size: 18px;">✖</div>' +
+            '<img src="' + (item.img || 'https://via.placeholder.com/400?text=SVVLK') + '" style="width: 100%; height: 100px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">' +
+            '<h4 style="font-size: 13px; margin: 0 0 5px 0; color: var(--text-dark);">' + item.brand + ' ' + item.name + '</h4>' +
+            '<p style="font-size: 12px; color: var(--text-muted); margin: 0 0 5px 0;">' + item.size + '</p>' +
+            '<p style="font-size: 14px; font-weight: bold; color: var(--accent-gold); margin: 0 0 10px 0;">₹' + Number(item.price).toLocaleString('en-IN') + '</p>' +
+            '<button onclick="addFavToCart(' + index + ')" style="background: var(--primary-forest); color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Add to Cart</button>';
+        
+        favListContainer.appendChild(card);
+    });
+}
+
+window.removeFavorite = function(index) {
+    favorites.splice(index, 1);
+    saveFavorites();
+    renderFavorites();
+    // Re-render products to update heart icons
+    if (typeof loadProducts === 'function') loadProducts();
+};
+
+window.addFavToCart = function(index) {
+    const item = favorites[index];
+    const productId = item.name + '-' + item.brand + '-' + item.size;
+    const existingProduct = cart.find(i => i.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ id: productId, name: item.name, brand: item.brand, size: item.size, price: item.price, quantity: 1 });
+    }
+
+    updateCart();
+    showToast(item.brand + ' ' + item.name + ' added to cart!', 'success');
+};
+
+if (favIcon) {
+    favIcon.addEventListener('click', () => {
+        renderFavorites();
+        favModal.style.display = 'flex';
+    });
+}
+
+if (closeFavModal) {
+    closeFavModal.addEventListener('click', () => {
+        favModal.style.display = 'none';
+    });
+}
+
+// Close when clicking outside
+if (favModal) {
+    favModal.addEventListener('click', (e) => {
+        if (e.target === favModal) {
+            favModal.style.display = 'none';
+        }
+    });
+}
+
+// Global click delegation for heart icons on product cards
+document.addEventListener('click', (e) => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+        e.stopPropagation();
+        const brand = favBtn.dataset.brand;
+        const name = favBtn.dataset.name;
+        const size = favBtn.dataset.size;
+        const price = Number(favBtn.dataset.price);
+        const img = favBtn.dataset.img;
+        
+        const existingIndex = favorites.findIndex(f => f.name === name && f.brand === brand && f.size === size);
+        
+        if (existingIndex > -1) {
+            // Remove
+            favorites.splice(existingIndex, 1);
+            favBtn.innerHTML = '🤍';
+            favBtn.style.color = '#ccc';
+            showToast('Removed from favorites', 'success');
+        } else {
+            // Add
+            favorites.push({ brand, name, size, price, img });
+            favBtn.innerHTML = 'â¤ï¸';
+            favBtn.style.color = '#e74c3c';
+            showToast('Added to favorites!', 'success');
+        }
+        
+        saveFavorites();
+    }
+});
+
+// Init
+updateFavCount();
+
+
+
+// ===============================
+// DYNAMIC DELIVERY FEE LOGIC
+// ===============================
+const checkoutCity = document.getElementById('customer-city');
+const deliveryFeeDisplay = document.getElementById('delivery-fee-display');
+const deliveryFeeAmount = document.getElementById('delivery-fee-amount');
+const checkoutFinalTotalDisplay = document.getElementById('checkout-final-total-display');
+const checkoutFinalAmount = document.getElementById('checkout-final-amount');
+
+const DELIVERY_FEES = {
+    'Marripalem': 20,
+    'Urvasi': 30,
+    'ITI Junction': 30,
+    'Kancharapalem': 40,
+    'Kapparada': 35,
+    'Thatichetlapalem': 40,
+    'NAD': 50,
+    'Gopalapatnam': 60
+};
+
+// Global checkout fee state
+window.currentDeliveryFee = 0;
+window.checkoutFinalTotal = 0;
+
+// Also we need to initialize checkoutFinalTotal when proceeding to checkout
+const proceedBtn = document.getElementById('proceed-checkout');
+if (proceedBtn) {
+    proceedBtn.addEventListener('click', () => {
+        const baseTotalStr = document.getElementById('cart-total').textContent.replace(/,/g, '');
+        window.checkoutFinalTotal = Number(baseTotalStr) || 0;
+        
+        // Trigger city change if already selected
+        if (checkoutCity && checkoutCity.value) {
+            checkoutCity.dispatchEvent(new Event('change'));
+        }
+    });
+}
+
+if (checkoutCity) {
+    checkoutCity.addEventListener('change', function() {
+        const city = this.value;
+        const fee = DELIVERY_FEES[city] || 0;
+        window.currentDeliveryFee = fee;
+        
+        const baseTotalStr = document.getElementById('cart-total').textContent.replace(/,/g, '');
+        const baseTotal = Number(baseTotalStr) || 0;
+        
+        window.checkoutFinalTotal = baseTotal + fee;
+        
+        if (fee > 0) {
+            if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'flex';
+            if(deliveryFeeAmount) deliveryFeeAmount.textContent = '₹' + fee;
+        } else {
+            if(deliveryFeeDisplay) deliveryFeeDisplay.style.display = 'none';
+        }
+        
+        if(checkoutFinalTotalDisplay) checkoutFinalTotalDisplay.style.display = 'flex';
+        if(checkoutFinalAmount) checkoutFinalAmount.textContent = '₹' + window.checkoutFinalTotal.toLocaleString('en-IN');
+        
+        // Update UPI button if they choose UPI
+        const upiBtn = document.getElementById('upi-pay-btn');
+        if (upiBtn) {
+            upiBtn.href = 'upi://pay?pa=7569898179@ybl&pn=SVVLK%20Traders&cu=INR&am=' + window.checkoutFinalTotal.toFixed(2);
+        }
+    });
+}
+
+
+// ===============================
+// ABANDONED CART NUDGE
+// ===============================
+setTimeout(() => {
+    try {
+        const storedCart = JSON.parse(localStorage.getItem('svvlk-cart')) || [];
+        if (storedCart.length > 0) {
+            const lastNudge = localStorage.getItem('svvlk-last-nudge');
+            const now = Date.now();
+            
+            // If never nudged, or nudged more than 4 hours ago (14400000 ms)
+            if (!lastNudge || (now - Number(lastNudge)) > 14400000) { 
+                
+                // Show custom elegant nudge
+                const nudge = document.createElement('div');
+                nudge.style = 'position: fixed; bottom: 100px; left: 20px; background: white; border-left: 4px solid var(--accent-gold); padding: 15px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 9999; display: flex; align-items: center; gap: 15px; transform: translateX(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 300px;';
+                
+                nudge.innerHTML = `
+                    <div style="font-size: 24px;">🛒</div>
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: var(--primary-forest); font-size: 15px;">You left items in your cart!</h4>
+                        <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Don't miss out on your fresh groceries.</p>
+                        <a href="#cart" onclick="this.parentElement.parentElement.style.transform='translateX(-150%)';" style="display: inline-block; margin-top: 8px; font-size: 13px; font-weight: bold; color: var(--accent-gold); text-decoration: none;">View Cart &rarr;</a>
+                    </div>
+                    <div onclick="this.parentElement.style.transform='translateX(-150%)'" style="position: absolute; top: 5px; right: 8px; cursor: pointer; color: #aaa; font-size: 18px;">&times;</div>
+                `;
+                
+                document.body.appendChild(nudge);
+                
+                // Slide in after 2.5 seconds of page load
+                setTimeout(() => {
+                    nudge.style.transform = 'translateX(0)';
+                }, 2500);
+                
+                localStorage.setItem('svvlk-last-nudge', now.toString());
+            }
+        }
+    } catch (e) {
+        console.error('Cart nudge error', e);
+    }
+}, 1000);
+
+
+// ===============================
+// SMART DELIVERY SLOTS
+// ===============================
+function updateDeliverySlots() {
+    const deliveryTimeSelect = document.getElementById('delivery-time');
+    if (!deliveryTimeSelect) return;
+    
+    const currentHour = new Date().getHours();
+    const options = deliveryTimeSelect.options;
+
+    // Reset options
+    for (let i = 1; i < options.length; i++) {
+        options[i].disabled = false;
+        options[i].text = options[i].text.replace(/ \(.*?\)/, ''); // Remove old warnings
+    }
+
+    // Fast Delivery (Within 2 Hours) - Disable if after 8 PM (20:00)
+    if (currentHour >= 20) {
+        options[1].disabled = true;
+        options[1].text = 'Fast Delivery (Unavailable after 8 PM)';
+    } else {
+        options[1].text = 'Fast Delivery (Within 2 Hours)';
+    }
+    
+    // Today (Evening) - Disable if after 6 PM (18:00)
+    if (currentHour >= 18) {
+        options[2].disabled = true;
+        options[2].text = 'Today Evening (Too late to order)';
+    } else {
+        options[2].text = 'Today (Evening)';
+    }
+}
+
+// Run on load and whenever checkout is opened
+updateDeliverySlots();
+if (document.getElementById('proceed-checkout')) {
+    document.getElementById('proceed-checkout').addEventListener('click', updateDeliverySlots);
+}
+
+
+// ===============================
+// B2B WHOLESALE LOGIC
+// ===============================
+window.updateB2BUI = function() {
+    const isB2B = localStorage.getItem('svvlk-is-b2b') === 'true';
+    
+    let badge = document.getElementById('b2b-badge');
+    if (isB2B) {
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.id = 'b2b-badge';
+            badge.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg> B2B Mode';
+            badge.className = 'b2b-badge-futuristic';
+            
+            // Insert into header
+            const headerActions = document.querySelector('header > div:last-child');
+            if (headerActions) {
+                headerActions.insertBefore(badge, headerActions.firstChild);
+            }
+        }
+    } else {
+        if (badge) badge.remove();
+    }
+};
+
+// Init on load
+updateB2BUI();
+
+
+// =========================================
+// TERMINAL BOOT SEQUENCE
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    if (bootScreen && bootText) {
+        // Only show boot screen once per session to not annoy the user
+        if (sessionStorage.getItem('svvlk-booted')) {
+            bootScreen.style.display = 'none';
+            return;
+        }
+        
+        const lines = [
+            'INITIATING SECURE CONNECTION...',
+            'BYPASSING MAINFRAME FIREWALL...',
+            'LOADING INVENTORY DATABASES...',
+            'DECRYPTING WHOLESALE PRICING...',
+            'ACCESS GRANTED. WELCOME TO SVVLK.'
+        ];
+        
+        let delay = 0;
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                bootText.innerHTML += line + '<br>';
+                playClickSound(); // Play typing sound
+            }, delay);
+            delay += 400 + Math.random() * 300;
+        });
+        
+        setTimeout(() => {
+            bootScreen.style.opacity = '0';
+            playBootSuccessSound();
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                sessionStorage.setItem('svvlk-booted', 'true');
+            }, 500);
+        }, delay + 500);
+    }
+});
+
+// =========================================
+// SCI-FI UI SOUND EFFECTS (Web Audio API)
+// =========================================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+window.playClickSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+    gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+};
+
+window.playAddCartSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.2);
+};
+
+window.playBootSuccessSound = function() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.3);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+};
+
+// Attach click sound to all buttons
+document.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+        if (e.target.classList.contains('add-to-cart')) {
+            playAddCartSound();
+        } else {
+            playClickSound();
+        }
+    }
+});
+
+
+// =========================================
+// FLOATING PARTICLES GENERATOR
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const particleContainer = document.getElementById('particle-container');
+    if (!particleContainer) return;
+
+    const numParticles = 40; // Number of particles on screen
+    
+    for (let i = 0; i < numParticles; i++) {
+        createParticle();
+    }
+
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Randomize size, position, and duration
+        const size = Math.random() * 4 + 1; // 1px to 5px
+        const posX = Math.random() * 100; // 0vw to 100vw
+        const duration = Math.random() * 15 + 10; // 10s to 25s
+        const delay = Math.random() * 15; // 0s to 15s delay
+
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = posX + 'vw';
+        particle.style.animationDuration = duration + 's';
+        particle.style.animationDelay = '-' + delay + 's'; // Negative delay so they start already on screen
+
+        particleContainer.appendChild(particle);
+        
+        // Re-generate particle when animation ends to keep it infinite without dom bloat
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+            createParticle();
+        });
+    }
+});
+
+
+
+// ===============================
+// TELUGU & ENGLISH LANGUAGE SWITCHER
+// ===============================
+let currentLang = localStorage.getItem('svvlk-lang') || 'en';
+
+const TRANSLATIONS = {
+    en: {
+        langBtn: "తెలుగు",
+        admin: "Admin",
+        myProfile: "My Profile",
+        logout: "Logout",
+        login: "Login",
+        loginGateTitle: "Login to SVVLK",
+        storeAddressTitle: "Store Address:",
+        storeAddress: "SVVLK Traders, Visakhapatnam",
+        viewGoogleMaps: "📍 View Store on Google Maps",
+        enterStore: "Enter Store",
+        dontHaveAccount: "Don't have an account?",
+        requestPassword: "Request a Password",
+        requestPasswordDesc: "Enter your email and click the button to message the proprietor on WhatsApp for an access password.",
+        whatsappProprietor: "WhatsApp Proprietor",
+        welcomeTitle: "WELCOME TO<br><span style='color: var(--accent-gold); display: inline-block; animation: pulse 2s infinite;'>SVVLK TRADERS</span>",
+        welcomeSubtitle: "Premium staples and organic pulses straight to your kitchen in Visakhapatnam.",
+        shopNow: "Shop Now",
+        b2bWholesale: "B2B Wholesale",
+        pureTitle: "100% Pure",
+        pureDesc: "Authentic & unadulterated staples.",
+        fastDeliveryTitle: "Fast Delivery",
+        fastDeliveryDesc: "Local delivery within 2 hours.",
+        wholesaleTitle: "Wholesale Prices",
+        wholesaleDesc: "Premium quality at retail rates.",
+        checkDeliveryTitle: "Check Delivery Availability 🚚",
+        checkDeliveryDesc: "Enter your 6-digit Pincode to see if we deliver to your area.",
+        checkBtn: "Check",
+        pincodePlaceholder: "e.g. 530018",
+        searchPlaceholder: "Search groceries...",
+        searchBtn: "Search",
+        ourGroceries: "Our Groceries",
+        catAll: "All",
+        catFlours: "Flours",
+        catRetail: "Retail",
+        catRice: "Rice",
+        catOils: "Oils",
+        catDals: "Dals",
+        catSalt: "Salt",
+        catTamarind: "Tamarind",
+        addToCart: "Add to Cart",
+        outOfStock: "Out of Stock",
+        yourCart: "Your Cart",
+        cartEmpty: "Your cart is empty.",
+        proceedCheckout: "Proceed to Checkout",
+        checkoutTitle: "Checkout",
+        namePlaceholder: "Enter your name",
+        phonePlaceholder: "Enter 10-digit mobile number",
+        addressPlaceholder: "Enter delivery address",
+        placeOrder: "Place Order",
+        myPurchaseHistory: "My Purchase History",
+        saveProfile: "Save Profile",
+        viewMyOrders: "📦 View My Orders",
+        myFavorites: "❤️ My Favorites",
+        noFavorites: "No favorites saved yet.",
+        toastSwitched: "Language switched to English"
+    },
+    te: {
+        langBtn: "English",
+        admin: "అడ్మిన్",
+        myProfile: "నా ప్రొఫైల్",
+        logout: "లాగ్ అవుట్",
+        login: "లాగిన్",
+        loginGateTitle: "SVVLK లాగిన్",
+        storeAddressTitle: "షాపు చిరునామా:",
+        storeAddress: "SVVLK ట్రేడర్స్, విశాఖపట్నం",
+        viewGoogleMaps: "📍 గూగుల్ మ్యాప్స్‌లో షాపును చూడండి",
+        enterStore: "షాపులోకి వెళ్లండి",
+        dontHaveAccount: "ఖాతా లేదా?",
+        requestPassword: "పాస్‌వర్డ్ అడగండి",
+        requestPasswordDesc: "మీ ఈమెయిల్ నమోదు చేసి పాస్‌వర్డ్ కొరకు యజమానికి వాట్సాప్ సందేశం పంపండి.",
+        whatsappProprietor: "యజమానికి వాట్సాప్ చేయండి",
+        welcomeTitle: "స్వాగతం<br><span style='color: var(--accent-gold); display: inline-block; animation: pulse 2s infinite;'>SVVLK ట్రేడర్స్</span>",
+        welcomeSubtitle: "విశాఖపట్నంలో మీ ఇంటికే నేరుగా స్వచ్ఛమైన సరుకులు మరియు నాణ్యమైన పప్పు దినుసులు.",
+        shopNow: "ఇప్పుడే కొనండి",
+        b2bWholesale: "హోల్‌సేల్ ఆర్డర్",
+        pureTitle: "100% స్వచ్ఛమైనవి",
+        pureDesc: "కల్తీ లేని స్వచ్ఛమైన నిత్యావసర సరుకులు.",
+        fastDeliveryTitle: "వేగవంతమైన డెలివరీ",
+        fastDeliveryDesc: "వైజాగ్‌లో 2 గంటల్లో త్వరిత డెలివరీ.",
+        wholesaleTitle: "హోల్‌సేల్ ధరలు",
+        wholesaleDesc: "తక్కువ ధరలో మేలైన నాణ్యత.",
+        checkDeliveryTitle: "డెలివరీ ఉందో లేదో సరిచూసుకోండి 🚚",
+        checkDeliveryDesc: "మీ ప్రాంతానికి డెలివరీ అందుబాటులో ఉందో లేదో తెలుసుకోవడానికి 6 అంకెల పిన్‌కోడ్ నమోదు చేయండి.",
+        checkBtn: "చూడండి",
+        pincodePlaceholder: "ఉదా: 530018",
+        searchPlaceholder: "సరుకుల కోసం వెతకండి...",
+        searchBtn: "వెతుకు",
+        ourGroceries: "మా నిత్యావసర సరుకులు",
+        catAll: "అన్నీ (All)",
+        catFlours: "పిండి రకాలు (Flours)",
+        catRetail: "రిటైల్ (Retail)",
+        catRice: "బియ్యం (Rice)",
+        catOils: "నూనెలు (Oils)",
+        catDals: "పప్పులు (Dals)",
+        catSalt: "ఉప్పు (Salt)",
+        catTamarind: "చింతపండు (Tamarind)",
+        addToCart: "కార్ట్‌కు చేర్చండి",
+        outOfStock: "స్టాక్ లేదు",
+        yourCart: "మీ షాపింగ్ కార్ట్",
+        cartEmpty: "మీ కార్ట్ ఖాళీగా ఉంది.",
+        proceedCheckout: "ఆర్డర్‌కు కొనసాగండి",
+        checkoutTitle: "ఆర్డర్ వివరాలు",
+        namePlaceholder: "మీ పూర్తి పేరు నమోదు చేయండి",
+        phonePlaceholder: "10 అంకెల మొబైల్ నంబర్",
+        addressPlaceholder: "పూర్తి డెలివరీ చిరునామా",
+        placeOrder: "ఆర్డర్ కన్ఫర్మ్ చేయండి",
+        myPurchaseHistory: "నా గత ఆర్డర్లు",
+        saveProfile: "ప్రొఫైల్ సేవ్ చేయండి",
+        viewMyOrders: "📦 నా ఆర్డర్లను చూడండి",
+        myFavorites: "❤️ నా ఇష్టమైనవి",
+        noFavorites: "ఇంకా ఏవీ జోడించలేదు.",
+        toastSwitched: "భాష తెలుగులోకి మార్చబడింది (Telugu Enabled)"
+    }
+};
+
+const TELUGU_PRODUCT_NAMES = {
+    // Rice & Grains
+    "sona masoori": "సోనా మసూరి బియ్యం",
+    "bpt": "BPT బియ్యం",
+    "basmati": "బాస్మతి బియ్యం",
+    "raw rice": "పచ్చి బియ్యం",
+    "boiled rice": "ఉప్పుడు బియ్యం",
+    "brown rice": "బ్రౌన్ రైస్",
+    "rice": "బియ్యం",
+    // Dals & Pulses
+    "toor dal": "కందిపప్పు",
+    "kandi pappu": "కందిపప్పు",
+    "kandi": "కందిపప్పు",
+    "moong dal": "పెసరపప్పు",
+    "pesara pappu": "పెసరపప్పు",
+    "moong": "పెసరపప్పు",
+    "urad dal": "మినపప్పు",
+    "minapa pappu": "మినపప్పు",
+    "urad": "మినపప్పు",
+    "chana dal": "శనగపప్పు",
+    "senaga pappu": "శనగపప్పు",
+    "fried gram": "పుట్నాల పప్పు",
+    "putnala pappu": "పుట్నాల పప్పు",
+    "masoor dal": "ఎర్ర కందిపప్పు",
+    "dal": "పప్పు",
+    // Oils
+    "sunflower oil": "సన్‌ఫ్లవర్ నూనె",
+    "sunflower": "సన్‌ఫ్లవర్ నూనె",
+    "freedom": "ఫ్రీడమ్ నూనె",
+    "groundnut oil": "వేరుశెనగ నూనె",
+    "deepam oil": "దీపం నూనె (పూజ)",
+    "deepam": "దీపం నూనె",
+    "pooja oil": "పూజ నూనె",
+    "gingelly oil": "నువ్వుల నూనె",
+    "sesame oil": "నువ్వుల నూనె",
+    "mustard oil": "ఆవ నూనె",
+    "oil": "వంట నూనె",
+    // Flours & Rava
+    "aashirvaad": "ఆశీర్వాద్ గోధుమ పిండి",
+    "wheat flour": "గోధుమ పిండి",
+    "atta": "గోధుమ పిండి",
+    "maida": "మైదా పిండి",
+    "bombay rava": "బొంబాయి రవ్వ / సూజి",
+    "sooji": "సూజి రవ్వ",
+    "idli rava": "ఇడ్లీ రవ్వ",
+    "besan": "శనగపిండి",
+    "gram flour": "శనగపిండి",
+    "rice flour": "బియ్యం పిండి",
+    "flour": "పిండి",
+    // Spices & Staples
+    "tamarind": "చింతపండు",
+    "crystal salt": "కల్లు ఉప్పు",
+    "salt": "ఉప్పు",
+    "sugar": "పంచదార / చక్కెర",
+    "jaggery": "బెల్లం",
+    "bellam": "బెల్లం",
+    "red chilli": "ఎండు మిర్చి / కారం",
+    "mirchi": "మిర్చి / కారం",
+    "turmeric": "పసుపు",
+    "pasupu": "పసుపు",
+    "mustard": "ఆవాలు",
+    "cumin": "జీలకర్ర",
+    "jeera": "జీలకర్ర",
+    "fenugreek": "మెంతులు",
+    "coriander": "ధనియాలు",
+    "dhaniyalu": "ధనియాలు",
+    "pepper": "మిరియాలు",
+    "cloves": "లవంగాలు",
+    "cardamom": "యాలకులు",
+    "cinnamon": "దాల్చిన చెక్క",
+    "peanuts": "వేరుశెనగ గుళ్లు / పల్లీలు",
+    "groundnut": "వేరుశెనగ గుళ్లు",
+    "cashew": "జీడిపప్పు",
+    "kismis": "కిస్మిస్",
+    "raisins": "కిస్మిస్",
+    "ghee": "స్వచ్ఛమైన నెయ్యి",
+    "garlic": "వెల్లుల్లి",
+    "ginger": "అల్లం"
+};
+
+// Sorted keys by length descending so specific matches take precedence
+const sortedTeluguKeys = Object.keys(TELUGU_PRODUCT_NAMES).sort((a, b) => b.length - a.length);
+
+window.getTeluguProductName = function(name, brand, category) {
+    const combined = ((name || '') + ' ' + (brand || '') + ' ' + (category || '')).toLowerCase();
+    for (let i = 0; i < sortedTeluguKeys.length; i++) {
+        const key = sortedTeluguKeys[i];
+        if (combined.includes(key)) {
+            return TELUGU_PRODUCT_NAMES[key];
+        }
+    }
+    return '';
+};
+
+window.applyLanguage = function(lang) {
+    currentLang = lang;
+    localStorage.setItem('svvlk-lang', lang);
+    document.documentElement.lang = lang;
+    const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+    // 1. Language Toggle Buttons text
+    const curLangText = document.getElementById('current-lang-text');
+    if (curLangText) curLangText.textContent = t.langBtn;
+    const gateLangText = document.getElementById('gate-lang-text');
+    if (gateLangText) gateLangText.textContent = t.langBtn;
+
+    // 2. Header
+    const adminLink = document.getElementById('admin-link');
+    if (adminLink) adminLink.textContent = t.admin;
+    const profileBtn = document.getElementById('my-profile-btn');
+    if (profileBtn) profileBtn.textContent = t.myProfile;
+    const logBtn = document.getElementById('login-btn');
+    if (logBtn) {
+        logBtn.textContent = currentUser ? t.logout : t.login;
+    }
+
+    // 3. Login Gate
+    const gateTitle = document.getElementById('gate-title');
+    if (gateTitle) gateTitle.textContent = t.loginGateTitle;
+    const gateSubmit = document.querySelector('#gate-auth-form button[type="submit"]');
+    if (gateSubmit) gateSubmit.textContent = t.enterStore;
+    const gateReqBtn = document.getElementById('gate-request-btn');
+    if (gateReqBtn) gateReqBtn.textContent = t.requestPassword;
+    const gateSendReq = document.getElementById('gate-send-request');
+    if (gateSendReq) gateSendReq.textContent = t.whatsappProprietor;
+
+    // 4. Hero Section
+    const heroHeading = document.getElementById('hero-heading');
+    if (heroHeading) heroHeading.innerHTML = t.welcomeTitle;
+    const heroSubtitle = document.getElementById('hero-subtitle');
+    if (heroSubtitle) heroSubtitle.textContent = t.welcomeSubtitle;
+    const heroShop = document.getElementById('hero-shop-btn');
+    if (heroShop) heroShop.textContent = t.shopNow;
+    const heroB2B = document.getElementById('hero-b2b-btn');
+    if (heroB2B) heroB2B.textContent = t.b2bWholesale;
+
+    // 5. Trust Banner
+    const pureT = document.getElementById('trust-pure-title');
+    if (pureT) pureT.textContent = t.pureTitle;
+    const pureD = document.getElementById('trust-pure-desc');
+    if (pureD) pureD.textContent = t.pureDesc;
+    const fastT = document.getElementById('trust-fast-title');
+    if (fastT) fastT.textContent = t.fastDeliveryTitle;
+    const fastD = document.getElementById('trust-fast-desc');
+    if (fastD) fastD.textContent = t.fastDeliveryDesc;
+    const wsT = document.getElementById('trust-wholesale-title');
+    if (wsT) wsT.textContent = t.wholesaleTitle;
+    const wsD = document.getElementById('trust-wholesale-desc');
+    if (wsD) wsD.textContent = t.wholesaleDesc;
+
+    // 6. Pincode
+    const pinH = document.getElementById('pincode-heading');
+    if (pinH) pinH.textContent = t.checkDeliveryTitle;
+    const pinD = document.getElementById('pincode-desc');
+    if (pinD) pinD.textContent = t.checkDeliveryDesc;
+    const pinIn = document.getElementById('pincode-input');
+    if (pinIn) pinIn.placeholder = t.pincodePlaceholder;
+    const pinBtn = document.getElementById('pincode-check-btn');
+    if (pinBtn) pinBtn.textContent = t.checkBtn;
+
+    // 7. Search & Catalog
+    const searchIn = document.getElementById('search-input');
+    if (searchIn) searchIn.placeholder = t.searchPlaceholder;
+    const searchBtnTxt = document.getElementById('search-btn-text');
+    if (searchBtnTxt) searchBtnTxt.textContent = t.searchBtn;
+    const grocH = document.getElementById('groceries-heading');
+    if (grocH) grocH.textContent = t.ourGroceries;
+
+    // Categories
+    const catMap = {
+        'cat-all': t.catAll,
+        'cat-flours': t.catFlours,
+        'cat-retail': t.catRetail,
+        'cat-rice': t.catRice,
+        'cat-oils': t.catOils,
+        'cat-dals': t.catDals,
+        'cat-salt': t.catSalt,
+        'cat-tamarind': t.catTamarind
+    };
+    Object.keys(catMap).forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            const labelSpan = btn.querySelector('.cat-label');
+            if (labelSpan) labelSpan.textContent = catMap[id];
+        }
+    });
+
+    // 8. Cart & Checkout
+    const cartHText = document.getElementById('cart-heading-text');
+    if (cartHText) cartHText.textContent = t.yourCart;
+    const procCheck = document.getElementById('proceed-checkout');
+    if (procCheck) procCheck.textContent = t.proceedCheckout;
+    const checkHText = document.getElementById('checkout-heading-text');
+    if (checkHText) checkHText.textContent = t.checkoutTitle;
+    const custName = document.getElementById('customer-name');
+    if (custName) custName.placeholder = t.namePlaceholder;
+    const custPhone = document.getElementById('customer-phone');
+    if (custPhone) custPhone.placeholder = t.phonePlaceholder;
+    const custAddr = document.getElementById('customer-address');
+    if (custAddr) custAddr.placeholder = t.addressPlaceholder;
+    const placeOrdTxt = document.getElementById('place-order-text');
+    if (placeOrdTxt) placeOrdTxt.textContent = t.placeOrder;
+
+    // 9. Quick View Modal Button
+    const pmAddBtn = document.getElementById('pm-add-btn');
+    if (pmAddBtn) pmAddBtn.textContent = t.addToCart;
+
+    // 10. Update product cards in catalog dynamically
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(card => {
+        const pName = card.dataset.name || '';
+        const pBrand = card.dataset.brand || '';
+        const pCat = card.dataset.category || '';
+        
+        let teSpan = card.querySelector('.telugu-subname');
+        if (lang === 'te') {
+            const teName = getTeluguProductName(pName, pBrand, pCat);
+            if (teName) {
+                if (!teSpan) {
+                    teSpan = document.createElement('span');
+                    teSpan.className = 'telugu-subname';
+                    const nameEl = card.querySelector('p');
+                    if (nameEl && nameEl.parentNode) {
+                        nameEl.parentNode.insertBefore(teSpan, nameEl.nextSibling);
+                    }
+                }
+                teSpan.textContent = '(' + teName + ')';
+                teSpan.style.display = 'block';
+            } else if (teSpan) {
+                teSpan.style.display = 'none';
+            }
+        } else {
+            if (teSpan) teSpan.style.display = 'none';
+        }
+
+        // Update button text
+        const cartBtn = card.querySelector('button.add-to-cart');
+        if (cartBtn) {
+            cartBtn.textContent = t.addToCart;
+        }
+        const oosBtn = card.querySelector('button[disabled]');
+        if (oosBtn && oosBtn.textContent.includes('Stock')) {
+            oosBtn.textContent = t.outOfStock;
+        }
+    });
+};
+
+function toggleLanguage() {
+    const nextLang = (currentLang === 'en') ? 'te' : 'en';
+    applyLanguage(nextLang);
+    const msg = (nextLang === 'te') ? TRANSLATIONS.te.toastSwitched : TRANSLATIONS.en.toastSwitched;
+    if (typeof showToast === 'function') {
+        showToast(msg, 'success');
+    }
+}
+
+// Bind click events
+document.addEventListener('DOMContentLoaded', () => {
+    const langBtn = document.getElementById('lang-toggle-btn');
+    if (langBtn) langBtn.addEventListener('click', toggleLanguage);
+    const gateLangBtn = document.getElementById('gate-lang-btn');
+    if (gateLangBtn) gateLangBtn.addEventListener('click', toggleLanguage);
+    applyLanguage(currentLang);
+});
+
+// Also run immediately in case DOM is already loaded
+setTimeout(() => {
+    const langBtn = document.getElementById('lang-toggle-btn');
+    if (langBtn && !langBtn.dataset.bound) {
+        langBtn.dataset.bound = 'true';
+        langBtn.addEventListener('click', toggleLanguage);
+    }
+    const gateLangBtn = document.getElementById('gate-lang-btn');
+    if (gateLangBtn && !gateLangBtn.dataset.bound) {
+        gateLangBtn.dataset.bound = 'true';
+        gateLangBtn.addEventListener('click', toggleLanguage);
+    }
+    applyLanguage(currentLang);
+}, 300);
