@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&family=Outfit:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
 
 :root {
     --bg-cream: #F0F4F8;
@@ -37,7 +37,7 @@ body.dark-mode {
 }
 
 body {
-    font-family: var(--font-body);
+    font-family: var(--font-body), 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
     background-color: var(--bg-cream);
     background-image: radial-gradient(at 0% 0%, rgba(0, 82, 255, 0.08) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(0, 210, 106, 0.05) 0px, transparent 50%);
     background-attachment: fixed;
@@ -912,9 +912,6 @@ body.dark-mode .success-card {
     50% { opacity: 1; }
     100% { transform: translate(40px, -30px); opacity: 0.1; }
 }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
 /* Advanced UI Improvements */
 header {
     backdrop-filter: blur(10px);
@@ -1252,3 +1249,50 @@ body.dark-mode .product-card:hover {
     }
 }
 
+
+
+/* ===============================
+   LANGUAGE TOGGLE & BILINGUAL STYLES
+   =============================== */
+.lang-toggle-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border-soft);
+    color: var(--text-dark);
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+.lang-toggle-btn:hover {
+    background: var(--accent-gold);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 82, 255, 0.25);
+}
+body.dark-mode .lang-toggle-btn {
+    background: rgba(0, 255, 157, 0.1);
+    color: #00FF9D;
+    border-color: rgba(0, 255, 157, 0.3);
+}
+body.dark-mode .lang-toggle-btn:hover {
+    background: #00FF9D;
+    color: #06090F;
+}
+.telugu-subname {
+    display: block;
+    font-size: 13px;
+    color: #27ae60;
+    font-weight: 600;
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+}
+body.dark-mode .telugu-subname {
+    color: #00FF9D;
+}
